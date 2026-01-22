@@ -1,10 +1,22 @@
 <?php
 namespace Auth\App\Action;
 
-class Logon
+use \Auth\Sys\Views;
+
+class Logon extends _Base
 {
 	public function __invoke()
 	{
-		echo 'ok';
+		$content = Views::get(
+			__DIR__.'/../View/Logon.php',
+			[
+				'test' => 'ok'
+			]
+		);
+
+		self::showLayout(
+			'Вход',
+			$content
+		);
 	}
 }

@@ -1,6 +1,5 @@
 <?php
-
-namespace Sys;
+namespace Auth\Sys;
 
 class Views
 {

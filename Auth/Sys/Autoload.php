@@ -1,5 +1,5 @@
 <?php
-namespace Sys;
+namespace Auth\Sys;
 
 require_once __DIR__.'/Error.php';
 
@@ -17,7 +17,20 @@ class Autoload
 		        $file_realpath = realpath($file_path);
 				if (substr($file_realpath, 0, strlen(__DIR_AUTH_ROOT__)) !== __DIR_AUTH_ROOT__) return;
 
-				if ( ! file_exists($file_path)) return;
+				if ( ! file_exists($file_path))
+				{
+					if (Request::isDevelopment())
+					{
+						Error::showError(
+							sprintf(
+								'File not found "%s"',
+								$file_path
+							)
+						);
+					}
+
+					return;
+				}
 
 	            include $file_path;
 	        }
@@ -25,4 +38,4 @@ class Autoload
 	}
 }
 
-\Sys\Autoload::register();
+\Auth\Sys\Autoload::register();
