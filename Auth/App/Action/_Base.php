@@ -1,12 +1,12 @@
 <?php
-
 namespace  Auth\App\Action;
 
+use Auth\Sys\Routing;
 use \Auth\SYS\Views;
 
 abstract class _Base
 {
-    protected static function showLayout($title, $content)
+	protected static function showLayout($title, $content)
     {
         echo Views::get(
             __DIR__.'/../View/Layout/Main.php',
@@ -16,4 +16,9 @@ abstract class _Base
             ]
         );
     }
+
+	public static function getUrl(array $params = []): string
+	{
+		return Routing::getUrl(static::class, $params);
+	}
 }

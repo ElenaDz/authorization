@@ -1,8 +1,6 @@
 <?php
 namespace Auth\Sys;
 
-require_once __DIR__.'/Error.php';
-
 class Autoload
 {
 	public static function register()
@@ -21,7 +19,7 @@ class Autoload
 				{
 					if (Request::isDevelopment())
 					{
-						Error::showError(
+						throw new \Exception(
 							sprintf(
 								'File not found "%s"',
 								$file_path
@@ -37,5 +35,3 @@ class Autoload
 	    );
 	}
 }
-
-\Auth\Sys\Autoload::register();

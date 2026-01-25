@@ -5,12 +5,12 @@ use \Auth\Sys\Views;
 
 class Logon extends _Base
 {
-	public function __invoke()
+	public function __invoke($param_optional = null)
 	{
 		$content = Views::get(
 			__DIR__.'/../View/Logon.php',
 			[
-				'test' => 'ok'
+				'test' => $param_optional ?? 'ok'
 			]
 		);
 

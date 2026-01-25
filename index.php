@@ -1,3 +1,6 @@
+<?php
+require __DIR__.'/Auth/autoload.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +8,6 @@
   <title>DriveMusic</title>
 </head>
 <body>
-  <a href="/Auth/Auth.php?action=<?= \Auth\App\Action\Logon::class; ?>">Вход</a>
+  <a href="<?= \Auth\App\Action\Logon::getUrl(['param_optional' => 123]); ?>">Вход</a>
 </body>
 </html>
