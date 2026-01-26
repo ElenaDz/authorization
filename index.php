@@ -2,7 +2,7 @@
 require __DIR__.'/Auth/autoload.php';
 
 // todo 0 установить любую программу для учета отработанного времени и начать ее использовать
-//  например https://motivateclock.org/ через vpn сайт открывается
+//  например https://motivateclock.org/ через vpn сайт открывается ок
 ?>
 <!DOCTYPE html>
 <html lang="en">
