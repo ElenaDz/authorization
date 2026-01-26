@@ -2,11 +2,7 @@
 /** @var $test */
 ?>
 
-<?= $test; ?>
-
-<!-- todo 1 форма ввода пароля -->
 <div>
-    <div class="close"></div>
     <div class="title">Войти на DriveMusic</div>
 
     <form  method="post" action="<?= \Auth\App\Action\Logon::getUrl(); ?>">
@@ -28,8 +24,8 @@
         </div>
 
         <div>
-            <span>Нет акаунта?</span>
-            <a href="<?= \Auth\App\Action\Reg::getUrl(); ?>">Зарегестрируйтесь</a>
+            <span>Нет аккаунта?</span>
+            <a href="<?= \Auth\App\Action\Reg::getUrl(); ?>">Зарегистрируйтесь</a>
         </div>
     </form>
 </div>

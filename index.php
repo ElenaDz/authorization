@@ -1,8 +1,5 @@
 <?php
 require __DIR__.'/Auth/autoload.php';
-
-// todo 0 установить любую программу для учета отработанного времени и начать ее использовать
-//  например https://motivateclock.org/ через vpn сайт открывается ок
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +10,7 @@ require __DIR__.'/Auth/autoload.php';
 <body>
     <?php if ( ! \Auth\App\Service\Auth::isAuthorized()): ?>
 
-    	<a href="<?= \Auth\App\Action\Logon::getUrl(['param_optional' => 'здесь должна быть форма ввода пароля']); ?>">
+    	<a href="<?= \Auth\App\Action\Logon::getUrl(); ?>">
             Вход
         </a>
 

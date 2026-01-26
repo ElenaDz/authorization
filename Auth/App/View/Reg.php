@@ -1,8 +1,7 @@
 
-<!-- todo 2 форма регистрации -->
+<!-- fixme файл не используется -->
 
 <div>
-    <div class="close"></div>
     <div class="title">Регистрация на DriveMusic</div>
 
     <form method="post" action="<?= \Auth\App\Action\Reg::getUrl(); ?>">
