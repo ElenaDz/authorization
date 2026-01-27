@@ -84,8 +84,7 @@ class Users extends _Base
 				sprintf(
 					'Пользователь с логин "%s" уже существует',
 					$login
-				),
-                404
+				)
 			);
 		}
 

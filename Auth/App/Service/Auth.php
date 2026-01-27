@@ -93,4 +93,69 @@ class Auth
     {
         return password_verify($pass, $hash);
     }
+
+    public static function validRegData($login, $pass)
+    {
+        self::validLogin($login);
+        self::validPassword($pass);
+    }
+
+    public static function validPassword($pass)
+    {
+        $rules = [
+            [
+                'check' => function ($p) {
+                    return strlen($p) > 5;
+                },
+                'error' => 'Пароль должен быть не менее 6 символов',
+            ],
+            [
+                'check' => function ($p) {
+                    return strlen($p) <= 30;
+                },
+                'error' => 'Пароль должен быть меньше 31 символа',
+            ],
+            [
+                'check' => function ($p) {
+                    return preg_match('/[A-Z]/', $p);
+                },
+                'error' => 'Пароль должен содержать хотя бы одну заглавную латинскую букву',
+            ],
+            [
+                'check' => function ($p) {
+                    return !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,\-\.\/:;<=>\?]).+$/', $p);
+                },
+                'error' => 'Пароль не соответствует требованиям сложности',
+            ],
+            [
+                'check' => function ($p) {
+                    return preg_match('/[a-z]/', $p);
+                },
+                'error' => 'Пароль должен содержать хотя бы одну строчную латинскую букву',
+            ],
+            [
+                'check' => function ($p) {
+                    return preg_match('/[!"#$%&()*+,\-\.\/:;<=>\?]/', $p);
+                },
+                'error' => 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , - . / : ; < = > ?',
+            ],
+        ];
+
+        foreach ($rules as $rule) {
+            if (!call_user_func($rule['check'], $pass)) {
+                throw new \Exception($rule['error']);
+            }
+        }
+    }
+
+    public static function validLogin($login)
+    {
+        if ( strlen($login) > 100) {
+            throw new \Exception(
+                sprintf(
+                    'Имя пользователя должно быть меньше 100 символов'
+                )
+            );
+        }
+    }
 }

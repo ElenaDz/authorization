@@ -27,19 +27,11 @@ class Reg extends _Base
             $pass_confirm = $_POST[self::POST_NAME_PASSWORD_CONFIRM];
             $email = $_POST[self::POST_EMAIL];
 
-            $user = \Auth\APP\Model\Users::getByLogin($login);
+            try {
 
-            if ( ! empty($user)) {
-                $errors[self::POST_NAME_LOGIN] = 'Уже занят';
-            }
-
-            if ( $pass != $pass_confirm) {
-                $errors = 'Пороли не совпадают';
-            }
-
-            if (empty($errors))
-            {
-               \Auth\APP\Model\Users::add($login, $pass, $pass_confirm, $email);
+                \Auth\APP\Model\Users::add($login, $pass, $pass_confirm, $email);
+            }catch (\Exception $exception){
+                var_dump($exception->getMessage());
             }
         }
 
