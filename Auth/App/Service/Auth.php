@@ -6,16 +6,17 @@ use Auth\App\Model\Users;
 
 class Auth
 {
-    const NAME_COOKIE_TOKEN = 'auth_token';
+    const COOKIE_NAME_TOKEN = 'auth_token';
 
     /**
      * @var User $user
      */
     private static $user;
 
+
     public static function isAuthorized(): bool
     {
-        $token = $_COOKIE[self::NAME_COOKIE_TOKEN];
+        $token = $_COOKIE[self::COOKIE_NAME_TOKEN];
         if (empty($token)) return false;
 
         if (self::$user) return true;
@@ -23,8 +24,9 @@ class Auth
         $user = Users::getByToken($token);
         if (empty($user))
         {
-            unset($_COOKIE[self::NAME_COOKIE_TOKEN]);
-            setcookie(self::NAME_COOKIE_TOKEN, '', -1, "/");
+            unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
+
+            setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
 
             return false;
         }
@@ -34,12 +36,14 @@ class Auth
         return true;
     }
 
+
 	public static function getUser()
 	{
 		if ( ! self::isAuthorized()) return null;
 
-		return new User();
+		return self::$user;
 	}
+
 
     public static function logon($login, $pass)
     {
@@ -60,7 +64,7 @@ class Auth
 
         $user->save();
 
-        $result = setcookie(self::NAME_COOKIE_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
+        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
         if ( ! $result) {
             throw new \Exception('Не удалось установить cookie');
         }
@@ -76,9 +80,10 @@ class Auth
 
         $user->save();
 
-        unset($_COOKIE[self::NAME_COOKIE_TOKEN]);
+		// fixme сброс токена происходит в нескольких местах, лучше вынести в отдельную функцию
+        unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
 
-        $result = setcookie(self::NAME_COOKIE_TOKEN, '', -1, "/");
+        $result = setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
         if ( ! $result) {
             throw new \Exception('Не удалось удалить cookie');
         }
@@ -94,6 +99,7 @@ class Auth
         return password_verify($pass, $hash);
     }
 
+	// fixme не понял логики, удалить
     public static function validRegData($login, $pass)
     {
         self::validLogin($login);
@@ -102,6 +108,7 @@ class Auth
 
     public static function validPassword($pass)
     {
+		// fixme заменить на код
         $rules = [
             [
                 'check' => function ($p) {
@@ -125,6 +132,7 @@ class Auth
                 'check' => function ($p) {
                     return !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,\-\.\/:;<=>\?]).+$/', $p);
                 },
+	            // fixme даже я не понимаю что здесь от меня хотят, пользователь точно не поймет
                 'error' => 'Пароль не соответствует требованиям сложности',
             ],
             [

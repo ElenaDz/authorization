@@ -15,6 +15,7 @@ abstract class _Base
 		if (empty(self::$pdo)) {
 			self::$pdo = new PDO(
 				'mysql:host=localhost;dbname=authorization',
+				// fixme добавь пользователя в бд и конекться здесь не от root а от имени этого пользователя
 				'root',
 				'',
 				[

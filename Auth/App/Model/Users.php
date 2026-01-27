@@ -59,12 +59,16 @@ class Users extends _Base
 		);
 	}
 
+	/**
+	 * @param $token
+	 * @return User|false|null
+	 */
     public static function getByToken($token)
     {
         $pdo = self::getPDO();
 
         $results = $pdo->prepare(
-            'SELECT * FROM users WHERE token=:token'
+            'SELECT * FROM users WHERE token=:token LIMIT 1'
         );
 
         $results->execute([
@@ -78,6 +82,9 @@ class Users extends _Base
 
 	public static function add($login, $pass, $pass_confirm, $email): int
 	{
+		// fixme логику создания пользователя лучше перенести в метод а здесь только записать его в БД
+		/** @link \Auth\App\Entity\User::create */
+
 		$user = self::getByLogin($login);
 		if ( ! empty($user)) {
 			throw new \Exception(
@@ -89,11 +96,7 @@ class Users extends _Base
 		}
 
         if ( $pass != $pass_confirm) {
-            throw new \Exception(
-                sprintf(
-                    'Пароли не совпадают'
-                )
-            );
+            throw new \Exception('Пароли не совпадают');
         }
 
 		$hash = Auth::getHash($pass);
@@ -117,8 +120,9 @@ class Users extends _Base
 
     public static function save(User $user)
     {
+		// fixme если id пустой нужно добавить а тут ошибка кривая выскочит
         if (
-            empty($user->getId())
+                empty($user->getId())
             ||  empty(self::getById($user->getId()))
         ) {
             throw new \Exception(

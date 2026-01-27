@@ -7,11 +7,26 @@ class User
 {
     const NAME_HASH = 'hash';
     const NAME_TOKEN = 'token';
+
     private $id;
     private $login;
     private $hash;
 	private $email;
     private $token;
+
+
+	public static function create()
+	{
+		$user = new self();
+
+		return $user;
+	}
+
+	private function __construct()
+	{
+
+	}
+
 
     public function getEmail()
 	{
@@ -33,6 +48,7 @@ class User
         return Auth::passwordVerify($pass, $this->hash);
     }
 
+	// fixme по-умолчанию нужно создавать функции private и менять только по необходимости
     public function createToken()
     {
         $this->token = md5(uniqid('', true));
@@ -47,6 +63,7 @@ class User
     {
         unset($this->token);
     }
+
     public function save()
     {
         \Auth\APP\Model\Users::save($this);

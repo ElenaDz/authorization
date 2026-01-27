@@ -8,6 +8,7 @@
     <form  method="post" action="<?= \Auth\App\Action\Logon::getUrl(); ?>">
         <div>
             <label for="login">Имя пользователя или e-mail</label>
+            <!-- fixme вместе login в имя нужно использовать константу из акшин, и так в каждом input этой форме -->
             <input type="text" id="login" name="login" required>
         </div>
 
