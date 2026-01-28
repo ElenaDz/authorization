@@ -14,7 +14,8 @@ class Logon extends _Base
 		$content = Views::get(
 			__DIR__ . '/../View/Logon.php',
 			[
-				'test' => $param_optional
+				'login' => self::POST_NAME_LOGIN,
+                'pass' => self::POST_NAME_PASS
 			]
 		);
 

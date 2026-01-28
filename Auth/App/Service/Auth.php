@@ -24,7 +24,7 @@ class Auth
         $user = Users::getByToken($token);
         if (empty($user))
         {
-            unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
+            self::unsetCookieToken();
 
             setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
 
@@ -36,6 +36,10 @@ class Auth
         return true;
     }
 
+    private static function unsetCookieToken()
+    {
+        unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
+    }
 
 	public static function getUser()
 	{
@@ -45,15 +49,15 @@ class Auth
 	}
 
 
-    public static function logon($login, $pass)
+    public static function logon($login_or_email, $pass)
     {
-        $user = Users::getByLogin($login);
+        $user = Users::getByLoginOrEmail($login_or_email);
         if (empty($user))
         {
             throw new \DomainException(
                 sprintf(
                     'Пользователь "%s" не найден',
-                    $login
+                    $login_or_email
                 )
             );
         }
@@ -61,6 +65,8 @@ class Auth
         if ( ! $user->verifyPass($pass)) {
             throw new \DomainException('Не правильный пароль');
         }
+
+        $user->createToken();
 
         $user->save();
 
@@ -80,8 +86,8 @@ class Auth
 
         $user->save();
 
-		// fixme сброс токена происходит в нескольких местах, лучше вынести в отдельную функцию
-        unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
+		// fixme сброс токена происходит в нескольких местах, лучше вынести в отдельную функцию ok
+        self::unsetCookieToken();
 
         $result = setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
         if ( ! $result) {
@@ -99,7 +105,7 @@ class Auth
         return password_verify($pass, $hash);
     }
 
-	// fixme не понял логики, удалить
+	// fixme не понял логики, удалить (ещё не дописано было)
     public static function validRegData($login, $pass)
     {
         self::validLogin($login);
@@ -108,51 +114,43 @@ class Auth
 
     public static function validPassword($pass)
     {
-		// fixme заменить на код
-        $rules = [
-            [
-                'check' => function ($p) {
-                    return strlen($p) > 5;
-                },
-                'error' => 'Пароль должен быть не менее 6 символов',
-            ],
-            [
-                'check' => function ($p) {
-                    return strlen($p) <= 30;
-                },
-                'error' => 'Пароль должен быть меньше 31 символа',
-            ],
-            [
-                'check' => function ($p) {
-                    return preg_match('/[A-Z]/', $p);
-                },
-                'error' => 'Пароль должен содержать хотя бы одну заглавную латинскую букву',
-            ],
-            [
-                'check' => function ($p) {
-                    return !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,\-\.\/:;<=>\?]).+$/', $p);
-                },
-	            // fixme даже я не понимаю что здесь от меня хотят, пользователь точно не поймет
-                'error' => 'Пароль не соответствует требованиям сложности',
-            ],
-            [
-                'check' => function ($p) {
-                    return preg_match('/[a-z]/', $p);
-                },
-                'error' => 'Пароль должен содержать хотя бы одну строчную латинскую букву',
-            ],
-            [
-                'check' => function ($p) {
-                    return preg_match('/[!"#$%&()*+,\-\.\/:;<=>\?]/', $p);
-                },
-                'error' => 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , - . / : ; < = > ?',
-            ],
-        ];
+        if (strlen($pass) < 6) {
+            throw new \Exception(
+                sprintf(
+                    'Пароль должен быть не менее 6 символов'
+                )
+            );
+        }
+        if (strlen($pass) > 30) {
+            throw new \Exception(
+                sprintf(
+                    'Пароль должен быть меньше 31 символа'
+                )
+            );
+        }
 
-        foreach ($rules as $rule) {
-            if (!call_user_func($rule['check'], $pass)) {
-                throw new \Exception($rule['error']);
-            }
+        if (!preg_match('/[A-Z]/', $pass)) {
+            throw new \Exception(
+                'Пароль должен содержать хотя бы одну заглавную латинскую букву'
+            );
+        }
+
+        if (!preg_match('/[a-z]/', $pass)) {
+            throw new \Exception(
+                'Пароль должен содержать хотя бы одну строчную латинскую букву'
+            );
+        }
+
+        if (!preg_match('/[!"#$%&()*+,\-\.\/:;<=>\?]/', $pass)) {
+            throw new \Exception(
+                'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , - . / : ; < = > ?'
+            );
+        }
+
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,\-\.\/:;<=>\?]).+$/', $pass)) {
+            throw new \Exception(
+                'Пароль не соответствует требованиям сложности'
+            );
         }
     }
 

@@ -1,5 +1,6 @@
 <?php
-/** @var $test */
+/** @var $login */
+/** @var $pass */
 ?>
 
 <div>
@@ -7,17 +8,17 @@
 
     <form  method="post" action="<?= \Auth\App\Action\Logon::getUrl(); ?>">
         <div>
-            <label for="login">Имя пользователя или e-mail</label>
-            <!-- fixme вместе login в имя нужно использовать константу из акшин, и так в каждом input этой форме -->
-            <input type="text" id="login" name="login" required>
+            <label for="<?= $login; ?>">Имя пользователя или e-mail</label>
+            <!-- fixme вместе login в имя нужно использовать константу из акшин, и так в каждом input этой форме ok -->
+            <input type="text" id="<?= $login; ?>" name="<?= $login; ?>" required>
         </div>
 
         <div>
             <div>
-                <label for="password">Пароль</label>
+                <label for="<?= $pass; ?>">Пароль</label>
                 <a>Забыли пароль?</a>
             </div>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="<?= $pass; ?>" name="<?= $pass; ?>" required>
         </div>
 
         <div>

@@ -42,6 +42,48 @@ class Users extends _Base
 		);
 	}
 
+    /**
+     * @param $login_or_email
+     * @return User|false
+     */
+    public static function getByLoginOrEmail($login_or_email)
+    {
+        $pdo = self::getPDO();
+
+        $results = $pdo->prepare(
+            'SELECT * FROM users WHERE login = :value OR email = :value'
+        );
+
+        $results->execute([
+            'value' => $login_or_email
+        ]);
+
+        return $results->fetchObject(
+            User::class
+        );
+    }
+
+    /**
+     * @param $email
+     * @return User|false
+     */
+    public static function getByEmail($email)
+    {
+        $pdo = self::getPDO();
+
+        $results = $pdo->prepare(
+            'SELECT * FROM users WHERE email=:email'
+        );
+
+        $results->execute([
+            'email' => $email
+        ]);
+
+        return $results->fetchObject(
+            User::class
+        );
+    }
+
 	/**
 	 * @return User[]
 	 */
@@ -80,33 +122,17 @@ class Users extends _Base
         );
     }
 
-	public static function add($login, $pass, $pass_confirm, $email): int
+	public static function add($login, $hash, $email): int
 	{
-		// fixme логику создания пользователя лучше перенести в метод а здесь только записать его в БД
+		// fixme логику создания пользователя лучше перенести в метод а здесь только записать его в БД ok
 		/** @link \Auth\App\Entity\User::create */
-
-		$user = self::getByLogin($login);
-		if ( ! empty($user)) {
-			throw new \Exception(
-				sprintf(
-					'Пользователь с логин "%s" уже существует',
-					$login
-				)
-			);
-		}
-
-        if ( $pass != $pass_confirm) {
-            throw new \Exception('Пароли не совпадают');
-        }
-
-		$hash = Auth::getHash($pass);
 
 		$prepare = self::getPDO()->prepare(
 			'INSERT INTO 
                      users
-                    (login, hash, email) 
+                    (login, hash, email, token) 
                 VALUES 
-                    (:login, :hash, :email)'
+                    (:login, :hash, :email, null)'
 		);
 
 		$prepare->execute([
@@ -120,17 +146,12 @@ class Users extends _Base
 
     public static function save(User $user)
     {
-		// fixme если id пустой нужно добавить а тут ошибка кривая выскочит
+		// fixme если id пустой нужно добавить а тут ошибка кривая выскочит(ok)
         if (
                 empty($user->getId())
             ||  empty(self::getById($user->getId()))
         ) {
-            throw new \Exception(
-                sprintf(
-                    'Пользователь "%s" не найден в БД',
-                    $user->getId()
-                )
-            );
+            self::add($user->getLogin(), $user->getHash(), $user->getEmail());
         }
 
         $user_from_db = self::getById($user->getId());

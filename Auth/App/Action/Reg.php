@@ -5,10 +5,10 @@ use Auth\Sys\Views;
 
 class Reg extends _Base
 {
-	// fixme login = username? нет должно быть одинаковое имя
-    const POST_NAME_LOGIN = 'username';
-	// fixme забыла добавить name
-    const POST_EMAIL = 'email';
+	// fixme login = username? нет должно быть одинаковое имя ok
+    const POST_NAME_LOGIN = 'login';
+	// fixme забыла добавить name ok
+    const POST_NAME_EMAIL = 'email';
     const POST_NAME_PASS = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
 
@@ -25,10 +25,10 @@ class Reg extends _Base
             $login = $_POST[self::POST_NAME_LOGIN];
             $pass = $_POST[self::POST_NAME_PASS];
             $pass_confirm = $_POST[self::POST_NAME_PASSWORD_CONFIRM];
-            $email = $_POST[self::POST_EMAIL];
+            $email = $_POST[self::POST_NAME_EMAIL];
 
             try {
-                \Auth\APP\Model\Users::add($login, $pass, $pass_confirm, $email);
+                \Auth\APP\Entity\User::create($login, $pass, $pass_confirm, $email);
 
             } catch (\Exception $exception){
                 var_dump($exception->getMessage());
@@ -38,7 +38,10 @@ class Reg extends _Base
         $content = Views::get(
             __DIR__ . '/../View/Reg.php',
             [
-                'test' => 'ok'
+                'login' => self::POST_NAME_LOGIN,
+                'pass' => self::POST_NAME_PASS,
+                'pass_confirm' => self::POST_NAME_PASSWORD_CONFIRM,
+                'email' => self::POST_NAME_EMAIL
             ]
         );
 

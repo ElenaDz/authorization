@@ -1,30 +1,56 @@
 <?php
 namespace Auth\App\Entity;
 
+use Auth\App\Model\Users;
 use Auth\App\Service\Auth;
 
 class User
 {
     const NAME_HASH = 'hash';
     const NAME_TOKEN = 'token';
-
     private $id;
     private $login;
     private $hash;
 	private $email;
     private $token;
 
+    private function __construct()
+    {
 
-	public static function create()
+    }
+
+	public static function create($login, $pass, $pass_confirm, $email)
 	{
-		$user = new self();
+        Auth::validRegData($login, $pass);
 
-		return $user;
-	}
+        $user_by_login = Users::getByLogin($login);
+        $user_by_email = Users::getByEmail($email);
 
-	private function __construct()
-	{
+        if ( ! empty($user_by_login)) {
+            throw new \Exception(
+                sprintf(
+                    'Пользователь с логин "%s" уже существует',
+                    $login
+                )
+            );
+        }
 
+        if ( ! empty($user_by_email)) {
+            throw new \Exception(
+                sprintf(
+                    'Пользователь с email "%s" уже существует',
+                    $email
+                )
+            );
+        }
+
+        if ( $pass != $pass_confirm) {
+            throw new \Exception('Пароли не совпадают');
+        }
+
+        $hash = Auth::getHash($pass);
+
+        Users::add($login, $hash, $email);
 	}
 
 
@@ -43,12 +69,17 @@ class User
         return $this->login;
     }
 
+    public function getHash() : string
+    {
+        return $this->hash;
+    }
+
     public function verifyPass($pass): bool
     {
         return Auth::passwordVerify($pass, $this->hash);
     }
 
-	// fixme по-умолчанию нужно создавать функции private и менять только по необходимости
+	// fixme по-умолчанию нужно создавать функции private и менять только по необходимости ok
     public function createToken()
     {
         $this->token = md5(uniqid('', true));
