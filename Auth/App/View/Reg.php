@@ -1,17 +1,13 @@
 <?php
-/** @var $login */
-/** @var $pass */
-/** @var $pass_confirm */
-/** @var $email */
+// fixme в случае ошибки поля должны быть заполнены введенными ранее данными кроме пароля
 ?>
-
 <div>
     <div class="title">Регистрация на DriveMusic</div>
 
     <form method="post" action="<?= \Auth\App\Action\Reg::getUrl(); ?>">
-        <label for="<?= $login; ?>">Имя пользователя</label>
-        <!-- fixme вместе username в имя нужно использовать константу из акшин, и так в каждом input этой форме  ok-->
-        <input type="text" id="<?= $login; ?>" name="<?= $login; ?>" required>
+        <label for="login">Имя пользователя</label>
+        <!-- fixme используй константы как я показал, и так в каждом input этой форме -->
+        <input type="text" id="login" name="<?= \Auth\App\Action\Reg::POST_NAME_LOGIN; ?>" required>
 
         <label for="<?= $email; ?>">E-mail</label>
         <input type="email" id="<?= $email; ?>" name="<?= $email; ?>" required>

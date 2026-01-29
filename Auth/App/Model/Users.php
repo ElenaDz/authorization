@@ -122,11 +122,10 @@ class Users extends _Base
         );
     }
 
+	// fixme вызовом этого метода ты создашь нового пользователя, а я просил чтобы пользователя можно было создать только
+	//  в одном месте, функцию должна принимать объект сущности User
 	public static function add($login, $hash, $email): int
 	{
-		// fixme логику создания пользователя лучше перенести в метод а здесь только записать его в БД ok
-		/** @link \Auth\App\Entity\User::create */
-
 		$prepare = self::getPDO()->prepare(
 			'INSERT INTO 
                      users
@@ -146,9 +145,10 @@ class Users extends _Base
 
     public static function save(User $user)
     {
-		// fixme если id пустой нужно добавить а тут ошибка кривая выскочит(ok)
         if (
                 empty($user->getId())
+                // fixme когда у пользователя есть id но он не найден в БД нужно показывать ошибку, потому что это явная ошибка
+                //  кстати ты запрашиваешь пользователя второй раз ниже, это не правильно, нужно делать это один раз
             ||  empty(self::getById($user->getId()))
         ) {
             self::add($user->getLogin(), $user->getHash(), $user->getEmail());

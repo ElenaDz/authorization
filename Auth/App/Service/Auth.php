@@ -6,7 +6,7 @@ use Auth\App\Model\Users;
 
 class Auth
 {
-    const COOKIE_NAME_TOKEN = 'auth_token';
+    const COOKIE_NAME_TOKEN = 'auth.token';
 
     /**
      * @var User $user
@@ -26,8 +26,6 @@ class Auth
         {
             self::unsetCookieToken();
 
-            setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
-
             return false;
         }
 
@@ -36,9 +34,14 @@ class Auth
         return true;
     }
 
-    private static function unsetCookieToken()
+    private static function unsetCookieToken($with_error = false)
     {
         unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
+
+	    $result = setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
+	    if ( ! $result && $with_error) {
+		    throw new \Exception('Не удалось удалить cookie');
+	    }
     }
 
 	public static function getUser()
@@ -86,15 +89,10 @@ class Auth
 
         $user->save();
 
-		// fixme сброс токена происходит в нескольких местах, лучше вынести в отдельную функцию ok
-        self::unsetCookieToken();
-
-        $result = setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
-        if ( ! $result) {
-            throw new \Exception('Не удалось удалить cookie');
-        }
+        self::unsetCookieToken(true);
     }
 
+	// fixme здесь этот метод private только этот класс должен знать как работать с хэшем
     public static function getHash($pass)
     {
         return password_hash($pass, \PASSWORD_BCRYPT);
@@ -105,27 +103,17 @@ class Auth
         return password_verify($pass, $hash);
     }
 
-	// fixme не понял логики, удалить (ещё не дописано было)
-    public static function validRegData($login, $pass)
-    {
-        self::validLogin($login);
-        self::validPassword($pass);
-    }
 
     public static function validPassword($pass)
     {
         if (strlen($pass) < 6) {
             throw new \Exception(
-                sprintf(
-                    'Пароль должен быть не менее 6 символов'
-                )
+				'Пароль должен быть не менее 6 символов'
             );
         }
         if (strlen($pass) > 30) {
             throw new \Exception(
-                sprintf(
-                    'Пароль должен быть меньше 31 символа'
-                )
+				'Пароль должен быть меньше 31 символа'
             );
         }
 
@@ -158,9 +146,7 @@ class Auth
     {
         if ( strlen($login) > 100) {
             throw new \Exception(
-                sprintf(
-                    'Имя пользователя должно быть меньше 100 символов'
-                )
+				'Имя пользователя должно быть меньше 100 символов'
             );
         }
     }

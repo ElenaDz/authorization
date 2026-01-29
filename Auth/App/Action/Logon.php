@@ -10,7 +10,7 @@ class Logon extends _Base
 
     public function __invoke($param_optional = null)
 	{
-        var_dump($_POST);
+
 		$content = Views::get(
 			__DIR__ . '/../View/Logon.php',
 			[

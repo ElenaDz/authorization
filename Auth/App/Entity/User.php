@@ -14,14 +14,20 @@ class User
 	private $email;
     private $token;
 
+	// fixme тебе нужно придумать минимальный необходимый набор данных для создания пользователя и указать его здесь
+	//  в конструкторе в качестве аргументов
     private function __construct()
     {
 
     }
 
+	// fixme не нужно передать сюда два пароля, то что там пароля два это относится к контролеру
 	public static function create($login, $pass, $pass_confirm, $email)
 	{
-        Auth::validRegData($login, $pass);
+		// fixme если бросать исключения мы будем получать только одну ошибку, а ошибок может быть несколько,
+		//  а нам нужно показывать сразу все ошибки, поэтому нужно возвращать массив всех ошибок
+        Auth::validLogin($login);
+		Auth::validPassword($pass);
 
         $user_by_login = Users::getByLogin($login);
         $user_by_email = Users::getByEmail($email);
@@ -50,6 +56,10 @@ class User
 
         $hash = Auth::getHash($pass);
 
+		$user = new User();
+
+		// fixme мы находимся в сущности мы не можешь здесь добавлять данные в БД, это делает модель или контроллер,
+		//  здесь мы можешь только создать пользователя и вернуть его
         Users::add($login, $hash, $email);
 	}
 
@@ -79,7 +89,7 @@ class User
         return Auth::passwordVerify($pass, $this->hash);
     }
 
-	// fixme по-умолчанию нужно создавать функции private и менять только по необходимости ok
+	// fixme скорее это genToken тоесть генерация токена так как это его можно вызывать несколько раз
     public function createToken()
     {
         $this->token = md5(uniqid('', true));
