@@ -23,10 +23,10 @@ class Users extends _Base
 
 	/**
 	 * @param $login
-	 * @return User|false
+	 * @return bool
 	 */
-	public static function getByLogin($login)
-	{
+	public static function hasUserByLogin($login): bool
+    {
 		$pdo = self::getPDO();
 
 		$results = $pdo->prepare(
@@ -37,9 +37,7 @@ class Users extends _Base
 			'login' => $login
 		]);
 
-		return $results->fetchObject(
-			User::class
-		);
+        return !empty($results->fetchColumn());
 	}
 
     /**
@@ -65,9 +63,9 @@ class Users extends _Base
 
     /**
      * @param $email
-     * @return User|false
+     * @return bool
      */
-    public static function getByEmail($email)
+    public static function hasUserByEmail($email): bool
     {
         $pdo = self::getPDO();
 
@@ -79,9 +77,7 @@ class Users extends _Base
             'email' => $email
         ]);
 
-        return $results->fetchObject(
-            User::class
-        );
+        return !empty($results->fetchColumn());
     }
 
 	/**
@@ -123,38 +119,42 @@ class Users extends _Base
     }
 
 	// fixme вызовом этого метода ты создашь нового пользователя, а я просил чтобы пользователя можно было создать только
-	//  в одном месте, функцию должна принимать объект сущности User
-	public static function add($login, $hash, $email): int
+	//  в одном месте, функцию должна принимать объект сущности User ok
+	public static function add(User $user): int
 	{
+        $code = random_int(1, 1000);
+
 		$prepare = self::getPDO()->prepare(
 			'INSERT INTO 
                      users
-                    (login, hash, email, token) 
+                    (login, hash, email, activation_code, token) 
                 VALUES 
-                    (:login, :hash, :email, null)'
+                    (:login, :hash, :email,:activation_code, null)'
 		);
 
 		$prepare->execute([
-			'login' => $login,
-			'hash' => $hash,
-			'email' => $email
+			'login' => $user->getLogin(),
+			'hash' => $user->getHash(),
+			'email' => $user->getEmail(),
+            'activation_code' => $code
 		]);
 
 		return self::getPDO()->lastInsertId();
 	}
 
+//     удалила, т.к. пока не использую
     public static function save(User $user)
     {
-        if (
-                empty($user->getId())
-                // fixme когда у пользователя есть id но он не найден в БД нужно показывать ошибку, потому что это явная ошибка
-                //  кстати ты запрашиваешь пользователя второй раз ниже, это не правильно, нужно делать это один раз
-            ||  empty(self::getById($user->getId()))
-        ) {
-            self::add($user->getLogin(), $user->getHash(), $user->getEmail());
-        }
+        $user_from_db = self::getById($user->getId()) ?? null;
 
-        $user_from_db = self::getById($user->getId());
+        if (
+            empty($user->getId())
+            // fixme когда у пользователя есть id но он не найден в БД нужно показывать ошибку, потому что это явная ошибка
+            //  кстати ты запрашиваешь пользователя второй раз ниже, это не правильно, нужно делать это один раз
+            ||  empty($user_from_db)
+        ) {
+            self::add($user);
+        }
 
         if ($user_from_db->getLogin() !== $user->getLogin())
         {
@@ -171,8 +171,8 @@ class Users extends _Base
             'UPDATE 
                         users 
                     SET 
-                        `hash` = :hash, 
-                        `token` = :token
+                        hash = :hash, 
+                        token = :token
                     WHERE 
                         id = :id'
         );

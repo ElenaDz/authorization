@@ -1,6 +1,10 @@
 <?php
 namespace Auth\App\Action;
 
+use Auth\APP\Helper\Email;
+use Auth\App\Entity\User;
+use Auth\App\Enum\Error;
+use Auth\App\Model\Users;
 use Auth\Sys\Views;
 
 class Reg extends _Base
@@ -26,16 +30,58 @@ class Reg extends _Base
             $email = $_POST[self::POST_NAME_EMAIL];
 
             try {
-                $user = \Auth\APP\Entity\User::create($login, $pass, $pass_confirm, $email);
+                if ( $pass != $pass_confirm) {
+                    $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
+                    throw new \Exception(json_encode($errors));
+                }
 
+                $user = User::create($login, $pass, $email);
+
+                $id = Users::add($user);
+
+                var_dump($user->getEncodeActivationCode());
+
+                if (!empty($id)) {
+
+                    $activation_link = $_SERVER['HTTP_ORIGIN'] . ActivationUser::getUrl([
+                        'login' => $_POST[self::POST_NAME_LOGIN],
+                        'code' => $user->getEncodeActivationCode()
+                    ]);
+
+                    Email::send(
+                        "Подтверждения электронной почты $email",
+                        "Здравствуйте, $login!
+                        Для подтверждения электронной почты и активации вашего аккаунта на сайте 
+                        drivemusic.me, пожалуйста, перейдите по <a href=$activation_link>этой ссылке</a>
+                        С уважением,
+                        Команда drivemusic",
+                        $email
+                    );
+
+                    $content = Views::get(
+                        __DIR__ . '/../View/AfterReg.php',
+                        [
+                            'test' => ''
+                        ]
+                    );
+
+                    self::showLayout(
+                        'Регистрация',
+                        $content
+                    );
+                    return;
+                }
             } catch (\Exception $exception){
-                var_dump($exception->getMessage());
+                $errors = json_decode($exception->getMessage(),true);
             }
         }
 
         $content = Views::get(
             __DIR__ . '/../View/Reg.php',
             [
+                'errors' => $errors,
+                'login' => $login,
+                'email' => $email,
             ]
         );
 

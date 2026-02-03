@@ -35,7 +35,6 @@ class Routing
 
 		$params = $_GET;
 		unset($params[ACTION_NAME]);
-
 		call_user_func_array($action, $params);
 	}
 

@@ -51,49 +51,16 @@ class Auth
 		return self::$user;
 	}
 
+//    удалила, пока не использую
 
-    public static function logon($login_or_email, $pass)
+
+    public static function setHashForUser(User $user, string $pass)
     {
-        $user = Users::getByLoginOrEmail($login_or_email);
-        if (empty($user))
-        {
-            throw new \DomainException(
-                sprintf(
-                    'Пользователь "%s" не найден',
-                    $login_or_email
-                )
-            );
-        }
-
-        if ( ! $user->verifyPass($pass)) {
-            throw new \DomainException('Не правильный пароль');
-        }
-
-        $user->createToken();
-
-        $user->save();
-
-        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
-        if ( ! $result) {
-            throw new \Exception('Не удалось установить cookie');
-        }
+        $user->setHash(self::getHash($pass));
     }
 
-    public static function logout()
-    {
-        if ( ! Auth::isAuthorized()) return;
-
-        $user = Auth::getUser();
-
-        $user->resetToken();
-
-        $user->save();
-
-        self::unsetCookieToken(true);
-    }
-
-	// fixme здесь этот метод private только этот класс должен знать как работать с хэшем
-    public static function getHash($pass)
+    // fixme здесь этот метод private только этот класс должен знать как работать с хэшем ok
+    private static function getHash($pass)
     {
         return password_hash($pass, \PASSWORD_BCRYPT);
     }
@@ -103,51 +70,43 @@ class Auth
         return password_verify($pass, $hash);
     }
 
-
     public static function validPassword($pass)
     {
+        $errors = [];
         if (strlen($pass) < 6) {
-            throw new \Exception(
-				'Пароль должен быть не менее 6 символов'
-            );
+            $errors['password'] = 'Пароль должен быть не менее 6 символов';
+            return  $errors;
         }
         if (strlen($pass) > 30) {
-            throw new \Exception(
-				'Пароль должен быть меньше 31 символа'
-            );
+            $errors['password'] = 'Пароль должен быть меньше 31 символа';
+            return  $errors;
         }
 
         if (!preg_match('/[A-Z]/', $pass)) {
-            throw new \Exception(
-                'Пароль должен содержать хотя бы одну заглавную латинскую букву'
-            );
+            $errors['password'] = 'Пароль должен содержать хотя бы одну заглавную латинскую букву';
+            return  $errors;
         }
 
         if (!preg_match('/[a-z]/', $pass)) {
-            throw new \Exception(
-                'Пароль должен содержать хотя бы одну строчную латинскую букву'
-            );
+            $errors['password'] = 'Пароль должен содержать хотя бы одну строчную латинскую букву';
+            return  $errors;
         }
 
-        if (!preg_match('/[!"#$%&()*+,\-\.\/:;<=>\?]/', $pass)) {
-            throw new \Exception(
-                'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , - . / : ; < = > ?'
-            );
+        if (!preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {
+            $errors['password'] = 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , . : ; < = > ?';
+            return  $errors;
         }
 
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,\-\.\/:;<=>\?]).+$/', $pass)) {
-            throw new \Exception(
-                'Пароль не соответствует требованиям сложности'
-            );
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,. :;<=>?]).+$/', $pass)) {
+            $errors['password'] = 'Пароль не соответствует требованиям сложности';
+            return  $errors;
         }
     }
 
     public static function validLogin($login)
     {
         if ( strlen($login) > 100) {
-            throw new \Exception(
-				'Имя пользователя должно быть меньше 100 символов'
-            );
+            return ['login' =>'Имя пользователя должно быть меньше 100 символов' ];
         }
     }
 }
