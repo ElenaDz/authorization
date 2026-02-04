@@ -10,6 +10,8 @@ class User
     const NAME_HASH = 'hash';
     const NAME_TOKEN = 'token';
     const NAME_ACTIVATION_CODE = 'activation_code';
+
+
     private $id;
     private $login;
     public $hash;
@@ -17,19 +19,19 @@ class User
 	private $email;
     private $token;
 
-	// fixme тебе нужно придумать минимальный необходимый набор данных для создания пользователя и указать его здесь
-	//  в конструкторе в качестве аргументов ok
-    private function __construct($login = null, $email = null)
+
+    private function __construct($login, $pass, $email)
     {
         $this->login = $login;
         $this->email = $email;
+
+	    $this->setHash(self::getHash($pass));
+
+		// todo здесь нужно генерировать код активации сразу в md5
     }
 
-	// fixme не нужно передать сюда два пароля, то что там пароля два это относится к контролеру ok
 	public static function create($login, $pass, $email): User
     {
-		// fixme если бросать исключения мы будем получать только одну ошибку, а ошибок может быть несколько,
-		//  а нам нужно показывать сразу все ошибки, поэтому нужно возвращать массив всех ошибок ok
         $errors = [];
         $error_login =  Auth::validLogin($login);
 
@@ -59,13 +61,9 @@ class User
             throw new \Exception(json_encode($errors));
         }
 
-        $user =  new User($login, $email);
-
-        Auth::setHashForUser($user, $pass);
+        $user = new User($login, $pass, $email);
 
         return $user;
-		// fixme мы находимся в сущности мы не можешь здесь добавлять данные в БД, это делает модель или контроллер,
-		//  здесь мы можешь только создать пользователя и вернуть его ok
 	}
 
     public function getEmail()
@@ -78,6 +76,7 @@ class User
         return (int) $this->id;
     }
 
+	// fixme избавиться от getEncodeActivationCode оставить только getActivationCode так как код активации уже закодирован при создании
     public function getEncodeActivationCode(): string
     {
         return md5($this->activation_code);
@@ -87,21 +86,25 @@ class User
     {
         return $this->activation_code;
     }
+
     public function getLogin() : string
     {
         return $this->login;
     }
 
-    public function getHash() : string
-    {
-        return $this->hash;
-    }
 
-    public function setHash($hash)
+    private function setHash($hash)
     {
         $this->hash = $hash;
     }
 
+	public function verifyPass($pass): bool
+	{
+		return password_verify($pass, $this->hash);
+	}
+
+
+	// fixme удалить не нужен
     public function setActivationCode($activation_code)
     {
         $this->activation_code = $activation_code;
@@ -111,12 +114,7 @@ class User
     {
         Users::save($this);
     }
-    public function verifyPass($pass): bool
-    {
-        return Auth::passwordVerify($pass, $this->hash);
-    }
 
-	// fixme скорее это genToken тоесть генерация токена так как это его можно вызывать несколько раз ok
     public function genToken()
     {
         $this->token = md5(uniqid('', true));
@@ -132,5 +130,9 @@ class User
         unset($this->token);
     }
 
-//    удалила не использую
+
+	private static function getHash($pass)
+	{
+		return password_hash($pass, \PASSWORD_BCRYPT);
+	}
 }

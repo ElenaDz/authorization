@@ -51,25 +51,6 @@ class Auth
 		return self::$user;
 	}
 
-//    удалила, пока не использую
-
-
-    public static function setHashForUser(User $user, string $pass)
-    {
-        $user->setHash(self::getHash($pass));
-    }
-
-    // fixme здесь этот метод private только этот класс должен знать как работать с хэшем ok
-    private static function getHash($pass)
-    {
-        return password_hash($pass, \PASSWORD_BCRYPT);
-    }
-
-    public static function passwordVerify($pass, $hash): bool
-    {
-        return password_verify($pass, $hash);
-    }
-
     public static function validPassword($pass)
     {
         $errors = [];

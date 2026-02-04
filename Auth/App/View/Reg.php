@@ -6,34 +6,36 @@ use Auth\App\Action\Reg;
  * @var $login
  * @var $email
  */
-// fixme в случае ошибки поля должны быть заполнены введенными ранее данными кроме пароля ok
 ?>
 <div>
-    <div class="title">Регистрация на DriveMusic</div>
+    <div class="title" style="font-weight: bold;">Регистрация на DriveMusic</div>
+    <hr>
 
     <form method="post"  action="<?= Reg::getUrl(); ?>">
-        <label for="login">Имя пользователя</label>
-        <!-- fixme используй константы как я показал, и так в каждом input этой форме  ok-->
-        <input type="text" id="login" autocomplete name="<?= Reg::POST_NAME_LOGIN; ?>" required value="<?= $login ?>">
+        <label for="login">Имя пользователя</label><br>
+        <input type="text" id="login" autocomplete name="<?= Reg::POST_NAME_LOGIN; ?>" required value="<?= $login ?>"><br>
         <?php if ($errors[Error::LOGIN_ERROR]) :?>
-        <div><?= $errors[Error::LOGIN_ERROR] ?></div>
+            <div><?= $errors[Error::LOGIN_ERROR] ?></div>
         <?php endif ?>
 
-        <label for="email">E-mail</label>
-        <input type="email" id="email" autocomplete name="<?= Reg::POST_NAME_EMAIL; ?>" required value="<?= $email ?>">
+        <br>
+        <label for="email">E-mail</label><br>
+        <input type="email" id="email" autocomplete name="<?= Reg::POST_NAME_EMAIL; ?>" required value="<?= $email ?>"><br>
         <?php if ($errors[Error::EMAIL_ERROR]) :?>
             <div><?= $errors[Error::EMAIL_ERROR] ?></div>
         <?php endif ?>
 
-        <label for="pass">Пароль два раза (буквы, цифры, знаки препинания)</label>
-        <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required>
+        <br>
+        <label for="pass">Пароль два раза (буквы, цифры, знаки препинания)</label><br>
+        <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required><br>
         <?php if ($errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]) :?>
             <div><?= $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]; ?></div>
         <?php endif ?>
 
         <label for="pass_confirm"></label>
-        <input type="password" id="pass_confirm" name="<?= Reg::POST_NAME_PASSWORD_CONFIRM; ?>" required>
+        <input type="password" id="pass_confirm" name="<?= Reg::POST_NAME_PASSWORD_CONFIRM; ?>" required><br>
 
+        <br>
         <button type="submit">Зарегистрироваться</button>
     </form>
 </div>

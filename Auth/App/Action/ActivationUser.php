@@ -1,5 +1,4 @@
 <?php
-
 namespace Auth\App\Action;
 
 use Auth\App\Model\Users;
@@ -11,23 +10,23 @@ class ActivationUser extends _Base
     {
         $errors = [];
 
-//        авторизация и редирект на главную
-        if ($login)
+		// todo проверка что переданы все необходимые данные, если нет кидаем исключение
+
+        $user = Users::getByLoginOrEmail($login);
+
+        var_dump($user->getEncodeActivationCode());
+        var_dump($code);
+
+		// fixme лучше завести метод validActivationCode по аналогии c validPass чтобы логика проверки кода осталась внутри класса пользователя
+        if ($user->getEncodeActivationCode() == $code)
         {
-            $user = Users::getByLoginOrEmail($login);
+			// fixme в данном случае лучше завести метод resetActivationCode без параметров
+            $user->setActivationCode(null);
 
-            var_dump($user->getEncodeActivationCode());
-            var_dump($code);
-            if ($user->getEncodeActivationCode() == $code)
-            {
-                setcookie();
+            $user->save();
 
-                $user->setActivationCode(null);
-
-                $user->save();
-
-            }
         }
+
     }
 
     public static function getUrl(array $params = []): string

@@ -118,8 +118,6 @@ class Users extends _Base
         );
     }
 
-	// fixme вызовом этого метода ты создашь нового пользователя, а я просил чтобы пользователя можно было создать только
-	//  в одном месте, функцию должна принимать объект сущности User ok
 	public static function add(User $user): int
 	{
         $code = random_int(1, 1000);
@@ -134,7 +132,7 @@ class Users extends _Base
 
 		$prepare->execute([
 			'login' => $user->getLogin(),
-			'hash' => $user->getHash(),
+			'hash' => self::getPrivatePropValueByUser($user, User::NAME_HASH),
 			'email' => $user->getEmail(),
             'activation_code' => $code
 		]);
@@ -142,15 +140,15 @@ class Users extends _Base
 		return self::getPDO()->lastInsertId();
 	}
 
-//     удалила, т.к. пока не использую
+
     public static function save(User $user)
     {
         $user_from_db = self::getById($user->getId()) ?? null;
 
+	    // fixme тут нужно добавить проверку что если у пользователя есть id но он не найден в бд то кидаем ошибку
+
         if (
-            empty($user->getId())
-            // fixme когда у пользователя есть id но он не найден в БД нужно показывать ошибку, потому что это явная ошибка
-            //  кстати ты запрашиваешь пользователя второй раз ниже, это не правильно, нужно делать это один раз
+                empty($user->getId())
             ||  empty($user_from_db)
         ) {
             self::add($user);
@@ -178,20 +176,23 @@ class Users extends _Base
                         id = :id'
         );
 
-        $ref_user = new \ReflectionClass($user);
-
-        $prop_hash = $ref_user->getProperty(User::NAME_HASH);
-        $prop_token = $ref_user->getProperty(User::NAME_TOKEN);
-        $prop_activation_code = $ref_user->getProperty(User::NAME_ACTIVATION_CODE);
-
-        $prop_hash->setAccessible(true);
-        $prop_token->setAccessible(true);
-
         $prepare->execute([
-            'id'            => $user->getId(),
-            'hash'          => $prop_hash->getValue($user),
-            'token'         => $prop_token->getValue($user),
-            'activation_code' => $prop_activation_code->getValue($user)
+            'id'                => $user->getId(),
+            'hash'              => self::getPrivatePropValueByUser($user, User::NAME_HASH),
+            'token'             => self::getPrivatePropValueByUser($user, User::NAME_TOKEN),
+            'activation_code'   => self::getPrivatePropValueByUser($user, User::NAME_ACTIVATION_CODE)
         ]);
     }
+
+
+	private static function getPrivatePropValueByUser(User $user, string $prop_name)
+	{
+		$ref_user = new \ReflectionClass($user);
+
+		$prop = $ref_user->getProperty($prop_name);
+
+		$prop->setAccessible(true);
+
+		return $prop->getValue($user);
+	}
 }

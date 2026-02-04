@@ -36,12 +36,9 @@ class Reg extends _Base
                 }
 
                 $user = User::create($login, $pass, $email);
-                var_dump($user->getActivationCode());
                 $id = Users::add($user);
 
                 if (!empty($id)) {
-
-                    var_dump($user->getActivationCode());
                     $activation_link = $_SERVER['HTTP_ORIGIN'] . ActivationUser::getUrl([
                         'login' => $_POST[self::POST_NAME_LOGIN],
                         'code' => $user->getEncodeActivationCode()
@@ -70,6 +67,7 @@ class Reg extends _Base
                     );
                     return;
                 }
+
             } catch (\Exception $exception){
                 $errors = json_decode($exception->getMessage(),true);
             }
