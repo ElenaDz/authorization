@@ -18,7 +18,9 @@ class User
     public $activation_code;
 	private $email;
     private $token;
-
+	// fixme удалить из бд, так как активирован пользователь или нет мы понимаем по коду активации его наличию или отсутствию
+	private $is_activated;
+	
 
     private function __construct($login, $pass, $email)
     {
