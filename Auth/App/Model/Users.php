@@ -172,7 +172,8 @@ class Users extends _Base
                         users 
                     SET 
                         hash = :hash, 
-                        token = :token
+                        token = :token,
+                        activation_code = :activation_code
                     WHERE 
                         id = :id'
         );
@@ -181,6 +182,7 @@ class Users extends _Base
 
         $prop_hash = $ref_user->getProperty(User::NAME_HASH);
         $prop_token = $ref_user->getProperty(User::NAME_TOKEN);
+        $prop_activation_code = $ref_user->getProperty(User::NAME_ACTIVATION_CODE);
 
         $prop_hash->setAccessible(true);
         $prop_token->setAccessible(true);
@@ -189,6 +191,7 @@ class Users extends _Base
             'id'            => $user->getId(),
             'hash'          => $prop_hash->getValue($user),
             'token'         => $prop_token->getValue($user),
+            'activation_code' => $prop_activation_code->getValue($user)
         ]);
     }
 }

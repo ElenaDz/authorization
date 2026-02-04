@@ -109,4 +109,44 @@ class Auth
             return ['login' =>'Имя пользователя должно быть меньше 100 символов' ];
         }
     }
+
+    public static function logon($login_or_email, $pass)
+    {
+        $user = Users::getByLoginOrEmail($login_or_email);
+        if (empty($user))
+        {
+            throw new \DomainException(
+                sprintf(
+                    'Пользователь "%s" не найден',
+                    $login_or_email
+                )
+            );
+        }
+
+        if ( ! $user->verifyPass($pass)) {
+            throw new \DomainException('Не правильный пароль');
+        }
+
+        $user->genToken();
+
+        $user->save();
+
+        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
+        if ( ! $result) {
+            throw new \Exception('Не удалось установить cookie');
+        }
+    }
+
+    public static function logout()
+    {
+        if ( ! Auth::isAuthorized()) return;
+
+        $user = Auth::getUser();
+
+        $user->resetToken();
+
+        $user->save();
+
+        self::unsetCookieToken(true);
+    }
 }

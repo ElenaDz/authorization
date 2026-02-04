@@ -9,6 +9,7 @@ class User
 {
     const NAME_HASH = 'hash';
     const NAME_TOKEN = 'token';
+    const NAME_ACTIVATION_CODE = 'activation_code';
     private $id;
     private $login;
     public $hash;
@@ -18,7 +19,7 @@ class User
 
 	// fixme тебе нужно придумать минимальный необходимый набор данных для создания пользователя и указать его здесь
 	//  в конструкторе в качестве аргументов ok
-    private function __construct($login, $email)
+    private function __construct($login = null, $email = null)
     {
         $this->login = $login;
         $this->email = $email;
@@ -79,11 +80,13 @@ class User
 
     public function getEncodeActivationCode(): string
     {
-        $code = $this->activation_code."c1k";
-
-        return base64_encode($code);
+        return md5($this->activation_code);
     }
 
+    public function getActivationCode(): int
+    {
+        return $this->activation_code;
+    }
     public function getLogin() : string
     {
         return $this->login;
@@ -99,6 +102,15 @@ class User
         $this->hash = $hash;
     }
 
+    public function setActivationCode($activation_code)
+    {
+        $this->activation_code = $activation_code;
+    }
+
+    public function save()
+    {
+        Users::save($this);
+    }
     public function verifyPass($pass): bool
     {
         return Auth::passwordVerify($pass, $this->hash);
