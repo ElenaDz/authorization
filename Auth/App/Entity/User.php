@@ -18,18 +18,23 @@ class User
     public $activation_code;
 	private $email;
     private $token;
-	// fixme удалить из бд, так как активирован пользователь или нет мы понимаем по коду активации его наличию или отсутствию
-	private $is_activated;
-	
+	// fixme удалить из бд, так как активирован пользователь или нет мы понимаем по коду активации его наличию или отсутствию ok
 
-    private function __construct($login, $pass, $email)
+    public function __construct($login, $pass, $email)
     {
         $this->login = $login;
         $this->email = $email;
 
-	    $this->setHash(self::getHash($pass));
+         if ($pass !== $this->getPass())
+         {
+             $this->setHash(self::getHash($pass));
 
-		// todo здесь нужно генерировать код активации сразу в md5
+         }
+
+
+		// todo здесь нужно генерировать код активации сразу в md5 ok
+        $this->activation_code = md5(random_int(1, 1000));
+
     }
 
 	public static function create($login, $pass, $email): User
@@ -78,15 +83,21 @@ class User
         return (int) $this->id;
     }
 
-	// fixme избавиться от getEncodeActivationCode оставить только getActivationCode так как код активации уже закодирован при создании
-    public function getEncodeActivationCode(): string
+	// fixme избавиться от getEncodeActivationCode оставить только getActivationCode так как код активации уже закодирован при создании ok
+
+    public  function validActivationCode($code): bool
     {
-        return md5($this->activation_code);
+        return $this->activation_code == $code;
     }
 
-    public function getActivationCode(): int
+    public function getActivationCode()
     {
         return $this->activation_code;
+    }
+
+    public function setActivationCode($activation_code)
+    {
+        $this->activation_code = $activation_code;
     }
 
     public function getLogin() : string
@@ -94,10 +105,14 @@ class User
         return $this->login;
     }
 
-
     private function setHash($hash)
     {
         $this->hash = $hash;
+    }
+
+    private function getPass()
+    {
+        return $this->hash;
     }
 
 	public function verifyPass($pass): bool
@@ -105,11 +120,10 @@ class User
 		return password_verify($pass, $this->hash);
 	}
 
-
-	// fixme удалить не нужен
-    public function setActivationCode($activation_code)
+	// fixme удалить не нужен ok
+    public function resetActivationCode()
     {
-        $this->activation_code = $activation_code;
+        $this->activation_code = null;
     }
 
     public function save()

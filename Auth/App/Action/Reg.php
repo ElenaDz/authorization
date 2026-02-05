@@ -36,12 +36,15 @@ class Reg extends _Base
                 }
 
                 $user = User::create($login, $pass, $email);
+
+
                 $id = Users::add($user);
+
 
                 if (!empty($id)) {
                     $activation_link = $_SERVER['HTTP_ORIGIN'] . ActivationUser::getUrl([
                         'login' => $_POST[self::POST_NAME_LOGIN],
-                        'code' => $user->getEncodeActivationCode()
+                        'code' => $user->getActivationCode()
                     ]);
 
                     Email::send(
@@ -55,7 +58,7 @@ class Reg extends _Base
                     );
 
                     $content = Views::get(
-                        __DIR__ . '/../View/AfterReg.php',
+                        __DIR__ . '/../View/RegSuccess.php',
                         [
                             'test' => ''
                         ]
@@ -74,7 +77,7 @@ class Reg extends _Base
         }
 
         $content = Views::get(
-            __DIR__ . '/../View/Reg.php',
+            __DIR__ . '/../View/Block/Reg/Reg.php',
             [
                 'errors' => $errors,
                 'login' => $login,

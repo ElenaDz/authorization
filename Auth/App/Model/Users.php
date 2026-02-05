@@ -3,6 +3,7 @@ namespace Auth\App\Model;
 
 use Auth\App\Entity\User;
 use Auth\App\Service\Auth;
+use PDO;
 
 class Users extends _Base
 {
@@ -51,14 +52,13 @@ class Users extends _Base
         $results = $pdo->prepare(
             'SELECT * FROM users WHERE login = :value OR email = :value'
         );
-
         $results->execute([
             'value' => $login_or_email
         ]);
-
-        return $results->fetchObject(
-            User::class
-        );
+        $data =  $results->fetch();
+        $user = new User($data['login'],$data['hash'], $data['email']);
+        $user->setActivationCode($data['activation_code']);
+        return $user;
     }
 
     /**
@@ -120,8 +120,6 @@ class Users extends _Base
 
 	public static function add(User $user): int
 	{
-        $code = random_int(1, 1000);
-
 		$prepare = self::getPDO()->prepare(
 			'INSERT INTO 
                      users
@@ -134,7 +132,7 @@ class Users extends _Base
 			'login' => $user->getLogin(),
 			'hash' => self::getPrivatePropValueByUser($user, User::NAME_HASH),
 			'email' => $user->getEmail(),
-            'activation_code' => $code
+            'activation_code' => $user->getActivationCode()
 		]);
 
 		return self::getPDO()->lastInsertId();
@@ -145,14 +143,23 @@ class Users extends _Base
     {
         $user_from_db = self::getById($user->getId()) ?? null;
 
-	    // fixme тут нужно добавить проверку что если у пользователя есть id но он не найден в бд то кидаем ошибку
+	    // fixme тут нужно добавить проверку что если у пользователя есть id но он не найден в бд то кидаем ошибку ok
+        if ($user->getId() &&  empty($user_from_db)) {
+            throw new \Exception(
+                sprintf(
+                    'Позьзователь с id = "%s" не найден в базе данных',
+                    $user->getId()
+                )
+            );
+        }
 
-        if (
-                empty($user->getId())
-            ||  empty($user_from_db)
-        ) {
+        if (empty($user->getId()) || empty($user_from_db))
+        {
             self::add($user);
         }
+
+        var_dump($user_from_db);
+        var_dump($user_from_db->getLogin());
 
         if ($user_from_db->getLogin() !== $user->getLogin())
         {
