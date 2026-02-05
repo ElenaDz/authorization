@@ -55,10 +55,7 @@ class Users extends _Base
         $results->execute([
             'value' => $login_or_email
         ]);
-        $data =  $results->fetch();
-        $user = new User($data['login'],$data['hash'], $data['email']);
-        $user->setActivationCode($data['activation_code']);
-        return $user;
+        return $results->fetchObject(User::class);
     }
 
     /**
@@ -142,7 +139,7 @@ class Users extends _Base
     public static function save(User $user)
     {
         $user_from_db = self::getById($user->getId()) ?? null;
-
+        var_dump($user_from_db);
 	    // fixme тут нужно добавить проверку что если у пользователя есть id но он не найден в бд то кидаем ошибку ok
         if ($user->getId() &&  empty($user_from_db)) {
             throw new \Exception(

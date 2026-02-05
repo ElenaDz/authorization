@@ -20,21 +20,21 @@ class User
     private $token;
 	// fixme удалить из бд, так как активирован пользователь или нет мы понимаем по коду активации его наличию или отсутствию ok
 
-    public function __construct($login, $pass, $email)
+    public function __construct($login = null, $pass = null, $email = null)
     {
         $this->login = $login;
         $this->email = $email;
 
-         if ($pass !== $this->getPass())
-         {
-             $this->setHash(self::getHash($pass));
+        if (!$pass === false) {
+            if ($pass !== $this->getPass())
+            {
+                $this->setHash(self::getHash($pass));
 
-         }
-
+            }
+        }
 
 		// todo здесь нужно генерировать код активации сразу в md5 ok
         $this->activation_code = md5(random_int(1, 1000));
-
     }
 
 	public static function create($login, $pass, $email): User
