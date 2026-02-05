@@ -52,9 +52,11 @@ class Users extends _Base
         $results = $pdo->prepare(
             'SELECT * FROM users WHERE login = :value OR email = :value'
         );
-        $results->execute([
+
+		$results->execute([
             'value' => $login_or_email
         ]);
+
         return $results->fetchObject(User::class);
     }
 
@@ -140,11 +142,11 @@ class Users extends _Base
     {
         $user_from_db = self::getById($user->getId()) ?? null;
         var_dump($user_from_db);
-	    // fixme тут нужно добавить проверку что если у пользователя есть id но он не найден в бд то кидаем ошибку ok
+
         if ($user->getId() &&  empty($user_from_db)) {
             throw new \Exception(
                 sprintf(
-                    'Позьзователь с id = "%s" не найден в базе данных',
+                    'Пользователь с id = "%s" не найден в базе данных',
                     $user->getId()
                 )
             );

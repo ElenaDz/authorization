@@ -11,29 +11,31 @@ class User
     const NAME_TOKEN = 'token';
     const NAME_ACTIVATION_CODE = 'activation_code';
 
-
+	
+	// todo добавить нужные сеттеры и добавить в них валидацию
     private $id;
     private $login;
     public $hash;
     public $activation_code;
 	private $email;
     private $token;
-	// fixme удалить из бд, так как активирован пользователь или нет мы понимаем по коду активации его наличию или отсутствию ok
 
+
+	// fixme конструктор должен быть private чтобы не было возможности создать пользователя с помощью него, для этого метод create
     public function __construct($login = null, $pass = null, $email = null)
     {
         $this->login = $login;
         $this->email = $email;
 
         if (!$pass === false) {
+			// fixme в момент создания пользователя все поля его пустые зачем ты здесь проверяешь старое значение пароля?
             if ($pass !== $this->getPass())
             {
                 $this->setHash(self::getHash($pass));
-
             }
         }
 
-		// todo здесь нужно генерировать код активации сразу в md5 ok
+		// todo используй здесь random_bytes вместо random_int
         $this->activation_code = md5(random_int(1, 1000));
     }
 
@@ -83,10 +85,10 @@ class User
         return (int) $this->id;
     }
 
-	// fixme избавиться от getEncodeActivationCode оставить только getActivationCode так как код активации уже закодирован при создании ok
 
     public  function validActivationCode($code): bool
     {
+		// fixme если у тебя есть геттер для свойства необходимо использовать его вместо прямого обращения к свойству
         return $this->activation_code == $code;
     }
 
@@ -95,21 +97,24 @@ class User
         return $this->activation_code;
     }
 
-    public function setActivationCode($activation_code)
-    {
-        $this->activation_code = $activation_code;
-    }
+	public function resetActivationCode()
+	{
+		$this->activation_code = null;
+	}
+
 
     public function getLogin() : string
     {
         return $this->login;
     }
 
+	// fixme лучше сделать метод setPass и пускай логика что происходит после этого уже будет скрыта в этом методе
     private function setHash($hash)
     {
         $this->hash = $hash;
     }
 
+	// fixme ерунда какая то pass или hash
     private function getPass()
     {
         return $this->hash;
@@ -120,16 +125,6 @@ class User
 		return password_verify($pass, $this->hash);
 	}
 
-	// fixme удалить не нужен ok
-    public function resetActivationCode()
-    {
-        $this->activation_code = null;
-    }
-
-    public function save()
-    {
-        Users::save($this);
-    }
 
     public function genToken()
     {
@@ -145,6 +140,12 @@ class User
     {
         unset($this->token);
     }
+
+
+	public function save()
+	{
+		Users::save($this);
+	}
 
 
 	private static function getHash($pass)

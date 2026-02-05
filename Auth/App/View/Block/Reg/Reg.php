@@ -1,4 +1,6 @@
 <?php
+// fixme вернуть где был, эта папка для блоков (кусочков из которых состоит страница), а это целая страница
+//  она должен быть в корне папки шаблоны
 use Auth\App\Enum\Error;
 use Auth\App\Action\Reg;
 /**
@@ -15,21 +17,21 @@ use Auth\App\Action\Reg;
         <label for="login">Имя пользователя</label><br>
         <input type="text" id="login" autocomplete name="<?= Reg::POST_NAME_LOGIN; ?>" required value="<?= $login ?>"><br>
         <?php if ($errors[Error::LOGIN_ERROR]) :?>
-            <div><?= $errors[Error::LOGIN_ERROR] ?></div>
+            <div style="color: red;"><?= $errors[Error::LOGIN_ERROR] ?></div>
         <?php endif ?>
 
         <br>
         <label for="email">E-mail</label><br>
         <input type="email" id="email" autocomplete name="<?= Reg::POST_NAME_EMAIL; ?>" required value="<?= $email ?>"><br>
         <?php if ($errors[Error::EMAIL_ERROR]) :?>
-            <div><?= $errors[Error::EMAIL_ERROR] ?></div>
+            <div style="color: red;"><?= $errors[Error::EMAIL_ERROR] ?></div>
         <?php endif ?>
 
         <br>
         <label for="pass">Пароль два раза (буквы, цифры, знаки препинания)</label><br>
         <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required><br>
         <?php if ($errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]) :?>
-            <div><?= $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]; ?></div>
+            <div style="color: red;"><?= $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]; ?></div>
         <?php endif ?>
 
         <label for="pass_confirm"></label>

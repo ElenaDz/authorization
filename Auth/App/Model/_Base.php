@@ -18,7 +18,7 @@ abstract class _Base
 				'lena',
 				'`12',
 				[
-                    PDO::ATTR_PERSISTENT => true
+                    PDO::ATTR_PERSISTENT => false
                 ]
 			);
 		}

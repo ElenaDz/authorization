@@ -37,9 +37,7 @@ class Reg extends _Base
 
                 $user = User::create($login, $pass, $email);
 
-
                 $id = Users::add($user);
-
 
                 if (!empty($id)) {
                     $activation_link = $_SERVER['HTTP_ORIGIN'] . ActivationUser::getUrl([
@@ -58,7 +56,7 @@ class Reg extends _Base
                     );
 
                     $content = Views::get(
-                        __DIR__ . '/../View/RegSuccess.php',
+                        __DIR__ . '/../View/Block/Reg/RegSuccess.php',
                         [
                             'test' => ''
                         ]

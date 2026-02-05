@@ -8,14 +8,13 @@ class ActivationUser extends _Base
 {
     public function __invoke($login = null, $code = null)
     {
-        $errors = [];
-
-		// todo проверка что переданы все необходимые данные, если нет кидаем исключение
+		// fixme плохая идея объединять эти две проверки для каждой проверки должен быть отдельный if и исключения
+	    //  важно сейчас тебя исправить чтобы ты в дальнейшем не делала этой ошибки
         if (empty($login) || empty($code))
         {
             throw new \Exception(
                 sprintf(
-                    'Нет Логина("%s") или кода активации("%s")',
+                    'Нет Логина ("%s") или кода активации ("%s")',
                     $login,
                     $code
                 )
@@ -24,10 +23,8 @@ class ActivationUser extends _Base
 
         $user = Users::getByLoginOrEmail($login);
 
-		// fixme лучше завести метод validActivationCode по аналогии c validPass чтобы логика проверки кода осталась внутри класса пользователя ok
         if ($user->validActivationCode($code))
         {
-			// fixme в данном случае лучше завести метод resetActivationCode без параметров ok
             $user->resetActivationCode();
 
             $user->save();
