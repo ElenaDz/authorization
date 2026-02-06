@@ -91,22 +91,27 @@ class Auth
         }
     }
 
-    public static function logon($login_or_email, $pass)
+    /**
+     * @throws \Exception
+     */
+    public static function logonByPassword($login_or_email, $pass)
     {
         $user = Users::getByLoginOrEmail($login_or_email);
-        if (empty($user))
-        {
-            throw new \DomainException(
-                sprintf(
-                    'Пользователь "%s" не найден',
-                    $login_or_email
-                )
-            );
-        }
+
+        self::verifyLogin($user,$login_or_email);
 
         if ( ! $user->verifyPass($pass)) {
             throw new \DomainException('Не правильный пароль');
         }
+
+        self::logonWithoutPassword($login_or_email);
+    }
+
+    public static function logonWithoutPassword($login_or_email)
+    {
+        $user = Users::getByLoginOrEmail($login_or_email);
+
+        self::verifyLogin($user,$login_or_email);
 
         $user->genToken();
 
@@ -118,9 +123,8 @@ class Auth
         }
     }
 
-    public static function activation($login_or_email)
+    private static function verifyLogin($user, $login_or_email)
     {
-        $user = Users::getByLoginOrEmail($login_or_email);
         if (empty($user))
         {
             throw new \DomainException(
@@ -129,15 +133,6 @@ class Auth
                     $login_or_email
                 )
             );
-        }
-
-        $user->genToken();
-
-        $user->save();
-
-        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
-        if ( ! $result) {
-            throw new \Exception('Не удалось установить cookie');
         }
     }
 

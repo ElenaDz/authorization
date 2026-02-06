@@ -27,7 +27,7 @@ class ActivationUser extends _Base
 
         if ($user->validActivationCode($code))
         {
-            Auth::activation($login);
+            Auth::logonWithoutPassword($login);
 
             $user->resetActivationCode();
 
