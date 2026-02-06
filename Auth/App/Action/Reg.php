@@ -75,7 +75,7 @@ class Reg extends _Base
         }
 
         $content = Views::get(
-            __DIR__ . '/../View/Block/Reg/Reg.php',
+            __DIR__ . '/../View/Reg.php',
             [
                 'errors' => $errors,
                 'login' => $login,

@@ -22,21 +22,29 @@ class User
 
 
 	// fixme конструктор должен быть private чтобы не было возможности создать пользователя с помощью него, для этого метод create
-    public function __construct($login = null, $pass = null, $email = null)
+    private function __construct($login = null, $pass = null, $email = null)
     {
-        $this->login = $login;
-        $this->email = $email;
+        if (!empty($login)) {
+            $this->login = $login;
+        }
+
+        if (!empty($email)) {
+            $this->email = $email;
+        }
 
         if (!$pass === false) {
 			// fixme в момент создания пользователя все поля его пустые зачем ты здесь проверяешь старое значение пароля?
-            if ($pass !== $this->getPass())
+            if ($pass !== $this->getHashFromBD())
             {
-                $this->setHash(self::getHash($pass));
+                $this->setPass($pass);
             }
         }
 
-		// todo используй здесь random_bytes вместо random_int
-        $this->activation_code = md5(random_int(1, 1000));
+        if (empty($this->getActivationCode())) {
+            $this->setActivationCode();
+        }
+
+		// todo используй здесь random_bytes вместо random_int ok
     }
 
 	public static function create($login, $pass, $email): User
@@ -88,13 +96,23 @@ class User
 
     public  function validActivationCode($code): bool
     {
-		// fixme если у тебя есть геттер для свойства необходимо использовать его вместо прямого обращения к свойству
-        return $this->activation_code == $code;
+		// fixme если у тебя есть геттер для свойства необходимо использовать его вместо прямого обращения к свойству ok
+        return self::getActivationCode() == $code;
     }
 
+    /**
+     * @return string|null
+     */
     public function getActivationCode()
     {
         return $this->activation_code;
+    }
+
+    public function setActivationCode()
+    {
+        if (empty($this->getToken()) ) {
+            $this->activation_code = md5(random_bytes(5));
+        }
     }
 
 	public function resetActivationCode()
@@ -102,20 +120,23 @@ class User
 		$this->activation_code = null;
 	}
 
-
     public function getLogin() : string
     {
         return $this->login;
     }
 
-	// fixme лучше сделать метод setPass и пускай логика что происходит после этого уже будет скрыта в этом методе
+    private function setPass($pass)
+    {
+        $this->setHash(self::getHash($pass));
+    }
+	// fixme лучше сделать метод setPass и пускай логика что происходит после этого уже будет скрыта в этом методе ok
     private function setHash($hash)
     {
         $this->hash = $hash;
     }
 
-	// fixme ерунда какая то pass или hash
-    private function getPass()
+	// fixme ерунда какая то pass или hash ok
+    private function getHashFromBD()
     {
         return $this->hash;
     }
@@ -131,7 +152,10 @@ class User
         $this->token = md5(uniqid('', true));
     }
 
-    public function getToken(): string
+    /**
+     * @return string|null
+     */
+    public function getToken()
     {
         return $this->token;
     }

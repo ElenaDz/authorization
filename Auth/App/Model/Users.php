@@ -141,7 +141,6 @@ class Users extends _Base
     public static function save(User $user)
     {
         $user_from_db = self::getById($user->getId()) ?? null;
-        var_dump($user_from_db);
 
         if ($user->getId() &&  empty($user_from_db)) {
             throw new \Exception(
@@ -156,9 +155,6 @@ class Users extends _Base
         {
             self::add($user);
         }
-
-        var_dump($user_from_db);
-        var_dump($user_from_db->getLogin());
 
         if ($user_from_db->getLogin() !== $user->getLogin())
         {
@@ -177,16 +173,16 @@ class Users extends _Base
                     SET 
                         hash = :hash, 
                         token = :token,
-                        activation_code = :activation_code
+                        activation_code = NULL
                     WHERE 
                         id = :id'
         );
 
+        var_dump('sav');
         $prepare->execute([
             'id'                => $user->getId(),
             'hash'              => self::getPrivatePropValueByUser($user, User::NAME_HASH),
-            'token'             => self::getPrivatePropValueByUser($user, User::NAME_TOKEN),
-            'activation_code'   => self::getPrivatePropValueByUser($user, User::NAME_ACTIVATION_CODE)
+            'token'             => self::getPrivatePropValueByUser($user, User::NAME_TOKEN)
         ]);
     }
 

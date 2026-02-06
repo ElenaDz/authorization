@@ -118,6 +118,29 @@ class Auth
         }
     }
 
+    public static function activation($login_or_email)
+    {
+        $user = Users::getByLoginOrEmail($login_or_email);
+        if (empty($user))
+        {
+            throw new \DomainException(
+                sprintf(
+                    'Пользователь "%s" не найден',
+                    $login_or_email
+                )
+            );
+        }
+
+        $user->genToken();
+
+        $user->save();
+
+        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
+        if ( ! $result) {
+            throw new \Exception('Не удалось установить cookie');
+        }
+    }
+
     public static function logout()
     {
         if ( ! Auth::isAuthorized()) return;
