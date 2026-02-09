@@ -17,6 +17,7 @@ class User
     private $login;
     public $hash;
     public $activation_code;
+    public $change_pass_code;
 	private $email;
     private $token;
 
@@ -113,6 +114,19 @@ class User
         if (empty($this->getToken()) ) {
             $this->activation_code = md5(random_bytes(5));
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getChangePassCode()
+    {
+        return $this->change_pass_code;
+    }
+
+    public function genChangePassCode()
+    {
+        $this->change_pass_code = md5(random_bytes(3));
     }
 
 	public function resetActivationCode()

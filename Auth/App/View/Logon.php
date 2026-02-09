@@ -1,5 +1,6 @@
 <?php
 use Auth\App\Action\Logon;
+use Auth\App\Action\RecoveryPass;
 use Auth\App\Action\Reg;
 ?>
 
@@ -17,7 +18,7 @@ use Auth\App\Action\Reg;
         <div>
             <div>
                 <label for="pass">Пароль</label>
-                <a href="#">Забыли пароль?</a>
+                <a href="<?=  RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
             </div>
             <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required>
         </div>

@@ -1,6 +1,7 @@
 <?php
 namespace  Auth\App\Action;
 
+use Auth\App\Model\Users;
 use Auth\Sys\Routing;
 use \Auth\SYS\Views;
 

@@ -22,6 +22,36 @@ class Users extends _Base
 		);
 	}
 
+    public static function deleteUserNotActivated()
+    {
+        self::getPDO()->query (
+            'DELETE FROM users
+                    WHERE activation_code IS NOT NULL
+                      AND created_at < NOW() - INTERVAL 7 DAY'
+        );
+    }
+
+    public static function setChangePassCode($id, $code)
+    {
+        $prepare = self::getPDO()->prepare(
+            'UPDATE 
+                        users 
+                    SET 
+                        pass_change_code = :pass_change_code, 
+                        change_pass_at = :change_pass_at
+                    WHERE 
+                        id = :id'
+        );
+
+        var_dump('setChangePassCode');
+
+        $prepare->execute([
+            'id'                        => $id,
+            'pass_change_code'          => $code,
+            'change_pass_at'            => date('Y-m-d H:i:s')
+        ]);
+    }
+
 	/**
 	 * @param $login
 	 * @return bool
