@@ -14,6 +14,7 @@ class Logon extends _Base
     public function __invoke($param_optional = null)
 	{
         if (Auth::isAuthorized()) {
+			// fixme чтобы redirect на главную страницу url можно указать просто слеш /
             Response::redirect('http://authorization/');
         }
 

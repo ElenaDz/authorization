@@ -8,23 +8,21 @@ use Auth\Sys\Response;
 
 class ActivationUser extends _Base
 {
+	const PARAM_NAME_LOGIN = 'login';
+
+
     public function __invoke($login = null, $code = null)
     {
-		// fixme плохая идея объединять эти две проверки для каждой проверки должен быть отдельный if и исключения ok
-	    //  важно сейчас тебя исправить чтобы ты в дальнейшем не делала этой ошибки
-        if (empty($login))
-        {
-            throw new \Exception(
-                'Нет Логина'
-            );
+        if (empty($login)) {
+            throw new \Exception('Нет логина');
+
         } elseif (empty($code)) {
-            throw new \Exception(
-                'Нет кода активации'
-            );
+            throw new \Exception('Нет кода активации');
         }
 
         $user = Users::getByLoginOrEmail($login);
 
+		// todo нет сообщения от ошибке когда код активации не правильный
         if ($user->validActivationCode($code))
         {
             Auth::logonWithoutPassword($login);

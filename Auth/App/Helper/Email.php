@@ -8,18 +8,18 @@ class Email
 {
 	public static function send($subject, $message, $to)
 	{
-//        Работает только без антивируса
+		// Работает только без антивируса
 
 		require_once __DIR__ . '/../../../vendor/PHPMailer/src/Exception.php';
 		require_once __DIR__ . '/../../../vendor/PHPMailer/src/PHPMailer.php';
 		require_once __DIR__ . '/../../../vendor/PHPMailer/src/SMTP.php';
 
-//        $subject = implode(', ', $subject);
+		// $subject = implode(', ', $subject);
 		$mail = new PHPMailer(true);
 
 		$mail->CharSet    = PHPMailer::CHARSET_UTF8;
 
-//        $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_SERVER;
+		// $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_SERVER;
 		$mail->isSMTP();
 		$mail->SMTPAuth   = true;
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -31,7 +31,7 @@ class Email
 		$mail->Password   = 'tkioaxwinulqjvgq';
 		$mail->Port       = 587;
 
-		// здесь email кому отправлять это письмо ($to) например в нашем случае это может быть tehnomarket.nhk@yandex.ru
+		// здесь email кому отправлять это письмо ($to)
 		$mail->addAddress("Lenagosu@yandex.ru");
 
 		// здесь указать email с того же аккаунта, что выше был указан пароль, может совпадать с email to
@@ -43,6 +43,9 @@ class Email
 		$mail->Body    = $message;
 
 		$mail->send();
+
+		// todo использовать данные присланные заказником, почта должна приходить к тебе на емейл, если вдруг не удасться
+		//  об этом лучше узнать как можно раньше
 
 //        Лена, привет.
 //

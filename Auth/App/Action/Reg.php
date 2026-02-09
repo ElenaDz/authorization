@@ -4,6 +4,7 @@ namespace Auth\App\Action;
 use Auth\APP\Helper\Email;
 use Auth\App\Entity\User;
 use Auth\App\Enum\Error;
+use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Views;
 
@@ -22,6 +23,9 @@ class Reg extends _Base
 	{
         $errors = [];
 
+		$login = null;
+		$email = null;
+
         if ($_POST[self::POST_NAME_LOGIN])
         {
             $login = $_POST[self::POST_NAME_LOGIN];
@@ -30,8 +34,9 @@ class Reg extends _Base
             $email = $_POST[self::POST_NAME_EMAIL];
 
             try {
-                if ( $pass != $pass_confirm) {
+                if ($pass != $pass_confirm) {
                     $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
+					// fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал
                     throw new \Exception(json_encode($errors));
                 }
 
@@ -39,14 +44,20 @@ class Reg extends _Base
 
                 $id = Users::add($user);
 
-                if (!empty($id)) {
-                    $activation_link = $_SERVER['HTTP_ORIGIN'] . ActivationUser::getUrl([
-                        'login' => $_POST[self::POST_NAME_LOGIN],
-                        'code' => $user->getActivationCode()
-                    ]);
+                if (!empty($id))
+				{
+					// todo для генерации абсолютных url`ов как здесь используй этот helper
+                    $activation_link = Url::getUrlAbsolute(
+						ActivationUser::getUrl([
+							// todo заведи константы для этих магических строк, ниже я дал ссылку на одну из них
+							ActivationUser::PARAM_NAME_LOGIN => $_POST[self::POST_NAME_LOGIN],
+	                        'code' => $user->getActivationCode()
+	                    ])
+                    );
 
                     Email::send(
                         "Подтверждения электронной почты $email",
+						// fixme заказчик просил для каждого письма создавать отдельный шаблон так как он будет их модифицировать в html
                         "Здравствуйте, $login!
                         Для подтверждения электронной почты и активации вашего аккаунта на сайте 
                         drivemusic.me, пожалуйста, перейдите по <a href=$activation_link>этой ссылке</a>
@@ -56,10 +67,7 @@ class Reg extends _Base
                     );
 
                     $content = Views::get(
-                        __DIR__ . '/../View/Block/Reg/RegSuccess.php',
-                        [
-                            'test' => ''
-                        ]
+                        __DIR__ . '/../View/Block/Reg/RegSuccess.php'
                     );
 
                     self::showLayout(

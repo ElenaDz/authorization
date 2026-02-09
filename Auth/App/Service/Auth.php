@@ -34,6 +34,7 @@ class Auth
         return true;
     }
 
+	// todo если есть метод unset то напрашивается и метод set
     private static function unsetCookieToken($with_error = false)
     {
         unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
@@ -51,6 +52,7 @@ class Auth
 		return self::$user;
 	}
 
+	// fixme метод не используется Ты тестировала что каждое из этих правил срабатывает?
     public static function validPassword($pass)
     {
         $errors = [];
@@ -98,7 +100,7 @@ class Auth
     {
         $user = Users::getByLoginOrEmail($login_or_email);
 
-        self::verifyLogin($user,$login_or_email);
+        self::verifyLogin($user, $login_or_email);
 
         if ( ! $user->verifyPass($pass)) {
             throw new \DomainException('Не правильный пароль');
@@ -111,7 +113,7 @@ class Auth
     {
         $user = Users::getByLoginOrEmail($login_or_email);
 
-        self::verifyLogin($user,$login_or_email);
+        self::verifyLogin($user, $login_or_email);
 
         $user->genToken();
 
@@ -125,6 +127,7 @@ class Auth
 
     private static function verifyLogin($user, $login_or_email)
     {
+		// fixme не нужно вложенности
         if (empty($user))
         {
             throw new \DomainException(

@@ -2,6 +2,8 @@
 
 namespace Auth\App\Enum;
 
+// fixme убрать вместо них использовать константы ссылку на которую я дал ниже
+/** @link \Auth\App\Action\Reg::POST_NAME_LOGIN */
 class Error
 {
     const LIST_LOGIN_ERROR = 'logins';

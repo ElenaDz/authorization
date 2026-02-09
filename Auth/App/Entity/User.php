@@ -5,14 +5,14 @@ use Auth\App\Enum\Error;
 use Auth\App\Model\Users;
 use Auth\App\Service\Auth;
 
-class User
+class User extends _Base
 {
     const NAME_HASH = 'hash';
     const NAME_TOKEN = 'token';
-    const NAME_ACTIVATION_CODE = 'activation_code';
 
-	
-	// todo добавить нужные сеттеры и добавить в них валидацию
+
+	// fixme свойства здесь должны быть в том же порядке что в БД иначе слишком сложно сравнивать их с БД
+	// fixme все свойства всегда private доступ только через сетеры/гетеры
     private $id;
     private $login;
     public $hash;
@@ -21,32 +21,6 @@ class User
 	private $email;
     private $token;
 
-
-	// fixme конструктор должен быть private чтобы не было возможности создать пользователя с помощью него, для этого метод create
-    private function __construct($login = null, $pass = null, $email = null)
-    {
-        if (!empty($login)) {
-            $this->login = $login;
-        }
-
-        if (!empty($email)) {
-            $this->email = $email;
-        }
-
-        if (!$pass === false) {
-			// fixme в момент создания пользователя все поля его пустые зачем ты здесь проверяешь старое значение пароля?
-            if ($pass !== $this->getHashFromBD())
-            {
-                $this->setPass($pass);
-            }
-        }
-
-        if (empty($this->getActivationCode())) {
-            $this->setActivationCode();
-        }
-
-		// todo используй здесь random_bytes вместо random_int ok
-    }
 
 	public static function create($login, $pass, $email): User
     {
@@ -76,18 +50,23 @@ class User
         }
 
         if (count($errors)> 0) {
+	        // fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал
             throw new \Exception(json_encode($errors));
         }
 
-        $user = new User($login, $pass, $email);
+        $user = new self();
+
+	    $user->setLogin($login);
+
+	    $user->setEmail($email);
+
+	    $user->setPass($pass);
+
+	    $user->setActivationCode();
 
         return $user;
 	}
 
-    public function getEmail()
-	{
-		return $this->email;
-	}
 
     public function getId(): int
     {
@@ -97,7 +76,7 @@ class User
 
     public  function validActivationCode($code): bool
     {
-		// fixme если у тебя есть геттер для свойства необходимо использовать его вместо прямого обращения к свойству ok
+		// fixme почему self ?
         return self::getActivationCode() == $code;
     }
 
@@ -109,12 +88,18 @@ class User
         return $this->activation_code;
     }
 
+	// fixme код активации создается один раз при создании пользователя, лучше перенеси этот код в конструктор, сетер удали
+	//  вторая ошибка в имени функции здесь gen а не set
     public function setActivationCode()
     {
-        if (empty($this->getToken()) ) {
-            $this->activation_code = md5(random_bytes(5));
-        }
+		$this->activation_code = md5(random_bytes(5));
     }
+
+	public function resetActivationCode()
+	{
+		$this->activation_code = null;
+	}
+
 
     /**
      * @return string|null
@@ -127,11 +112,17 @@ class User
     public function genChangePassCode()
     {
         $this->change_pass_code = md5(random_bytes(3));
+
+		// fixme если это поле свеяно с полем времени генерации этого кода то обновленное время нужно записывать прямо здесь
     }
 
-	public function resetActivationCode()
+
+
+	private function setLogin($login)
 	{
-		$this->activation_code = null;
+		// todo валидация
+
+		$this->login = $login;
 	}
 
     public function getLogin() : string
@@ -139,24 +130,36 @@ class User
         return $this->login;
     }
 
+
     private function setPass($pass)
     {
-        $this->setHash(self::getHash($pass));
-    }
-	// fixme лучше сделать метод setPass и пускай логика что происходит после этого уже будет скрыта в этом методе ok
-    private function setHash($hash)
-    {
-        $this->hash = $hash;
+		// todo валидация
+
+	    $this->hash = self::getHashForPass($pass);
     }
 
-	// fixme ерунда какая то pass или hash ok
-    private function getHashFromBD()
+    private function getHash()
     {
         return $this->hash;
     }
 
+
+	public function setEmail($email)
+	{
+		// todo валидация
+
+		$this->email = $email;
+	}
+
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
+
 	public function verifyPass($pass): bool
 	{
+		// fixme для hash есть гетер
 		return password_verify($pass, $this->hash);
 	}
 
@@ -186,7 +189,7 @@ class User
 	}
 
 
-	private static function getHash($pass)
+	private static function getHashForPass($pass)
 	{
 		return password_hash($pass, \PASSWORD_BCRYPT);
 	}

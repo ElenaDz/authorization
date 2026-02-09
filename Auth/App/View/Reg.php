@@ -1,8 +1,7 @@
 <?php
-// fixme вернуть где был, эта папка для блоков (кусочков из которых состоит страница), а это целая страница
-//  она должен быть в корне папки шаблоны ok
 use Auth\App\Enum\Error;
 use Auth\App\Action\Reg;
+
 /**
  * @var array $errors
  * @var $login

@@ -31,6 +31,8 @@ class Users extends _Base
         );
     }
 
+
+	// fixme удалить, тебе этот метод не нужен у тебя есть метод save просто замени что нужно и вызови save
     public static function setChangePassCode($id, $code)
     {
         $prepare = self::getPDO()->prepare(
@@ -52,6 +54,7 @@ class Users extends _Base
         ]);
     }
 
+	// fixme слово User в названии лишнее
 	/**
 	 * @param $login
 	 * @return bool
@@ -60,7 +63,8 @@ class Users extends _Base
     {
 		$pdo = self::getPDO();
 
-		$results = $pdo->prepare(
+	    // fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена
+	    $results = $pdo->prepare(
 			'SELECT * FROM users WHERE login=:login'
 		);
 
@@ -90,6 +94,7 @@ class Users extends _Base
         return $results->fetchObject(User::class);
     }
 
+	// fixme слово User в названии лишнее
     /**
      * @param $email
      * @return bool
@@ -98,6 +103,7 @@ class Users extends _Base
     {
         $pdo = self::getPDO();
 
+		// fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена
         $results = $pdo->prepare(
             'SELECT * FROM users WHERE email=:email'
         );
@@ -109,6 +115,7 @@ class Users extends _Base
         return !empty($results->fetchColumn());
     }
 
+	// fixme удалить не используется
 	/**
 	 * @return User[]
 	 */
@@ -172,7 +179,7 @@ class Users extends _Base
     {
         $user_from_db = self::getById($user->getId()) ?? null;
 
-        if ($user->getId() &&  empty($user_from_db)) {
+        if ($user->getId() && empty($user_from_db)) {
             throw new \Exception(
                 sprintf(
                     'Пользователь с id = "%s" не найден в базе данных',
@@ -208,7 +215,6 @@ class Users extends _Base
                         id = :id'
         );
 
-        var_dump('sav');
         $prepare->execute([
             'id'                => $user->getId(),
             'hash'              => self::getPrivatePropValueByUser($user, User::NAME_HASH),
