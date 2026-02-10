@@ -10,8 +10,6 @@ class User extends _Base
     const NAME_HASH = 'hash';
     const NAME_TOKEN = 'token';
 
-	// fixme свойства здесь должны быть в том же порядке что в БД иначе слишком сложно сравнивать их с БД ok
-	// fixme все свойства всегда private доступ только через сетеры/гетеры ok
     private $id;
     private $login;
     private $hash;
@@ -62,7 +60,7 @@ class User extends _Base
 
 	    $user->setPass($pass);
 
-	    $user->genActivationCode();
+	    $user->activation_code = md5(random_bytes(5));
 
         return $user;
 	}
@@ -74,7 +72,6 @@ class User extends _Base
 
     public  function validActivationCode($code): bool
     {
-		// fixme почему self ? ok
         return $this->getActivationCode() == $code;
     }
 
@@ -86,12 +83,6 @@ class User extends _Base
         return $this->activation_code;
     }
 
-	// fixme код активации создается один раз при создании пользователя, лучше перенеси этот код в конструктор, сетер удали(уже нет конструктора)
-	//  вторая ошибка в имени функции здесь gen а не set ок
-    public function genActivationCode()
-    {
-		$this->activation_code = md5(random_bytes(5));
-    }
 
 	public function resetActivationCode()
 	{
@@ -110,7 +101,6 @@ class User extends _Base
     {
         $this->pass_change_code = md5(random_bytes(3));
 
-		// fixme если это поле свеяно с полем времени генерации этого кода то обновленное время нужно записывать прямо здесь ok
         $this->pass_change_code_at = date('Y-m-d H:i:s');
     }
 

@@ -23,14 +23,14 @@ use Auth\App\Action\Reg;
         <label for="email">E-mail</label><br>
         <input type="email" id="email" autocomplete name="<?= Reg::POST_NAME_EMAIL; ?>" required value="<?= $email ?>"><br>
         <?php if ($errors[Error::EMAIL_ERROR]) :?>
-            <small style="color: red;"><?= $errors[Error::EMAIL_ERROR] ?></small>
+            <small style="color: red;"><?= $errors[Error::EMAIL_ERROR] ?></small><br>
         <?php endif ?>
 
         <br>
         <label for="pass">Пароль два раза (буквы, цифры, знаки препинания)</label><br>
         <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required><br>
         <?php if ($errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]) :?>
-            <small style="color: red;"><?= $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]; ?></small>
+            <small style="color: red;"><?= $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]; ?></small><br>
         <?php endif ?>
 
         <label for="pass_confirm"></label>

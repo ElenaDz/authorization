@@ -23,8 +23,7 @@ class ActivationUser extends _Base
 
         $user = Users::getByLoginOrEmail($login);
 
-		// todo нет сообщения от ошибке когда код активации не правильный ок
-        if (!$user->validActivationCode($code))
+        if ( ! $user->validActivationCode($code))
         {
             throw new \Exception('Код активации не совпадает');
         }

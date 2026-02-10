@@ -25,6 +25,7 @@ class ChangePass  extends _Base
             try {
                 if ($pass_post != $pass_confirm_post) {
                     $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
+					// fixme не используй json в исключениях
                     throw new \Exception(json_encode($errors));
                 }
 
@@ -41,10 +42,10 @@ class ChangePass  extends _Base
             }
         }
 
+		// fixme не правильно мы должны выдавать ошибки когда не заданы обязательные параметры емейл или код, ты просто ни чего не показываешь
         if ($email && $code)
         {
             $user = Users::getByLoginOrEmail($email);
-
             if (empty($user))
             {
                 throw new \Exception(

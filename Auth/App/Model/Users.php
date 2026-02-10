@@ -31,7 +31,7 @@ class Users extends _Base
         );
     }
 
-	// fixme слово User в названии лишнее ok
+
 	/**
 	 * @param $login
 	 * @return bool
@@ -40,7 +40,6 @@ class Users extends _Base
     {
 		$pdo = self::getPDO();
 
-	    // fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена ok
 	    $results = $pdo->prepare(
 			'SELECT * FROM users WHERE login=:login  LIMIT 1'
 		);
@@ -71,7 +70,7 @@ class Users extends _Base
         return $results->fetchObject(User::class);
     }
 
-	// fixme слово User в названии лишнее ok
+
     /**
      * @param $email
      * @return bool
@@ -80,7 +79,6 @@ class Users extends _Base
     {
         $pdo = self::getPDO();
 
-		// fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена ok
         $results = $pdo->prepare(
             'SELECT * FROM users WHERE email=:email LIMIT 1'
         );
@@ -92,7 +90,6 @@ class Users extends _Base
         return !empty($results->fetchColumn());
     }
 
-	// fixme удалить не используется ok
 
 	/**
 	 * @param $token
@@ -135,7 +132,6 @@ class Users extends _Base
 		return self::getPDO()->lastInsertId();
 	}
 
-    // fixme удалить, тебе этот метод не нужен у тебя есть метод save просто замени что нужно и вызови save ок
 
     public static function save(User $user)
     {

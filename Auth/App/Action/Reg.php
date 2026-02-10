@@ -32,6 +32,8 @@ class Reg extends _Base
             $pass_confirm = $_POST[self::POST_NAME_PASSWORD_CONFIRM];
             $email = $_POST[self::POST_NAME_EMAIL];
 
+			// todo нету сообщения об ошибке когда пытаешься зарегистрироваться с именем который уже занят
+
             try {
                 if ($pass != $pass_confirm) {
                     $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
@@ -45,17 +47,15 @@ class Reg extends _Base
 
                 if (!empty($id))
 				{
-					// todo для генерации абсолютных url`ов как здесь используй этот helper ок
                     $activation_link = Url::getUrlAbsolute(
 						ActivationUser::getUrl([
-							// todo заведи константы для этих магических строк, ниже я дал ссылку на одну из них ok
 							ActivationUser::PARAM_NAME_LOGIN => $login,
 	                        ActivationUser::PARAM_NAME_CODE => $user->getActivationCode()
 	                    ])
                     );
 
                     $message = Views::get(
-                        __DIR__ . '/../View/Block/EmailMessage/Reg.php',
+                        __DIR__ . '/../View/Email/Reg.php',
                         [
                             'login' => $login,
                             'activation_link' => $activation_link,
@@ -64,7 +64,6 @@ class Reg extends _Base
 
                     Email::send(
                         "Подтверждения электронной почты $email",
-						// fixme заказчик просил для каждого письма создавать отдельный шаблон так как он будет их модифицировать в html ok
                         $message,
                         $email
                     );

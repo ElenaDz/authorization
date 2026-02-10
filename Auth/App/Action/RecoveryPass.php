@@ -14,6 +14,7 @@ class RecoveryPass extends _Base
 
     public function __invoke()
     {
+		// fixme исправь в соответствии с аудио сообщением о структуре контроллера
         if (empty($_POST))
         {
             $content = Views::get(
@@ -45,7 +46,6 @@ class RecoveryPass extends _Base
 
             $user->genPassChangeCode();
 
-			// fixme не правильное название столбца в БД это не время смены пароля а времся генерации кода смены пароля ok
             $user->save();
 
             $activation_link = Url::getUrlAbsolute(
@@ -58,7 +58,7 @@ class RecoveryPass extends _Base
             $login = $user->getLogin();
 
             $message = Views::get(
-                __DIR__ . '/../View/Block/EmailMessage/RecoveryPass.php',
+                __DIR__ . '/../View/Email/RecoveryPass.php',
                 [
                     'login' => $login,
                     'activation_link' => $activation_link,
@@ -67,10 +67,6 @@ class RecoveryPass extends _Base
 
             Email::send(
                 "Восстановление пароля",
-	            // fixme заказчик просил для каждого письма создавать отдельный шаблон так как он будет их модифицировать в html ok
-                //  используй слово email в названии шаблона( использовала в названии директроии)
-                // fixme не используй url сайта (drivemusic.me) просто в коде, используй метод возвращающий его из конфигурационного файла Main ок
-                // fixme тоже самое катается названия сайта (drivemusic) ok
                 $message,
                 $email_post
             );

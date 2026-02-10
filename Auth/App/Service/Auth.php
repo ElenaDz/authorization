@@ -34,7 +34,6 @@ class Auth
         return true;
     }
 
-	// todo если есть метод unset то напрашивается и метод set ok
     private static function unsetCookieToken($with_error = false)
     {
         unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
@@ -48,7 +47,6 @@ class Auth
     private static function setCookieToken($user)
     {
         $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
-
         if ( ! $result) {
             throw new \Exception('Не удалось установить cookie');
         }
@@ -61,7 +59,7 @@ class Auth
 		return self::$user;
 	}
 
-	// fixme метод не используется Ты тестировала что каждое из этих правил срабатывает?( используется, да каждое срабатывает) ok
+
     public static function validPassword($pass)
     {
         $errors = [];
@@ -93,6 +91,8 @@ class Auth
             $errors['password'] = 'Пароль не соответствует требованиям сложности';
             return  $errors;
         }
+
+		return [];
     }
 
     public static function validLogin($login)
@@ -100,6 +100,8 @@ class Auth
         if ( strlen($login) > 100) {
             return ['login' =>'Имя пользователя должно быть меньше 100 символов' ];
         }
+
+		return [];
     }
 
     /**
@@ -133,7 +135,6 @@ class Auth
 
     private static function verifyLogin($user, $login_or_email)
     {
-		// fixme не нужно вложенности ok
         if ($user) return;
 
         throw new \DomainException(
