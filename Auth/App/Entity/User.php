@@ -129,7 +129,7 @@ class User extends _Base
 
 	private function setLogin($login)
 	{
-		// todo валидация ( убрать валидацию из create и перенести сюда?)
+		// todo валидация
 
 		$this->login = $login;
 	}
@@ -141,7 +141,7 @@ class User extends _Base
 
     private function setPass($pass)
     {
-		// todo валидация (убрать валидацию из create и перенести сюда?)
+		// todo валидация
 
 	    $this->hash = self::getHashForPass($pass);
     }

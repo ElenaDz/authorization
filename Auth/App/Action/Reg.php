@@ -35,9 +35,7 @@ class Reg extends _Base
             try {
                 if ($pass != $pass_confirm) {
                     $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
-					// fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал ($errors это массив, и
-                    // без json_encode  происходит:
-                    // Fatal error: Uncaught TypeError: Exception::__construct(): Argument #1 ($message) must be of type string, array given
+					// fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал
                     throw new \Exception(json_encode($errors));
                 }
 
