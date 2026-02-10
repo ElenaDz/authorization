@@ -179,7 +179,7 @@ class SMTP
      */
     protected $smtp_transaction_id_patterns = [
         'exim' => '/[\d]{3} OK id=(.*)/',
-        'sendmail' => '/[\d]{3} 2.0.0 (.*) Message/',
+        'sendmail' => '/[\d]{3} 2.0.0 (.*) EmailMessage/',
         'postfix' => '/[\d]{3} 2.0.0 Ok: queued as (.*)/',
         'Microsoft_ESMTP' => '/[0-9]{3} 2.[\d].0 (.*)@(?:.*) Queued mail for delivery/',
         'Amazon_SES' => '/[\d]{3} Ok (.*)/',
@@ -657,7 +657,7 @@ class SMTP
      * and the message body being separated by an additional <CRLF>.
      * Implements RFC 821: DATA <CRLF>.
      *
-     * @param string $msg_data Message data to send
+     * @param string $msg_data EmailMessage data to send
      *
      * @return bool
      */
@@ -730,7 +730,7 @@ class SMTP
             }
         }
 
-        //Message data has been sent, complete the command
+        //EmailMessage data has been sent, complete the command
         //Increase timelimit for end of DATA command
         $savetimelimit = $this->Timelimit;
         $this->Timelimit *= 2;

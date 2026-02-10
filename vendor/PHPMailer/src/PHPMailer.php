@@ -236,7 +236,7 @@ class PHPMailer
     public $ConfirmReadingTo = '';
 
     /**
-     * The hostname to use in the Message-ID header and as default HELO string.
+     * The hostname to use in the EmailMessage-ID header and as default HELO string.
      * If empty, PHPMailer attempts to find one with, in order,
      * $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
      * 'localhost.localdomain'.
@@ -248,7 +248,7 @@ class PHPMailer
     public $Hostname = '';
 
     /**
-     * An ID to be used in the Message-ID header.
+     * An ID to be used in the EmailMessage-ID header.
      * If empty, a unique id will be generated.
      * You can set your own, but it must be in the format "<id@domain>",
      * as defined in RFC5322 section 3.6.4 or it will be ignored.
@@ -663,7 +663,7 @@ class PHPMailer
     protected $CustomHeader = [];
 
     /**
-     * The most recent Message-ID (including angular brackets).
+     * The most recent EmailMessage-ID (including angular brackets).
      *
      * @var string
      */
@@ -833,7 +833,7 @@ class PHPMailer
      *
      * @param string      $to      To
      * @param string      $subject Subject
-     * @param string      $body    Message Body
+     * @param string      $body    EmailMessage Body
      * @param string      $header  Additional Header(s)
      * @param string|null $params  Params
      *
@@ -1254,7 +1254,7 @@ class PHPMailer
     }
 
     /**
-     * Return the Message-ID header of the last email.
+     * Return the EmailMessage-ID header of the last email.
      * Technically this is the value from the last time the headers were created,
      * but it's also the message ID of the last sent message except in
      * pathological cases.
@@ -2086,7 +2086,7 @@ class PHPMailer
             'authenticate' => 'SMTP Error: Could not authenticate.',
             'connect_host' => 'SMTP Error: Could not connect to SMTP host.',
             'data_not_accepted' => 'SMTP Error: data not accepted.',
-            'empty_message' => 'Message body empty',
+            'empty_message' => 'EmailMessage body empty',
             'encoding' => 'Unknown encoding: ',
             'execute' => 'Could not execute: ',
             'file_access' => 'Could not access file: ',
@@ -2213,7 +2213,7 @@ class PHPMailer
 
         //Split message into lines
         $lines = explode(static::$LE, $message);
-        //Message will be rebuilt in here
+        //EmailMessage will be rebuilt in here
         $message = '';
         foreach ($lines as $line) {
             $words = explode(' ', $line);
@@ -2413,7 +2413,7 @@ class PHPMailer
         } else {
             $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->serverHostname());
         }
-        $result .= $this->headerLine('Message-ID', $this->lastMessageID);
+        $result .= $this->headerLine('EmailMessage-ID', $this->lastMessageID);
         if (null !== $this->Priority) {
             $result .= $this->headerLine('X-Priority', $this->Priority);
         }
@@ -4508,7 +4508,7 @@ class PHPMailer
      *
      * @see https://tools.ietf.org/html/rfc6376#section-3.4.3
      *
-     * @param string $body Message Body
+     * @param string $body EmailMessage Body
      *
      * @return string
      */
@@ -4549,7 +4549,7 @@ class PHPMailer
             'Date',
             'Subject',
             'Reply-To',
-            'Message-ID',
+            'EmailMessage-ID',
             'Content-Type',
             'Mime-Version',
             'X-Mailer',

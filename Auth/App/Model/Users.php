@@ -31,41 +31,18 @@ class Users extends _Base
         );
     }
 
-
-	// fixme удалить, тебе этот метод не нужен у тебя есть метод save просто замени что нужно и вызови save
-    public static function setChangePassCode($id, $code)
-    {
-        $prepare = self::getPDO()->prepare(
-            'UPDATE 
-                        users 
-                    SET 
-                        pass_change_code = :pass_change_code, 
-                        change_pass_at = :change_pass_at
-                    WHERE 
-                        id = :id'
-        );
-
-        var_dump('setChangePassCode');
-
-        $prepare->execute([
-            'id'                        => $id,
-            'pass_change_code'          => $code,
-            'change_pass_at'            => date('Y-m-d H:i:s')
-        ]);
-    }
-
-	// fixme слово User в названии лишнее
+	// fixme слово User в названии лишнее ok
 	/**
 	 * @param $login
 	 * @return bool
 	 */
-	public static function hasUserByLogin($login): bool
+	public static function hasByLogin($login): bool
     {
 		$pdo = self::getPDO();
 
-	    // fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена
+	    // fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена ok
 	    $results = $pdo->prepare(
-			'SELECT * FROM users WHERE login=:login'
+			'SELECT * FROM users WHERE login=:login  LIMIT 1'
 		);
 
 		$results->execute([
@@ -84,7 +61,7 @@ class Users extends _Base
         $pdo = self::getPDO();
 
         $results = $pdo->prepare(
-            'SELECT * FROM users WHERE login = :value OR email = :value'
+            'SELECT * FROM users WHERE login = :value OR email = :value  LIMIT 1'
         );
 
 		$results->execute([
@@ -94,18 +71,18 @@ class Users extends _Base
         return $results->fetchObject(User::class);
     }
 
-	// fixme слово User в названии лишнее
+	// fixme слово User в названии лишнее ok
     /**
      * @param $email
      * @return bool
      */
-    public static function hasUserByEmail($email): bool
+    public static function hasByEmail($email): bool
     {
         $pdo = self::getPDO();
 
-		// fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена
+		// fixme если ты ищешь 1 запись нужно указать LIMIT 1 чтобы не нагружать БД проверкой всех строк таблицы если 1 запись уже найдена ok
         $results = $pdo->prepare(
-            'SELECT * FROM users WHERE email=:email'
+            'SELECT * FROM users WHERE email=:email LIMIT 1'
         );
 
         $results->execute([
@@ -115,23 +92,7 @@ class Users extends _Base
         return !empty($results->fetchColumn());
     }
 
-	// fixme удалить не используется
-	/**
-	 * @return User[]
-	 */
-	public static function getAll(): array
-    {
-		$pdo = self::getPDO();
-
-		$results = $pdo->query(
-			'SELECT * FROM users'
-		);
-
-		return $results->fetchAll(
-			\PDO::FETCH_CLASS,
-			User::class
-		);
-	}
+	// fixme удалить не используется ok
 
 	/**
 	 * @param $token
@@ -174,6 +135,7 @@ class Users extends _Base
 		return self::getPDO()->lastInsertId();
 	}
 
+    // fixme удалить, тебе этот метод не нужен у тебя есть метод save просто замени что нужно и вызови save ок
 
     public static function save(User $user)
     {
@@ -210,18 +172,21 @@ class Users extends _Base
                     SET 
                         hash = :hash, 
                         token = :token,
-                        activation_code = NULL
+                        activation_code = NULL,
+                        pass_change_code = :pass_change_code,
+                        pass_change_code_at = :pass_change_code_at
                     WHERE 
                         id = :id'
         );
 
         $prepare->execute([
-            'id'                => $user->getId(),
-            'hash'              => self::getPrivatePropValueByUser($user, User::NAME_HASH),
-            'token'             => self::getPrivatePropValueByUser($user, User::NAME_TOKEN)
+            'id'                        => $user->getId(),
+            'hash'                      => self::getPrivatePropValueByUser($user, User::NAME_HASH),
+            'token'                     => self::getPrivatePropValueByUser($user, User::NAME_TOKEN),
+            'pass_change_code'          => $user->getPassChangeCode() ?? null,
+            'pass_change_code_at'       => $user->getPassChangeCode() ? $user->getPassChangeCodeAt() : null
         ]);
     }
-
 
 	private static function getPrivatePropValueByUser(User $user, string $prop_name)
 	{

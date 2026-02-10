@@ -9,6 +9,7 @@ use Auth\Sys\Response;
 class ActivationUser extends _Base
 {
 	const PARAM_NAME_LOGIN = 'login';
+	const PARAM_NAME_CODE = 'code';
 
 
     public function __invoke($login = null, $code = null)
@@ -22,14 +23,19 @@ class ActivationUser extends _Base
 
         $user = Users::getByLoginOrEmail($login);
 
-		// todo нет сообщения от ошибке когда код активации не правильный
+		// todo нет сообщения от ошибке когда код активации не правильный ок
+        if (!$user->validActivationCode($code))
+        {
+            throw new \Exception('Код активации не совпадает');
+        }
+
         if ($user->validActivationCode($code))
         {
-            Auth::logonWithoutPassword($login);
-
             $user->resetActivationCode();
 
-            Response::redirect('http://authorization/');
+            Auth::logonWithoutPassword($login);
+
+            Response::redirect('/');
         }
     }
 

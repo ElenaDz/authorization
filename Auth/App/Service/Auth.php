@@ -34,7 +34,7 @@ class Auth
         return true;
     }
 
-	// todo если есть метод unset то напрашивается и метод set
+	// todo если есть метод unset то напрашивается и метод set ok
     private static function unsetCookieToken($with_error = false)
     {
         unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
@@ -45,6 +45,15 @@ class Auth
 	    }
     }
 
+    private static function setCookieToken($user)
+    {
+        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
+
+        if ( ! $result) {
+            throw new \Exception('Не удалось установить cookie');
+        }
+    }
+
 	public static function getUser()
 	{
 		if ( ! self::isAuthorized()) return null;
@@ -52,7 +61,7 @@ class Auth
 		return self::$user;
 	}
 
-	// fixme метод не используется Ты тестировала что каждое из этих правил срабатывает?
+	// fixme метод не используется Ты тестировала что каждое из этих правил срабатывает?( используется, да каждое срабатывает) ok
     public static function validPassword($pass)
     {
         $errors = [];
@@ -119,24 +128,20 @@ class Auth
 
         $user->save();
 
-        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
-        if ( ! $result) {
-            throw new \Exception('Не удалось установить cookie');
-        }
+        self::setCookieToken($user);
     }
 
     private static function verifyLogin($user, $login_or_email)
     {
-		// fixme не нужно вложенности
-        if (empty($user))
-        {
-            throw new \DomainException(
-                sprintf(
-                    'Пользователь "%s" не найден',
-                    $login_or_email
-                )
-            );
-        }
+		// fixme не нужно вложенности ok
+        if ($user) return;
+
+        throw new \DomainException(
+            sprintf(
+                'Пользователь "%s" не найден',
+                $login_or_email
+            )
+        );
     }
 
     public static function logout()

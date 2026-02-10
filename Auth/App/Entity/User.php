@@ -10,16 +10,16 @@ class User extends _Base
     const NAME_HASH = 'hash';
     const NAME_TOKEN = 'token';
 
-
-	// fixme свойства здесь должны быть в том же порядке что в БД иначе слишком сложно сравнивать их с БД
-	// fixme все свойства всегда private доступ только через сетеры/гетеры
+	// fixme свойства здесь должны быть в том же порядке что в БД иначе слишком сложно сравнивать их с БД ok
+	// fixme все свойства всегда private доступ только через сетеры/гетеры ok
     private $id;
     private $login;
-    public $hash;
-    public $activation_code;
-    public $change_pass_code;
-	private $email;
+    private $hash;
+    private $email;
     private $token;
+    private $activation_code;
+    private $pass_change_code;
+    private $pass_change_code_at;
 
 
 	public static function create($login, $pass, $email): User
@@ -31,18 +31,18 @@ class User extends _Base
             $errors[Error::LIST_LOGIN_ERROR] = $error_login;
         }
 
-        $error_pass =  Auth::validLogin($pass);
+        $error_pass =  Auth::validPassword($pass);
         if (!empty($error_pass)) {
             $errors[Error::LIST_PASS_ERROR] = $error_pass;
         }
 
-        if (Users::hasUserByLogin($login)) {
+        if (Users::hasByLogin($login)) {
             $errors[Error::LIST_LOGIN_ERROR] =  sprintf(
                 'Пользователь с логин "%s" уже существует',
                 $login
             );
         }
-        if ( Users::hasUserByEmail($email)) {
+        if ( Users::hasByEmail($email)) {
             $errors[Error::EMAIL_ERROR] =  sprintf(
                 'Пользователь с email "%s" уже существует',
                 $email
@@ -62,22 +62,20 @@ class User extends _Base
 
 	    $user->setPass($pass);
 
-	    $user->setActivationCode();
+	    $user->genActivationCode();
 
         return $user;
 	}
-
 
     public function getId(): int
     {
         return (int) $this->id;
     }
 
-
     public  function validActivationCode($code): bool
     {
-		// fixme почему self ?
-        return self::getActivationCode() == $code;
+		// fixme почему self ? ok
+        return $this->getActivationCode() == $code;
     }
 
     /**
@@ -88,9 +86,9 @@ class User extends _Base
         return $this->activation_code;
     }
 
-	// fixme код активации создается один раз при создании пользователя, лучше перенеси этот код в конструктор, сетер удали
-	//  вторая ошибка в имени функции здесь gen а не set
-    public function setActivationCode()
+	// fixme код активации создается один раз при создании пользователя, лучше перенеси этот код в конструктор, сетер удали(уже нет конструктора)
+	//  вторая ошибка в имени функции здесь gen а не set ок
+    public function genActivationCode()
     {
 		$this->activation_code = md5(random_bytes(5));
     }
@@ -100,27 +98,38 @@ class User extends _Base
 		$this->activation_code = null;
 	}
 
+    /**
+     * @return string|null
+     */
+    public function getPassChangeCode()
+    {
+        return $this->pass_change_code;
+    }
+
+    public function genPassChangeCode()
+    {
+        $this->pass_change_code = md5(random_bytes(3));
+
+		// fixme если это поле свеяно с полем времени генерации этого кода то обновленное время нужно записывать прямо здесь ok
+        $this->pass_change_code_at = date('Y-m-d H:i:s');
+    }
 
     /**
      * @return string|null
      */
-    public function getChangePassCode()
+    public function getPassChangeCodeAt()
     {
-        return $this->change_pass_code;
+        return $this->pass_change_code_at;
     }
 
-    public function genChangePassCode()
+    public function resetPassChangeCode()
     {
-        $this->change_pass_code = md5(random_bytes(3));
-
-		// fixme если это поле свеяно с полем времени генерации этого кода то обновленное время нужно записывать прямо здесь
+        $this->pass_change_code = null;
     }
-
-
 
 	private function setLogin($login)
 	{
-		// todo валидация
+		// todo валидация ( убрать валидацию из create и перенести сюда?)
 
 		$this->login = $login;
 	}
@@ -130,10 +139,9 @@ class User extends _Base
         return $this->login;
     }
 
-
     private function setPass($pass)
     {
-		// todo валидация
+		// todo валидация (убрать валидацию из create и перенести сюда?)
 
 	    $this->hash = self::getHashForPass($pass);
     }
@@ -142,7 +150,6 @@ class User extends _Base
     {
         return $this->hash;
     }
-
 
 	public function setEmail($email)
 	{
@@ -156,13 +163,11 @@ class User extends _Base
 		return $this->email;
 	}
 
-
 	public function verifyPass($pass): bool
 	{
 		// fixme для hash есть гетер
 		return password_verify($pass, $this->hash);
 	}
-
 
     public function genToken()
     {
@@ -182,12 +187,10 @@ class User extends _Base
         unset($this->token);
     }
 
-
 	public function save()
 	{
 		Users::save($this);
 	}
-
 
 	private static function getHashForPass($pass)
 	{

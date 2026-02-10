@@ -15,7 +15,6 @@ class Reg extends _Base
     const POST_NAME_PASS = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
 
-
     /**
      * @throws \Exception
      */
@@ -36,7 +35,9 @@ class Reg extends _Base
             try {
                 if ($pass != $pass_confirm) {
                     $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
-					// fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал
+					// fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал ($errors это массив, и
+                    // без json_encode  происходит:
+                    // Fatal error: Uncaught TypeError: Exception::__construct(): Argument #1 ($message) must be of type string, array given
                     throw new \Exception(json_encode($errors));
                 }
 
@@ -46,23 +47,27 @@ class Reg extends _Base
 
                 if (!empty($id))
 				{
-					// todo для генерации абсолютных url`ов как здесь используй этот helper
+					// todo для генерации абсолютных url`ов как здесь используй этот helper ок
                     $activation_link = Url::getUrlAbsolute(
 						ActivationUser::getUrl([
-							// todo заведи константы для этих магических строк, ниже я дал ссылку на одну из них
-							ActivationUser::PARAM_NAME_LOGIN => $_POST[self::POST_NAME_LOGIN],
-	                        'code' => $user->getActivationCode()
+							// todo заведи константы для этих магических строк, ниже я дал ссылку на одну из них ok
+							ActivationUser::PARAM_NAME_LOGIN => $login,
+	                        ActivationUser::PARAM_NAME_CODE => $user->getActivationCode()
 	                    ])
+                    );
+
+                    $message = Views::get(
+                        __DIR__ . '/../View/Block/EmailMessage/Reg.php',
+                        [
+                            'login' => $login,
+                            'activation_link' => $activation_link,
+                        ]
                     );
 
                     Email::send(
                         "Подтверждения электронной почты $email",
-						// fixme заказчик просил для каждого письма создавать отдельный шаблон так как он будет их модифицировать в html
-                        "Здравствуйте, $login!
-                        Для подтверждения электронной почты и активации вашего аккаунта на сайте 
-                        drivemusic.me, пожалуйста, перейдите по <a href=$activation_link>этой ссылке</a>
-                        С уважением,
-                        Команда drivemusic",
+						// fixme заказчик просил для каждого письма создавать отдельный шаблон так как он будет их модифицировать в html ok
+                        $message,
                         $email
                     );
 

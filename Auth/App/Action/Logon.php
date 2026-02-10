@@ -14,8 +14,8 @@ class Logon extends _Base
     public function __invoke($param_optional = null)
 	{
         if (Auth::isAuthorized()) {
-			// fixme чтобы redirect на главную страницу url можно указать просто слеш /
-            Response::redirect('http://authorization/');
+			// fixme чтобы redirect на главную страницу url можно указать просто слеш / ок
+            Response::redirect('/');
         }
 
         $errors = [];
@@ -28,7 +28,7 @@ class Logon extends _Base
             try {
                 Auth::logonByPassword($login, $pass);
 
-                Response::redirect('http://authorization/');
+                Response::redirect('/');
 
             } catch (\DomainException $exception) {
                 $errors[self::POST_NAME_LOGIN] = $exception->getMessage();
