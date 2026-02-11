@@ -7,6 +7,7 @@ use Auth\App\Enum\Error;
 use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Views;
+use mysql_xdevapi\Exception;
 
 class Reg extends _Base
 {
@@ -32,15 +33,52 @@ class Reg extends _Base
             $pass_confirm = $_POST[self::POST_NAME_PASSWORD_CONFIRM];
             $email = $_POST[self::POST_NAME_EMAIL];
 
-			// todo нету сообщения об ошибке когда пытаешься зарегистрироваться с именем который уже занят
+            try {
+                User::validEmail($email);
+            }catch (Exception $e){
+                $errors[self::POST_NAME_EMAIL] =  $e->getMessage();
+            }
+            try {
+                User::validLogin($login);
+            }catch (Exception $e){
+                $errors[self::POST_NAME_LOGIN] =  $e->getMessage();
+            }
+            try {
+                User::validPassword($pass);
+            }catch (Exception $e){
+                $errors[self::POST_NAME_PASS] =  $e->getMessage();
+            }
+
+			// todo нету сообщения об ошибке когда пытаешься зарегистрироваться с именем который уже занят ok
+            if (Users::hasByLogin($login)) {
+                throw new \Exception('Пользователь с таким Именем уже есть');
+            } elseif (Users::hasByEmail($email)) {
+                throw new \Exception('Пользователь с таким email уже есть');
+            }
+
+            if ($pass != $pass_confirm) {
+                $errors[self::POST_NAME_PASS] = 'Пароли не совпадают';
+                // fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал ок
+            }
+
+            if (count($errors)> 0) {
+                $content = Views::get(
+                    __DIR__ . '/../View/Reg.php',
+                    [
+                        'errors' => $errors,
+                        'login' => $login,
+                        'email' => $email,
+                    ]
+                );
+
+                self::showLayout(
+                    'Регистрация',
+                    $content
+                );
+                return;
+            }
 
             try {
-                if ($pass != $pass_confirm) {
-                    $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
-					// fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал
-                    throw new \Exception(json_encode($errors));
-                }
-
                 $user = User::create($login, $pass, $email);
 
                 $id = Users::add($user);
@@ -80,14 +118,13 @@ class Reg extends _Base
                 }
 
             } catch (\Exception $exception){
-                $errors = json_decode($exception->getMessage(),true);
+                throw new \Exception($exception->getMessage());
             }
         }
 
         $content = Views::get(
             __DIR__ . '/../View/Reg.php',
             [
-                'errors' => $errors,
                 'login' => $login,
                 'email' => $email,
             ]

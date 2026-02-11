@@ -6,7 +6,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class Email
 {
-	// fixme не используется $to
+	// fixme не используется $to ( я протестировала, отплавляетс по нужному адрессу,
+    // пока оставила вместо $to этот "Lenagosu@yandex.ru", так удобнее тестировать)
 	public static function send($subject, $message, $to)
 	{
 		// Работает только без антивируса

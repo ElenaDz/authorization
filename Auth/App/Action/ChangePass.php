@@ -22,13 +22,11 @@ class ChangePass  extends _Base
             $pass_post = $_POST[self::POST_NAME_PASS];
             $pass_confirm_post = $_POST[self::POST_NAME_PASSWORD_CONFIRM];
 
-            try {
-                if ($pass_post != $pass_confirm_post) {
-                    $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR] = 'Пароли не совпадают';
-					// fixme не используй json в исключениях
-                    throw new \Exception(json_encode($errors));
-                }
+            if ($pass_post != $pass_confirm_post) {
+                throw new \Exception('Пароли не совпадают');
+            }
 
+            try {
                 $user = Users::getByLoginOrEmail($email);
 
                 $user->resetPassChangeCode();
@@ -40,36 +38,44 @@ class ChangePass  extends _Base
             } catch (\Exception $exception){
                 $errors = json_decode($exception->getMessage(),true);
             }
+            return;
         }
 
-		// fixme не правильно мы должны выдавать ошибки когда не заданы обязательные параметры емейл или код, ты просто ни чего не показываешь
-        if ($email && $code)
+		// fixme не правильно мы должны выдавать ошибки когда не заданы обязательные параметры емейл или код, ты просто ни чего не показываешь ok
+        if (empty($email))
         {
-            $user = Users::getByLoginOrEmail($email);
-            if (empty($user))
-            {
-                throw new \Exception(
-                    sprintf(
-                        'Пользователь с email = "%s" не найден',
-                        $email
-                    )
-                );
-            }
+            throw new \Exception('Нет email');
+        } elseif (empty($code)) {
+            throw new \Exception('Нет кода смены пароля');
+        }
 
-            if ($user->getPassChangeCode() == $code)
-            {
-                $content = Views::get(
-                    __DIR__ . '/../View/ChangePass.php',
-                    [
-                        'email'  => $email
-                    ]
-                );
+        $user = Users::getByLoginOrEmail($email);
 
-                self::showLayout(
-                    'Смена пароля',
-                    $content
-                );
-            }
+        if (empty($user))
+        {
+            throw new \Exception(
+                sprintf(
+                    'Пользователь с email = "%s" не найден',
+                    $email
+                )
+            );
+        }
+
+        if ($user->getPassChangeCode() == $code)
+        {
+            $content = Views::get(
+                __DIR__ . '/../View/ChangePass.php',
+                [
+                    'email'  => $email
+                ]
+            );
+
+            self::showLayout(
+                'Смена пароля',
+                $content
+            );
+        } else {
+            throw new \Exception('Код не совпадает с кодом пользователя');
         }
     }
 }

@@ -13,7 +13,6 @@ class Auth
      */
     private static $user;
 
-
     public static function isAuthorized(): bool
     {
         $token = $_COOKIE[self::COOKIE_NAME_TOKEN];
@@ -58,42 +57,6 @@ class Auth
 
 		return self::$user;
 	}
-
-
-    public static function validPassword($pass)
-    {
-        $errors = [];
-        if (strlen($pass) < 6) {
-            $errors['password'] = 'Пароль должен быть не менее 6 символов';
-            return  $errors;
-        }
-        if (strlen($pass) > 30) {
-            $errors['password'] = 'Пароль должен быть меньше 31 символа';
-            return  $errors;
-        }
-
-        if (!preg_match('/[A-Z]/', $pass)) {
-            $errors['password'] = 'Пароль должен содержать хотя бы одну заглавную латинскую букву';
-            return  $errors;
-        }
-
-        if (!preg_match('/[a-z]/', $pass)) {
-            $errors['password'] = 'Пароль должен содержать хотя бы одну строчную латинскую букву';
-            return  $errors;
-        }
-
-        if (!preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {
-            $errors['password'] = 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , . : ; < = > ?';
-            return  $errors;
-        }
-
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,. :;<=>?]).+$/', $pass)) {
-            $errors['password'] = 'Пароль не соответствует требованиям сложности';
-            return  $errors;
-        }
-
-		return [];
-    }
 
     public static function validLogin($login)
     {
@@ -156,5 +119,41 @@ class Auth
         $user->save();
 
         self::unsetCookieToken(true);
+    }
+
+    public static function validPassword($pass): array
+    {
+        $errors = [];
+
+        if (strlen($pass) < 6) {
+            $errors['password'] = 'Пароль должен быть не менее 6 символов';
+            return  $errors;
+        }
+        if (strlen($pass) > 30) {
+            $errors['password'] = 'Пароль должен быть меньше 31 символа';
+            return  $errors;
+        }
+
+        if (!preg_match('/[A-Z]/', $pass)) {
+            $errors['password'] = 'Пароль должен содержать хотя бы одну заглавную латинскую букву';
+            return  $errors;
+        }
+
+        if (!preg_match('/[a-z]/', $pass)) {
+            $errors['password'] = 'Пароль должен содержать хотя бы одну строчную латинскую букву';
+            return  $errors;
+        }
+
+        if (!preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {
+            $errors['password'] = 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , . : ; < = > ?';
+            return  $errors;
+        }
+
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,. :;<=>?]).+$/', $pass)) {
+            $errors['password'] = 'Пароль не соответствует требованиям сложности';
+            return  $errors;
+        }
+
+        return [];
     }
 }

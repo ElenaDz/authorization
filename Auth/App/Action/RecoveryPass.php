@@ -14,19 +14,7 @@ class RecoveryPass extends _Base
 
     public function __invoke()
     {
-		// fixme исправь в соответствии с аудио сообщением о структуре контроллера
-        if (empty($_POST))
-        {
-            $content = Views::get(
-                __DIR__ . '/../View/RecoveryPass.php'
-            );
-
-            self::showLayout(
-                'Восстановление пароля',
-                $content
-            );
-        }
-
+		// fixme исправь в соответствии с аудио сообщением о структуре контроллера ok
         if ($_POST[self::POST_NAME_EMAIL])
 		{
             $email_post = $_POST[self::POST_NAME_EMAIL];
@@ -79,6 +67,16 @@ class RecoveryPass extends _Base
                 'Восстановление пароля',
                 $content
             );
+            return;
         }
+
+        $content = Views::get(
+            __DIR__ . '/../View/RecoveryPass.php'
+        );
+
+        self::showLayout(
+            'Восстановление пароля',
+            $content
+        );
     }
 }

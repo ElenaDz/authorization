@@ -15,22 +15,22 @@ use Auth\App\Action\Reg;
     <form method="post"  action="<?= Reg::getUrl(); ?>">
         <label for="login">Имя пользователя</label><br>
         <input type="text" id="login" autocomplete name="<?= Reg::POST_NAME_LOGIN; ?>" required value="<?= $login ?>"><br>
-        <?php if ($errors[Error::LOGIN_ERROR]) :?>
-            <small style="color: red;"><?= $errors[Error::LOGIN_ERROR] ?></small>
+        <?php if ($errors[Reg::POST_NAME_LOGIN]) :?>
+            <small style="color: red;"><?= $errors[Reg::POST_NAME_LOGIN] ?></small>
         <?php endif ?>
 
         <br>
         <label for="email">E-mail</label><br>
         <input type="email" id="email" autocomplete name="<?= Reg::POST_NAME_EMAIL; ?>" required value="<?= $email ?>"><br>
-        <?php if ($errors[Error::EMAIL_ERROR]) :?>
-            <small style="color: red;"><?= $errors[Error::EMAIL_ERROR] ?></small><br>
+        <?php if ($errors[Reg::POST_NAME_EMAIL]) :?>
+            <small style="color: red;"><?= $errors[Reg::POST_NAME_EMAIL] ?></small><br>
         <?php endif ?>
 
         <br>
         <label for="pass">Пароль два раза (буквы, цифры, знаки препинания)</label><br>
         <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required><br>
-        <?php if ($errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]) :?>
-            <small style="color: red;"><?= $errors[Error::LIST_PASS_ERROR][Error::PASS_ERROR]; ?></small><br>
+        <?php if ($errors[Reg::POST_NAME_PASS]) :?>
+            <small style="color: red;"><?= $errors[Reg::POST_NAME_PASS]; ?></small><br>
         <?php endif ?>
 
         <label for="pass_confirm"></label>

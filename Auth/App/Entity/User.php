@@ -22,36 +22,6 @@ class User extends _Base
 
 	public static function create($login, $pass, $email): User
     {
-        $errors = [];
-        $error_login =  Auth::validLogin($login);
-
-        if (!empty($error_login)) {
-            $errors[Error::LIST_LOGIN_ERROR] = $error_login;
-        }
-
-        $error_pass =  Auth::validPassword($pass);
-        if (!empty($error_pass)) {
-            $errors[Error::LIST_PASS_ERROR] = $error_pass;
-        }
-
-        if (Users::hasByLogin($login)) {
-            $errors[Error::LIST_LOGIN_ERROR] =  sprintf(
-                'Пользователь с логин "%s" уже существует',
-                $login
-            );
-        }
-        if ( Users::hasByEmail($email)) {
-            $errors[Error::EMAIL_ERROR] =  sprintf(
-                'Пользователь с email "%s" уже существует',
-                $email
-            );
-        }
-
-        if (count($errors)> 0) {
-	        // fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал
-            throw new \Exception(json_encode($errors));
-        }
-
         $user = new self();
 
 	    $user->setLogin($login);
@@ -82,7 +52,6 @@ class User extends _Base
     {
         return $this->activation_code;
     }
-
 
 	public function resetActivationCode()
 	{
@@ -119,7 +88,8 @@ class User extends _Base
 
 	private function setLogin($login)
 	{
-		// todo валидация
+		// todo валидация ok
+        self::validLogin($login);
 
 		$this->login = $login;
 	}
@@ -131,9 +101,10 @@ class User extends _Base
 
     private function setPass($pass)
     {
-		// todo валидация
+		// todo валидация ok
+        self::validPassword($pass);
 
-	    $this->hash = self::getHashForPass($pass);
+        $this->hash = self::getHashForPass($pass);
     }
 
     private function getHash()
@@ -143,7 +114,8 @@ class User extends _Base
 
 	public function setEmail($email)
 	{
-		// todo валидация
+		// todo валидация ok
+        self::validEmail($email);
 
 		$this->email = $email;
 	}
@@ -155,8 +127,8 @@ class User extends _Base
 
 	public function verifyPass($pass): bool
 	{
-		// fixme для hash есть гетер
-		return password_verify($pass, $this->hash);
+		// fixme для hash есть гетер ok
+		return password_verify($pass, $this->getHash());
 	}
 
     public function genToken()
@@ -181,6 +153,51 @@ class User extends _Base
 	{
 		Users::save($this);
 	}
+    public static function validLogin($login)
+    {
+        if (strlen($login) > 100) {
+            throw new \DomainException(
+                'Логин доложен быть меньше 100 символов'
+            );
+        }
+    }
+
+    public static function validEmail($email)
+    {
+        if (strlen($email) > 40) {
+            throw new \DomainException(
+                'Email доложен быть меньше 400 символов'
+            );
+        }
+    }
+
+    public static function validPassword($pass)
+    {
+        if (strlen($pass) < 6) {
+            throw new \DomainException('Пароль должен быть не менее 6 символов');
+        }
+        if (strlen($pass) > 30) {
+            throw new \DomainException('Пароль должен быть меньше 31 символа');
+        }
+
+        if (!preg_match('/[A-Z]/', $pass)) {
+            throw new \DomainException('Пароль должен содержать хотя бы одну заглавную латинскую букву');
+        }
+
+        if (!preg_match('/[a-z]/', $pass)) {
+            throw new \DomainException('Пароль должен содержать хотя бы одну строчную латинскую букву');
+        }
+
+        if (!preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {
+            throw new \DomainException(
+                'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , . : ; < = > ?'
+            );
+        }
+
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,. :;<=>?]).+$/', $pass)) {
+            throw new \DomainException('Пароль не соответствует требованиям сложности');
+        }
+    }
 
 	private static function getHashForPass($pass)
 	{
