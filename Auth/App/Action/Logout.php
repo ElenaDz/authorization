@@ -16,7 +16,6 @@ class Logout extends _Base
             Auth::logout();
         }
 
-		// fixme не используй абсолютные пути, используй относительные ок
         Response::redirect('/');
 	}
 }

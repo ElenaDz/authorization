@@ -11,6 +11,7 @@ class Logon extends _Base
     const POST_NAME_LOGIN = 'login';
     const POST_NAME_PASS = 'password';
 
+
     public function __invoke($param_optional = null)
 	{
         if (Auth::isAuthorized()) {
@@ -30,6 +31,7 @@ class Logon extends _Base
                 Response::redirect('/');
 
             } catch (\DomainException $exception) {
+				// fixme например "не правильный пароль" это не ошибка логина, это ошибка пароля
                 $errors[self::POST_NAME_LOGIN] = $exception->getMessage();
             }
         }
@@ -38,7 +40,6 @@ class Logon extends _Base
 			__DIR__ . '/../View/Logon.php',
 			[
                 'errors' => $errors
-
 			]
 		);
 

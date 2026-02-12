@@ -59,7 +59,7 @@ class Error
 
 	private static function exceptionHandler(\Throwable $e)
 	{
-		$msg = $e->getMessage();
+		$msg = 'Ошибка! '.$e->getMessage();
 		$code = $e->getCode();
 
 		if ($code && ($code < 300 || $code >= 600))
@@ -67,7 +67,8 @@ class Error
 			$msg = $msg." [code $code]";
 		}
 
-		if ($e->getFile()) {
+		if ($e->getFile() && Request::isDevelopment())
+		{
 			$msg = $msg."\r\n".
 				$e->getFile().' on line '.$e->getLine();
 		}

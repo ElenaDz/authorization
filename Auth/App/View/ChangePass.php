@@ -12,10 +12,10 @@ use Auth\App\Action\ChangePass;
         <input type="email" id="email" autocomplete name="<?= ChangePass::POST_NAME_EMAIL; ?>" required value="<?= $email ?>"><br>
 
         <br>
-        <label for="pass">Пароль два раза (буквы, цифры, знаки препинания)</label><br>
+        <label for="pass">Пароль (буквы, цифры, знаки препинания)</label><br>
         <input type="password" id="pass" name="<?= ChangePass::POST_NAME_PASS; ?>" required><br>
 
-        <label for="pass_confirm"></label>
+        <label for="pass_confirm">Пароль еще раз</label>
         <input type="password" id="pass_confirm" name="<?= ChangePass::POST_NAME_PASSWORD_CONFIRM; ?>" required><br>
 
         <br>

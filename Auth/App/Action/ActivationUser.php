@@ -21,6 +21,8 @@ class ActivationUser extends _Base
             throw new \Exception('Нет кода активации');
         }
 
+		// todo заведи метод getByLoginOrEmailOrFall который будет вызывать getByLoginOrEmail и если он ни чего не вернул
+	    //  бросай исключение и используй его везде где это нужно, например здесь
         $user = Users::getByLoginOrEmail($login);
 
         if ( ! $user->validActivationCode($code))

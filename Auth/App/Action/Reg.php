@@ -3,7 +3,6 @@ namespace Auth\App\Action;
 
 use Auth\APP\Helper\Email;
 use Auth\App\Entity\User;
-use Auth\App\Enum\Error;
 use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Views;
@@ -35,33 +34,39 @@ class Reg extends _Base
 
             try {
                 User::validEmail($email);
-            }catch (Exception $e){
+
+            } catch (Exception $e){
                 $errors[self::POST_NAME_EMAIL] =  $e->getMessage();
             }
+
             try {
                 User::validLogin($login);
-            }catch (Exception $e){
+
+            } catch (Exception $e){
                 $errors[self::POST_NAME_LOGIN] =  $e->getMessage();
             }
+
             try {
                 User::validPassword($pass);
-            }catch (Exception $e){
+
+            } catch (Exception $e){
                 $errors[self::POST_NAME_PASS] =  $e->getMessage();
             }
 
-			// todo нету сообщения об ошибке когда пытаешься зарегистрироваться с именем который уже занят ok
+			// fixme тут везде ошибки заполняют массив, а тут бросается исключение, почему?
             if (Users::hasByLogin($login)) {
                 throw new \Exception('Пользователь с таким Именем уже есть');
+
             } elseif (Users::hasByEmail($email)) {
                 throw new \Exception('Пользователь с таким email уже есть');
             }
 
             if ($pass != $pass_confirm) {
                 $errors[self::POST_NAME_PASS] = 'Пароли не совпадают';
-                // fixme не будем кидать json в качестве исключения, ни когда такого не видел не слышал ок
             }
 
-            if (count($errors)> 0) {
+            if (count($errors)> 0)
+			{
                 $content = Views::get(
                     __DIR__ . '/../View/Reg.php',
                     [
@@ -83,7 +88,7 @@ class Reg extends _Base
 
                 $id = Users::add($user);
 
-                if (!empty($id))
+                if ( ! empty($id))
 				{
                     $activation_link = Url::getUrlAbsolute(
 						ActivationUser::getUrl([

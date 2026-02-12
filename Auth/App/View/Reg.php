@@ -1,5 +1,4 @@
 <?php
-use Auth\App\Enum\Error;
 use Auth\App\Action\Reg;
 
 /**
@@ -27,13 +26,14 @@ use Auth\App\Action\Reg;
         <?php endif ?>
 
         <br>
-        <label for="pass">Пароль два раза (буквы, цифры, знаки препинания)</label><br>
+        <label for="pass">Пароль (буквы, цифры, знаки препинания)</label><br>
         <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required><br>
         <?php if ($errors[Reg::POST_NAME_PASS]) :?>
             <small style="color: red;"><?= $errors[Reg::POST_NAME_PASS]; ?></small><br>
         <?php endif ?>
 
-        <label for="pass_confirm"></label>
+        <br>
+        <label for="pass_confirm">Пароль еще раз</label><br>
         <input type="password" id="pass_confirm" name="<?= Reg::POST_NAME_PASSWORD_CONFIRM; ?>" required><br>
 
         <br>

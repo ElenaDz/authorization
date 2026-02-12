@@ -1,16 +1,17 @@
 <?php
 namespace Auth\APP\Helper;
 
-use Exception;
+use Auth\Sys\Request;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class Email
 {
-	// fixme не используется $to ( я протестировала, отплавляетс по нужному адрессу,
-    // пока оставила вместо $to этот "Lenagosu@yandex.ru", так удобнее тестировать)
+	/**
+	 * Внимание! Работает только без антивируса
+	 */
 	public static function send($subject, $message, $to)
 	{
-		// Работает только без антивируса
+		$to = Request::isDevelopment() && $to === '1@1' ? 'Lenagosu@yandex.ru' : $to;
 
 		require_once __DIR__ . '/../../../vendor/PHPMailer/src/Exception.php';
 		require_once __DIR__ . '/../../../vendor/PHPMailer/src/PHPMailer.php';
@@ -33,8 +34,7 @@ class Email
 		$mail->Password   = 'tkioaxwinulqjvgq';
 		$mail->Port       = 587;
 
-		// здесь email кому отправлять это письмо ($to)
-		$mail->addAddress("Lenagosu@yandex.ru");
+		$mail->addAddress($to);
 
 		// здесь указать email с того же аккаунта, что выше был указан пароль, может совпадать с email to
 		$mail->setFrom("Lenagosu@yandex.ru");

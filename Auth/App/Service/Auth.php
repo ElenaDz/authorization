@@ -6,7 +6,7 @@ use Auth\App\Model\Users;
 
 class Auth
 {
-    const COOKIE_NAME_TOKEN = 'auth.token';
+    const COOKIE_NAME_TOKEN = 'auth_token';
 
     /**
      * @var User $user
@@ -15,7 +15,7 @@ class Auth
 
     public static function isAuthorized(): bool
     {
-        $token = $_COOKIE[self::COOKIE_NAME_TOKEN];
+		$token = $_COOKIE[self::COOKIE_NAME_TOKEN];
         if (empty($token)) return false;
 
         if (self::$user) return true;

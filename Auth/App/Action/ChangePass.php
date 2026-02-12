@@ -41,10 +41,10 @@ class ChangePass  extends _Base
             return;
         }
 
-		// fixme не правильно мы должны выдавать ошибки когда не заданы обязательные параметры емейл или код, ты просто ни чего не показываешь ok
-        if (empty($email))
-        {
+		// fixme эта проверка должна быть в самом начале
+        if (empty($email)) {
             throw new \Exception('Нет email');
+
         } elseif (empty($code)) {
             throw new \Exception('Нет кода смены пароля');
         }
@@ -61,6 +61,7 @@ class ChangePass  extends _Base
             );
         }
 
+		// fixme нарушила принцип что основной код контролера не должен быть во вложении
         if ($user->getPassChangeCode() == $code)
         {
             $content = Views::get(
@@ -74,6 +75,7 @@ class ChangePass  extends _Base
                 'Смена пароля',
                 $content
             );
+
         } else {
             throw new \Exception('Код не совпадает с кодом пользователя');
         }

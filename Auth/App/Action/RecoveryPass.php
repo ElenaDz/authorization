@@ -14,7 +14,6 @@ class RecoveryPass extends _Base
 
     public function __invoke()
     {
-		// fixme исправь в соответствии с аудио сообщением о структуре контроллера ok
         if ($_POST[self::POST_NAME_EMAIL])
 		{
             $email_post = $_POST[self::POST_NAME_EMAIL];

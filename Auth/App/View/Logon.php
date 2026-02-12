@@ -2,6 +2,9 @@
 use Auth\App\Action\Logon;
 use Auth\App\Action\RecoveryPass;
 use Auth\App\Action\Reg;
+
+// todo не вижу здесь сообщений об ошибках, на каждый запрос пользователя если он что то ввел нужно либо авторизация
+//  либо сообщение об ошибке
 ?>
 
 <div>
