@@ -30,6 +30,7 @@ class ActivationUser extends _Base
             throw new \Exception('Код активации не совпадает');
         }
 
+		// fixme основной код не должен быть во вложенности
         if ($user->validActivationCode($code))
         {
             $user->resetActivationCode();
