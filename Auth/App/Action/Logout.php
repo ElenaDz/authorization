@@ -8,7 +8,8 @@ class Logout extends _Base
 {
 	public function __invoke()
 	{
-        if (empty($_POST)) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST')
+        {
             throw new \Exception('Только для POST запросов');
         }
 

@@ -30,15 +30,12 @@ class ActivationUser extends _Base
             throw new \Exception('Код активации не совпадает');
         }
 
-		// fixme основной код не должен быть во вложенности
-        if ($user->validActivationCode($code))
-        {
-            $user->resetActivationCode();
+		// fixme основной код не должен быть во вложенности ok
+        $user->resetActivationCode();
 
-            Auth::logonWithoutPassword($login);
+        Auth::logonWithoutPassword($login);
 
-            Response::redirect('/');
-        }
+        Response::redirect('/');
     }
 
     public static function getUrl(array $params = []): string

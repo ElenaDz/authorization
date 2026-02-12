@@ -17,6 +17,14 @@ class ChangePass  extends _Base
 
     public function __invoke($email = null, $code = null)
     {
+        // fixme эта проверка должна быть в самом начале ok
+        if (empty($email)) {
+            throw new \Exception('Нет email');
+
+        } elseif (empty($code)) {
+            throw new \Exception('Нет кода смены пароля');
+        }
+
         if ($_POST)
         {
             $pass_post = $_POST[self::POST_NAME_PASS];
@@ -41,14 +49,6 @@ class ChangePass  extends _Base
             return;
         }
 
-		// fixme эта проверка должна быть в самом начале
-        if (empty($email)) {
-            throw new \Exception('Нет email');
-
-        } elseif (empty($code)) {
-            throw new \Exception('Нет кода смены пароля');
-        }
-
         $user = Users::getByLoginOrEmail($email);
 
         if (empty($user))
@@ -61,23 +61,22 @@ class ChangePass  extends _Base
             );
         }
 
-		// fixme нарушила принцип что основной код контролера не должен быть во вложении
-        if ($user->getPassChangeCode() == $code)
-        {
-            $content = Views::get(
-                __DIR__ . '/../View/ChangePass.php',
-                [
-                    'email'  => $email
-                ]
-            );
-
-            self::showLayout(
-                'Смена пароля',
-                $content
-            );
-
-        } else {
+		// fixme нарушила принцип что основной код контролера не должен быть во вложении ok
+        if ($user->getPassChangeCode() !== $code) {
             throw new \Exception('Код не совпадает с кодом пользователя');
         }
+
+        $content = Views::get(
+            __DIR__ . '/../View/ChangePass.php',
+            [
+                'email'  => $email
+            ]
+        );
+
+        self::showLayout(
+            'Смена пароля',
+            $content
+        );
+
     }
 }

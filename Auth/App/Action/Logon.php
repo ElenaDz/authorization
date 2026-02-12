@@ -10,7 +10,7 @@ class Logon extends _Base
 {
     const POST_NAME_LOGIN = 'login';
     const POST_NAME_PASS = 'password';
-
+    const POST_NAME_SUBMIT = 'submit';
 
     public function __invoke($param_optional = null)
 	{
@@ -31,8 +31,8 @@ class Logon extends _Base
                 Response::redirect('/');
 
             } catch (\DomainException $exception) {
-				// fixme например "не правильный пароль" это не ошибка логина, это ошибка пароля
-                $errors[self::POST_NAME_LOGIN] = $exception->getMessage();
+				// fixme например "не правильный пароль" это не ошибка логина, это ошибка пароля ok
+                $errors[self::POST_NAME_SUBMIT] = $exception->getMessage();
             }
         }
 

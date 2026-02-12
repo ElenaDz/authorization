@@ -91,7 +91,10 @@ class User extends _Base
         self::validLogin($login);
 
 		// todo здесь нет проверки что этот логин уже занят другим пользователем, должна быть здесь, а не в методе выше
-		//  так как нам понадобиться id пользователя для этой проверки
+		//  так как нам понадобиться id пользователя для этой проверки (тогда нужны ли эжи же проверки в контролере Reg?) ok
+        if (Users::hasByLogin($login)) {
+            throw new \Exception('Пользователь с таким Именем уже есть');
+        }
 
 		$this->login = $login;
 	}
@@ -117,7 +120,10 @@ class User extends _Base
 	{
         self::validEmail($email);
 
-		// todo здесь нет проверки для емейл уже занят
+		// todo здесь нет проверки для емейл уже занят (тогда нужны ли эжи же проверки в контролере Reg?) ok
+        if (Users::hasByEmail($email)) {
+            throw new \Exception('Пользователь с таким email уже есть');
+        }
 
 		$this->email = $email;
 	}
@@ -147,7 +153,7 @@ class User extends _Base
 
     public function resetToken()
     {
-        unset($this->token);
+        $this->token = null;
     }
 
 	public function save()
@@ -157,8 +163,8 @@ class User extends _Base
 
     public static function validLogin($login)
     {
-		// fixme вместо strlen во всех валидациях нужно использовать mb_strlen потому что мы работает c кодировкой utb8 а она многобайтовая
-        if (strlen($login) > 100) {
+		// fixme вместо strlen во всех валидациях нужно использовать mb_strlen потому что мы работает c кодировкой utb8 а она многобайтовая ok
+        if (mb_strlen($login) > 100) {
             throw new \DomainException(
                 'Логин доложен быть меньше 100 символов'
             );
@@ -167,20 +173,20 @@ class User extends _Base
 
     public static function validEmail($email)
     {
-        if (strlen($email) > 40) {
+        if (mb_strlen($email) > 40) {
             throw new \DomainException(
-                'Email доложен быть меньше 40 символов'
+                'Email доложен быть меньше 41 символов'
             );
         }
     }
 
     public static function validPassword($pass)
     {
-        if (strlen($pass) < 6) {
+        if (mb_strlen($pass) < 6) {
             throw new \DomainException('Пароль должен быть не менее 6 символов');
         }
 
-        if (strlen($pass) > 30) {
+        if (mb_strlen($pass) > 30) {
             throw new \DomainException('Пароль должен быть меньше 31 символа');
         }
 
@@ -196,12 +202,6 @@ class User extends _Base
             throw new \DomainException(
                 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , . : ; < = > ?'
             );
-        }
-
-		// fixme кажется дублирует выше приведенные проверки, если так удалить
-        if ( ! preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,. :;<=>?]).+$/', $pass)) {
-			// fixme не понятное сообщение об ошибки, оно не помогает исправить ошибку
-            throw new \DomainException('Пароль не соответствует требованиям сложности');
         }
     }
 

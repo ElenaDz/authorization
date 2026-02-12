@@ -2,10 +2,8 @@
 namespace Auth\App\Model;
 
 use Auth\App\Entity\User;
-use Auth\App\Service\Auth;
-use PDO;
 
-// todo добавить ключи в БД для полей по которым происходит поиск для всей этой модели
+// todo добавить ключи в БД для полей по которым происходит поиск для всей этой модели ok
 class Users extends _Base
 {
 	/**
@@ -23,20 +21,27 @@ class Users extends _Base
 		);
 	}
 
-	// todo создать контролер который будет удалять не активированных пользователей
-    public static function deleteUserNotActivated()
+	// todo создать контролер который будет удалять не активированных пользователей  ok
+    public static function getNotActivated()
     {
-		// fixme нельзя удалять пользователей напрямую из БД как здесь, так как при удалении пользователя может потребоваться
-	    //  удалить что-то еще, например файлы которые относиться к этому пользователю и лежат на диске, а не в БД или
-	    //  просто данные в других таблицах которые относятся к этому пользователю, поэтому удаляем пользователей
-	    //  по одному по id метод delete(User $user), а кого удалять должен решать контролер соответствующий
-        self::getPDO()->query (
-            'DELETE FROM users
+        $results = self::getPDO()->query (
+            'SELECT * FROM users
                     WHERE activation_code IS NOT NULL
-                      AND created_at < NOW() - INTERVAL 7 DAY'
+                      AND created_at < NOW() - INTERVAL 7 DAY
+                      LIMIT 1'
+        );
+
+        return $results->fetchObject(
+            User::class
         );
     }
 
+    public static function deleteById($id)
+    {
+        self::getPDO()->query (
+            'DELETE FROM users WHERE id ='. (int) $id
+        );
+    }
 
 	/**
 	 * @param $login
@@ -137,7 +142,6 @@ class Users extends _Base
 
 		return self::getPDO()->lastInsertId();
 	}
-
 
     public static function save(User $user)
     {

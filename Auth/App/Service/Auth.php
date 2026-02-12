@@ -125,11 +125,11 @@ class Auth
     {
         $errors = [];
 
-        if (strlen($pass) < 6) {
+        if (mb_strlen($pass) < 6) {
             $errors['password'] = 'Пароль должен быть не менее 6 символов';
             return  $errors;
         }
-        if (strlen($pass) > 30) {
+        if (mb_strlen($pass) > 30) {
             $errors['password'] = 'Пароль должен быть меньше 31 символа';
             return  $errors;
         }
@@ -146,11 +146,6 @@ class Auth
 
         if (!preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {
             $errors['password'] = 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , . : ; < = > ?';
-            return  $errors;
-        }
-
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&()*+,. :;<=>?]).+$/', $pass)) {
-            $errors['password'] = 'Пароль не соответствует требованиям сложности';
             return  $errors;
         }
 

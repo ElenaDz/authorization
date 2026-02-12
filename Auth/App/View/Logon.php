@@ -3,6 +3,9 @@ use Auth\App\Action\Logon;
 use Auth\App\Action\RecoveryPass;
 use Auth\App\Action\Reg;
 
+/**
+ * @var array $errors
+ */
 // todo не вижу здесь сообщений об ошибках, на каждый запрос пользователя если он что то ввел нужно либо авторизация
 //  либо сообщение об ошибке
 ?>
@@ -15,6 +18,7 @@ use Auth\App\Action\Reg;
         <div>
             <label for="login">Имя пользователя или e-mail</label><br>
             <input type="text" id="login" name="<?= Reg::POST_NAME_LOGIN; ?>" required>
+
         </div>
 
         <br>
@@ -28,6 +32,9 @@ use Auth\App\Action\Reg;
 
         <br>
         <div>
+            <?php if ($errors[Logon::POST_NAME_SUBMIT]) :?>
+                <small style="color: red;"><?= $errors[Logon::POST_NAME_SUBMIT]; ?></small><br>
+            <?php endif ?>
             <button type="submit">Войти</button>
         </div>
 
