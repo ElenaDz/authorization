@@ -90,8 +90,6 @@ class User extends _Base
 	{
         self::validLogin($login);
 
-		// todo здесь нет проверки что этот логин уже занят другим пользователем, должна быть здесь, а не в методе выше
-		//  так как нам понадобиться id пользователя для этой проверки (тогда нужны ли эжи же проверки в контролере Reg?) ok
         if (Users::hasByLogin($login)) {
             throw new \Exception('Пользователь с таким Именем уже есть');
         }
@@ -120,7 +118,6 @@ class User extends _Base
 	{
         self::validEmail($email);
 
-		// todo здесь нет проверки для емейл уже занят (тогда нужны ли эжи же проверки в контролере Reg?) ok
         if (Users::hasByEmail($email)) {
             throw new \Exception('Пользователь с таким email уже есть');
         }
@@ -156,17 +153,24 @@ class User extends _Base
         $this->token = null;
     }
 
+
 	public function save()
 	{
 		Users::save($this);
 	}
 
+
+	public function delete()
+	{
+		Users::deleteById($this->getId());
+	}
+
+
     public static function validLogin($login)
     {
-		// fixme вместо strlen во всех валидациях нужно использовать mb_strlen потому что мы работает c кодировкой utb8 а она многобайтовая ok
         if (mb_strlen($login) > 100) {
             throw new \DomainException(
-                'Логин доложен быть меньше 100 символов'
+                'Логин доложен быть не больше 100 символов'
             );
         }
     }
@@ -175,7 +179,7 @@ class User extends _Base
     {
         if (mb_strlen($email) > 40) {
             throw new \DomainException(
-                'Email доложен быть меньше 41 символов'
+                'Email должен быть не больше 40 символов'
             );
         }
     }
@@ -187,7 +191,7 @@ class User extends _Base
         }
 
         if (mb_strlen($pass) > 30) {
-            throw new \DomainException('Пароль должен быть меньше 31 символа');
+            throw new \DomainException('Пароль должен быть не больше 30 символов');
         }
 
         if ( ! preg_match('/[A-Z]/', $pass)) {

@@ -3,6 +3,7 @@ namespace Auth\App\Service;
 
 use Auth\App\Entity\User;
 use Auth\App\Model\Users;
+use Auth\Sys\Request;
 
 class Auth
 {
@@ -12,6 +13,7 @@ class Auth
      * @var User $user
      */
     private static $user;
+
 
     public static function isAuthorized(): bool
     {
@@ -33,24 +35,6 @@ class Auth
         return true;
     }
 
-    private static function unsetCookieToken($with_error = false)
-    {
-        unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
-
-	    $result = setcookie(self::COOKIE_NAME_TOKEN, '', -1, "/");
-	    if ( ! $result && $with_error) {
-		    throw new \Exception('Не удалось удалить cookie');
-	    }
-    }
-
-    private static function setCookieToken($user)
-    {
-        $result = setcookie(self::COOKIE_NAME_TOKEN, $user->getToken(), time() + (3600 * 24 * 30), "/");
-        if ( ! $result) {
-            throw new \Exception('Не удалось установить cookie');
-        }
-    }
-
 	public static function getUser()
 	{
 		if ( ! self::isAuthorized()) return null;
@@ -58,20 +42,13 @@ class Auth
 		return self::$user;
 	}
 
-    public static function validLogin($login)
-    {
-        if ( strlen($login) > 100) {
-            return ['login' =>'Имя пользователя должно быть меньше 100 символов' ];
-        }
-
-		return [];
-    }
 
     /**
      * @throws \Exception
      */
     public static function logonByPassword($login_or_email, $pass)
     {
+		// fixme используй функцию getByLoginOrEmailOrFall я писал подробнее в другом fixme
         $user = Users::getByLoginOrEmail($login_or_email);
 
         self::verifyLogin($user, $login_or_email);
@@ -83,6 +60,7 @@ class Auth
         self::logonWithoutPassword($login_or_email);
     }
 
+	// fixme переименовать в loginUser(User $user) чтобы избавиться от повторного запроса пользователя из БД
     public static function logonWithoutPassword($login_or_email)
     {
         $user = Users::getByLoginOrEmail($login_or_email);
@@ -96,6 +74,22 @@ class Auth
         self::setCookieToken($user);
     }
 
+
+	public static function logout()
+	{
+		if ( ! Auth::isAuthorized()) return;
+
+		$user = Auth::getUser();
+
+		$user->resetToken();
+
+		$user->save();
+
+		self::unsetCookieToken(true);
+	}
+
+
+	// fixme удалить, больше не нужно
     private static function verifyLogin($user, $login_or_email)
     {
         if ($user) return;
@@ -108,47 +102,37 @@ class Auth
         );
     }
 
-    public static function logout()
-    {
-        if ( ! Auth::isAuthorized()) return;
 
-        $user = Auth::getUser();
+	private static function setCookieToken($user)
+	{
+		$result = setcookie(
+			self::COOKIE_NAME_TOKEN,
+			$user->getToken(),
+			[
+				'expires' => time() + (3600 * 24 * 30 * 1),
+				'path' => '/',
+				'secure' => Request::isDevelopment() ? false : true,
+				'httponly' => true,
+				'samesite' => 'Lax'
+			]
+		);
+		if ( ! $result) {
+			throw new \Exception('Не удалось установить cookie');
+		}
+	}
 
-        $user->resetToken();
+	private static function unsetCookieToken($with_error = false)
+	{
+		unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
 
-        $user->save();
-
-        self::unsetCookieToken(true);
-    }
-
-    public static function validPassword($pass): array
-    {
-        $errors = [];
-
-        if (mb_strlen($pass) < 6) {
-            $errors['password'] = 'Пароль должен быть не менее 6 символов';
-            return  $errors;
-        }
-        if (mb_strlen($pass) > 30) {
-            $errors['password'] = 'Пароль должен быть меньше 31 символа';
-            return  $errors;
-        }
-
-        if (!preg_match('/[A-Z]/', $pass)) {
-            $errors['password'] = 'Пароль должен содержать хотя бы одну заглавную латинскую букву';
-            return  $errors;
-        }
-
-        if (!preg_match('/[a-z]/', $pass)) {
-            $errors['password'] = 'Пароль должен содержать хотя бы одну строчную латинскую букву';
-            return  $errors;
-        }
-
-        if (!preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {
-            $errors['password'] = 'Пароль должен содержать хотя бы один символ из перечисленных: ! " # $ % & ( ) * + , . : ; < = > ?';
-            return  $errors;
-        }
-
-        return [];
-    }
+		$result = setcookie(
+			self::COOKIE_NAME_TOKEN,
+			'',
+			-1,
+			"/"
+		);
+		if ( ! $result && $with_error) {
+			throw new \Exception('Не удалось удалить cookie');
+		}
+	}
 }

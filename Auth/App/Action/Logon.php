@@ -31,7 +31,6 @@ class Logon extends _Base
                 Response::redirect('/');
 
             } catch (\DomainException $exception) {
-				// fixme например "не правильный пароль" это не ошибка логина, это ошибка пароля ok
                 $errors[self::POST_NAME_SUBMIT] = $exception->getMessage();
             }
         }

@@ -53,7 +53,6 @@ class Reg extends _Base
                 $errors[self::POST_NAME_PASS] =  $e->getMessage();
             }
 
-			// fixme тут везде ошибки заполняют массив, а тут бросается исключение, почему? ok
             if (Users::hasByLogin($login)) {
                 $errors[self::POST_NAME_LOGIN] = 'Пользователь с таким Именем уже есть';
 

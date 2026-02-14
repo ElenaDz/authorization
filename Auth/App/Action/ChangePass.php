@@ -15,9 +15,9 @@ class ChangePass  extends _Base
     const POST_NAME_PASS = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
 
+
     public function __invoke($email = null, $code = null)
     {
-        // fixme эта проверка должна быть в самом начале ok
         if (empty($email)) {
             throw new \Exception('Нет email');
 
@@ -43,7 +43,8 @@ class ChangePass  extends _Base
 
                 Response::redirect('/');
 
-            } catch (\Exception $exception){
+            } catch (\Exception $exception) {
+	            // fixme что это и зачем?
                 $errors = json_decode($exception->getMessage(),true);
             }
             return;
@@ -51,6 +52,7 @@ class ChangePass  extends _Base
 
         $user = Users::getByLoginOrEmail($email);
 
+		// fixme поднять обе проверки наверх выше обработки POST
         if (empty($user))
         {
             throw new \Exception(
@@ -61,7 +63,6 @@ class ChangePass  extends _Base
             );
         }
 
-		// fixme нарушила принцип что основной код контролера не должен быть во вложении ok
         if ($user->getPassChangeCode() !== $code) {
             throw new \Exception('Код не совпадает с кодом пользователя');
         }

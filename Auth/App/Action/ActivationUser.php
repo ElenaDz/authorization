@@ -27,10 +27,10 @@ class ActivationUser extends _Base
 
         if ( ! $user->validActivationCode($code))
         {
+			// fixme способ валидации кода скрыт внутри метода поэтому правильное сообщение "Код активации не валиден"
             throw new \Exception('Код активации не совпадает');
         }
 
-		// fixme основной код не должен быть во вложенности ok
         $user->resetActivationCode();
 
         Auth::logonWithoutPassword($login);

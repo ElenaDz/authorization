@@ -6,6 +6,7 @@ use Auth\App\Action\ChangePass;
  */
 ?>
 <div>
+    <!-- fixme здесь урл должен быть с емейлом и кодом смены пароля  -->
     <form method="post"  action="<?= ChangePass::getUrl(); ?>">
 
         <label for="email">E-mail</label><br>
