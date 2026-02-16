@@ -16,6 +16,7 @@ class User extends _Base
     private $email;
     private $token;
     private $activation_code;
+    private $created_at;
     private $pass_change_code;
     private $pass_change_code_at;
 
@@ -102,7 +103,7 @@ class User extends _Base
         return $this->login;
     }
 
-    private function setPass($pass)
+    public function setPass($pass)
     {
         self::validPassword($pass);
 
@@ -129,6 +130,11 @@ class User extends _Base
 	{
 		return $this->email;
 	}
+
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
 
 	public function verifyPass($pass): bool
 	{

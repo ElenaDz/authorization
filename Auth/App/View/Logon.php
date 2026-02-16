@@ -1,4 +1,6 @@
 <?php
+
+use Auth\App\Action\DeleteNotActivatedUsers;
 use Auth\App\Action\Logon;
 use Auth\App\Action\RecoveryPass;
 use Auth\App\Action\Reg;
@@ -7,8 +9,12 @@ use Auth\App\Action\Reg;
  * @var array $errors
  */
 // todo не вижу здесь сообщений об ошибках, на каждый запрос пользователя если он что то ввел нужно либо авторизация
-//  либо сообщение об ошибке
+//  либо сообщение об ошибке ok
 ?>
+<!-- для теста-->
+<form method="post" action="<?= DeleteNotActivatedUsers::getUrl() ?>">
+    <button type="submit">Удалить неактивированых пользователей более 7 дней</button>
+</form><br>
 
 <div>
     <div class="title" style="font-weight: bold">Войти на DriveMusic</div>
@@ -32,7 +38,7 @@ use Auth\App\Action\Reg;
 
         <br>
         <div>
-            <?php if ($errors[Logon::POST_NAME_SUBMIT]) :?>
+            <?php if (!empty($errors) && $errors[Logon::POST_NAME_SUBMIT]) :?>
                 <small style="color: red;"><?= $errors[Logon::POST_NAME_SUBMIT]; ?></small><br>
             <?php endif ?>
             <button type="submit">Войти</button>

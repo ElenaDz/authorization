@@ -22,17 +22,15 @@ class Users extends _Base
 
 	// fixme логика удаления не активированных пользователей должна быть либо в контролере либо в сервисе, но точно
 	//  не в моделе (модель это абстракция для доступа к данным в БД), убери здесь условия про дату просто возвращай
-	//  всех не активированных и с помощью Php удаляй тех которые старше 7 дней
+	//  всех не активированных и с помощью Php удаляй тех которые старше 7 дней ok
     public static function getNotActivated()
     {
         $results = self::getPDO()->query (
-            'SELECT * FROM users
-                    WHERE activation_code IS NOT NULL
-                      AND created_at < NOW() - INTERVAL 7 DAY
-                      LIMIT 1'
+            'SELECT * FROM users WHERE activation_code IS NOT NULL'
         );
 
-        return $results->fetchObject(
+        return $results->fetchAll(
+            \PDO::FETCH_CLASS,
             User::class
         );
     }
@@ -82,6 +80,21 @@ class Users extends _Base
         return $results->fetchObject(User::class);
     }
 
+    public static function getByLoginOrEmailOrFall($login_or_email)
+    {
+        $user = self::getByLoginOrEmail($login_or_email);
+        if (!$user)
+        {
+            throw new \Exception(
+                sprintf(
+                    'Пользователь "%s" не найден в базе данных',
+                    $login_or_email
+                )
+            );
+        }
+
+        return $user;
+    }
 
     /**
      * @param $email
@@ -101,7 +114,6 @@ class Users extends _Base
 
         return !empty($results->fetchColumn());
     }
-
 
 	/**
 	 * @param $token

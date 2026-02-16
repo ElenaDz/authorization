@@ -21,19 +21,24 @@ class ActivationUser extends _Base
             throw new \Exception('Нет кода активации');
         }
 
-		// todo заведи метод getByLoginOrEmailOrFall который будет вызывать getByLoginOrEmail и если он ни чего не вернул
-	    //  бросай исключение и используй его везде где это нужно, например здесь
-        $user = Users::getByLoginOrEmail($login);
+		// todo заведи метод getByLoginOrEmailOrFall который будет вызывать getByLoginOrEmail и если он ни чего не вернул ok
+	    //  бросай исключение и используй его везде где это нужно, например здесь ok
+        try {
+            $user = Users::getByLoginOrEmailOrFall($login);
+
+        } catch (\Exception $exception ) {
+            throw new \Exception($exception->getMessage());
+        }
 
         if ( ! $user->validActivationCode($code))
         {
-			// fixme способ валидации кода скрыт внутри метода поэтому правильное сообщение "Код активации не валиден"
-            throw new \Exception('Код активации не совпадает');
+			// fixme способ валидации кода скрыт внутри метода поэтому правильное сообщение "Код активации не валиден" ok
+            throw new \Exception('Код активации не валиден');
         }
 
         $user->resetActivationCode();
 
-        Auth::logonWithoutPassword($login);
+        Auth::loginUser($user);
 
         Response::redirect('/');
     }

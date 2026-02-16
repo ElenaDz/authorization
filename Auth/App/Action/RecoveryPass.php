@@ -14,7 +14,7 @@ class RecoveryPass extends _Base
 
     public function __invoke()
     {
-        if ($_POST[self::POST_NAME_EMAIL])
+        if (!empty($_POST) && $_POST[self::POST_NAME_EMAIL])
 		{
             $email_post = $_POST[self::POST_NAME_EMAIL];
 
@@ -29,7 +29,12 @@ class RecoveryPass extends _Base
                 );
             }
 
-            $user = Users::getByLoginOrEmail($email_post);
+            try {
+                $user = Users::getByLoginOrEmailOrFall($email_post);
+
+            } catch (\Exception $exception ) {
+                throw new \Exception($exception->getMessage());
+            }
 
             $user->genPassChangeCode();
 

@@ -3,6 +3,7 @@
 namespace Auth\App\Action;
 
 use Auth\App\Enum\Error;
+use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\App\Service\Auth;
 use Auth\Sys\Response;
@@ -25,6 +26,18 @@ class ChangePass  extends _Base
             throw new \Exception('Нет кода смены пароля');
         }
 
+        try {
+            $user = Users::getByLoginOrEmailOrFall($email);
+
+        } catch (\Exception $exception ) {
+            throw new \Exception($exception->getMessage());
+        }
+
+        // fixme поднять обе проверки наверх выше обработки POST ok
+        if ($user->getPassChangeCode() !== $code) {
+            throw new \Exception('Код не совпадает с кодом пользователя');
+        }
+
         if ($_POST)
         {
             $pass_post = $_POST[self::POST_NAME_PASS];
@@ -34,43 +47,25 @@ class ChangePass  extends _Base
                 throw new \Exception('Пароли не совпадают');
             }
 
-            try {
-                $user = Users::getByLoginOrEmail($email);
+            $user->resetPassChangeCode();
 
-                $user->resetPassChangeCode();
+//            надо подумать над бизнес логикой
+            $user->setPass($pass_post);
 
-                Auth::logonByPassword($email, $pass_post);
+            Auth::loginUser($user);
 
-                Response::redirect('/');
+            Response::redirect('/');
 
-            } catch (\Exception $exception) {
-	            // fixme что это и зачем?
-                $errors = json_decode($exception->getMessage(),true);
-            }
             return;
         }
 
-        $user = Users::getByLoginOrEmail($email);
-
-		// fixme поднять обе проверки наверх выше обработки POST
-        if (empty($user))
-        {
-            throw new \Exception(
-                sprintf(
-                    'Пользователь с email = "%s" не найден',
-                    $email
-                )
-            );
-        }
-
-        if ($user->getPassChangeCode() !== $code) {
-            throw new \Exception('Код не совпадает с кодом пользователя');
-        }
+        $activation_link = self::getUrl().'&'. self::POST_NAME_EMAIL. '='. $email.'&' . self::POST_NAME_CODE. '='. $code;
 
         $content = Views::get(
             __DIR__ . '/../View/ChangePass.php',
             [
-                'email'  => $email
+                'email'  => $email,
+                'activation_link'  => $activation_link
             ]
         );
 

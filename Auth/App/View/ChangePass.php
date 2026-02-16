@@ -3,11 +3,12 @@ use Auth\App\Action\ChangePass;
 
 /**
  * @var $email
+ * @var $activation_link
  */
 ?>
 <div>
-    <!-- fixme здесь урл должен быть с емейлом и кодом смены пароля  -->
-    <form method="post"  action="<?= ChangePass::getUrl(); ?>">
+    <!-- fixme здесь урл должен быть с емейлом и кодом смены пароля ok -->
+    <form method="post"  action="<?= $activation_link; ?>">
 
         <label for="email">E-mail</label><br>
         <input type="email" id="email" autocomplete name="<?= ChangePass::POST_NAME_EMAIL; ?>" required value="<?= $email ?>"><br>
@@ -20,6 +21,6 @@ use Auth\App\Action\ChangePass;
         <input type="password" id="pass_confirm" name="<?= ChangePass::POST_NAME_PASSWORD_CONFIRM; ?>" required><br>
 
         <br>
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit">Сменить пароль</button>
     </form>
 </div>

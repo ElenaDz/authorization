@@ -17,7 +17,7 @@ class Auth
 
     public static function isAuthorized(): bool
     {
-		$token = $_COOKIE[self::COOKIE_NAME_TOKEN];
+		$token = $_COOKIE[self::COOKIE_NAME_TOKEN] ?? null ;
         if (empty($token)) return false;
 
         if (self::$user) return true;
@@ -48,25 +48,24 @@ class Auth
      */
     public static function logonByPassword($login_or_email, $pass)
     {
-		// fixme используй функцию getByLoginOrEmailOrFall я писал подробнее в другом fixme
-        $user = Users::getByLoginOrEmail($login_or_email);
+		// fixme используй функцию getByLoginOrEmailOrFall я писал подробнее в другом fixme ok
+        try {
+            $user = Users::getByLoginOrEmailOrFall($login_or_email);
 
-        self::verifyLogin($user, $login_or_email);
+        } catch (\Exception $exception ) {
+            throw new \Exception($exception->getMessage());
+        }
 
         if ( ! $user->verifyPass($pass)) {
             throw new \DomainException('Не правильный пароль');
         }
 
-        self::logonWithoutPassword($login_or_email);
+        self::loginUser($user);
     }
 
-	// fixme переименовать в loginUser(User $user) чтобы избавиться от повторного запроса пользователя из БД
-    public static function logonWithoutPassword($login_or_email)
+	// fixme переименовать в loginUser(User $user) чтобы избавиться от повторного запроса пользователя из БД ok
+    public static function loginUser(User $user)
     {
-        $user = Users::getByLoginOrEmail($login_or_email);
-
-        self::verifyLogin($user, $login_or_email);
-
         $user->genToken();
 
         $user->save();
@@ -88,21 +87,6 @@ class Auth
 		self::unsetCookieToken(true);
 	}
 
-
-	// fixme удалить, больше не нужно
-    private static function verifyLogin($user, $login_or_email)
-    {
-        if ($user) return;
-
-        throw new \DomainException(
-            sprintf(
-                'Пользователь "%s" не найден',
-                $login_or_email
-            )
-        );
-    }
-
-
 	private static function setCookieToken($user)
 	{
 		$result = setcookie(
@@ -116,6 +100,7 @@ class Auth
 				'samesite' => 'Lax'
 			]
 		);
+
 		if ( ! $result) {
 			throw new \Exception('Не удалось установить cookie');
 		}

@@ -1,7 +1,6 @@
 <?php
 namespace Auth\App\Action;
 
-use Auth\App\Entity\User;
 use Auth\App\Service\Auth;
 use Auth\Sys\Response;
 use \Auth\Sys\Views;
@@ -20,7 +19,7 @@ class Logon extends _Base
 
         $errors = [];
 
-        if ($_POST[self::POST_NAME_LOGIN])
+        if (!empty($_POST) && $_POST[self::POST_NAME_LOGIN])
         {
             $login = $_POST[self::POST_NAME_LOGIN];
             $pass = $_POST[self::POST_NAME_PASS];
