@@ -26,18 +26,18 @@ class Email
 		$mail->isSMTP();
 		$mail->SMTPAuth   = true;
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-		$mail->Host       = 'smtp.yandex.ru';
+		$mail->Host       = 'mx.drivemusic.me';
 
 		// здесь логин от яндекса
-		$mail->Username   = 'Lenagosu';
+		$mail->Username   = 'no-reply';
 
-		$mail->Password   = 'tkioaxwinulqjvgq';
+		$mail->Password   = 'AyCi9dR7zD5jPQC';
 		$mail->Port       = 587;
 
 		$mail->addAddress($to);
 
 		// здесь указать email с того же аккаунта, что выше был указан пароль, может совпадать с email to
-		$mail->setFrom("Lenagosu@yandex.ru");
+		$mail->setFrom("no-reply@drivemusic.me");
 
 		$mail->isHTML(true);
 
@@ -47,20 +47,6 @@ class Email
 		return $mail->send();
 
 		// todo использовать данные присланные заказником, почта должна приходить к тебе на емейл, если вдруг не удастся
-		//  об этом лучше узнать как можно раньше
-
-//        Лена, привет.
-//
-//        Мы подняли почтовый сервер для отправки писем пользователям при регистрации и восстановлении пароля.
-//
-//        Сбрасываю данные:
-//
-//    no-reply@drivemusic.me
-//    Пароль: AyCi9dR7zD5jPQC
-//
-//    SMTP сервер: mx.drivemusic.me
-//    Порт: 587
-//    Соединение: Безопасное на станд. порт STARTTLS
-//    Протокол: POP v3
+		//  об этом лучше узнать как можно раньше ok
 	}
 }
