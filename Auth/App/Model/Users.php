@@ -20,9 +20,9 @@ class Users extends _Base
 		);
 	}
 
-	// fixme логика удаления не активированных пользователей должна быть либо в контролере либо в сервисе, но точно
-	//  не в моделе (модель это абстракция для доступа к данным в БД), убери здесь условия про дату просто возвращай
-	//  всех не активированных и с помощью Php удаляй тех которые старше 7 дней ok
+	/**
+	 * @return User[]
+	 */
     public static function getNotActivated()
     {
         $results = self::getPDO()->query (
@@ -83,11 +83,11 @@ class Users extends _Base
     public static function getByLoginOrEmailOrFall($login_or_email)
     {
         $user = self::getByLoginOrEmail($login_or_email);
-        if (!$user)
+        if ( ! $user)
         {
             throw new \Exception(
                 sprintf(
-                    'Пользователь "%s" не найден в базе данных',
+                    'Пользователь "%s" не найден',
                     $login_or_email
                 )
             );
@@ -185,6 +185,7 @@ class Users extends _Base
             );
         }
 
+		// todo в блоке set должны быть все поля из БД
         $prepare = self::getPDO()->prepare(
             'UPDATE 
                         users 
@@ -198,6 +199,8 @@ class Users extends _Base
                         id = :id'
         );
 
+
+		// todo значение всех полей нужно получаться с помощью метода getPrivatePropValueByUser не стоит использовать геттеры
         $prepare->execute([
             'id'                        => $user->getId(),
             'hash'                      => self::getPrivatePropValueByUser($user, User::NAME_HASH),

@@ -34,7 +34,7 @@ class Email
 		$mail->Password   = 'tkioaxwinulqjvgq';
 		$mail->Port       = 587;
 
-		$mail->addAddress('Lenagosu@yandex.ru');
+		$mail->addAddress($to);
 
 		// здесь указать email с того же аккаунта, что выше был указан пароль, может совпадать с email to
 		$mail->setFrom("Lenagosu@yandex.ru");
@@ -44,7 +44,7 @@ class Email
 		$mail->Subject = $subject;
 		$mail->Body    = $message;
 
-		$mail->send();
+		return $mail->send();
 
 		// todo использовать данные присланные заказником, почта должна приходить к тебе на емейл, если вдруг не удастся
 		//  об этом лучше узнать как можно раньше

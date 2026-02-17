@@ -21,5 +21,11 @@ require __DIR__.'/Auth/autoload.php';
         </form>
 
     <?php endif; ?>
+
+    <br>
+    <br>
+    <a href="<?= \Auth\App\Action\TestBox::getUrl(); ?>">
+        Тестовая площадка
+    </a>
 </body>
 </html>

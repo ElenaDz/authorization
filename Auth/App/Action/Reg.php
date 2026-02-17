@@ -6,7 +6,6 @@ use Auth\App\Entity\User;
 use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Views;
-use mysql_xdevapi\Exception;
 
 class Reg extends _Base
 {
@@ -35,21 +34,21 @@ class Reg extends _Base
             try {
                 User::validEmail($email);
 
-            } catch (Exception $e){
+            } catch (\Exception $e){
                 $errors[self::POST_NAME_EMAIL] =  $e->getMessage();
             }
 
             try {
                 User::validLogin($login);
 
-            } catch (Exception $e){
+            } catch (\Exception $e){
                 $errors[self::POST_NAME_LOGIN] =  $e->getMessage();
             }
 
             try {
                 User::validPassword($pass);
 
-            } catch (Exception $e){
+            } catch (\Exception $e){
                 $errors[self::POST_NAME_PASS] =  $e->getMessage();
             }
 

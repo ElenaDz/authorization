@@ -8,12 +8,15 @@ use Auth\App\Action\Reg;
 /**
  * @var array $errors
  */
-// todo не вижу здесь сообщений об ошибках, на каждый запрос пользователя если он что то ввел нужно либо авторизация
-//  либо сообщение об ошибке ok
+
+// todo форма должна заполнятся ранее введенными данными кроме пароля
+
+// todo обрати внимание я добавил tabindex элементам попробуй как он работает с помощью кнопки tab,
+//  это очень важно для тех кто не берет мышку во время заполнения формы, например я
 ?>
-<!-- для теста-->
+<!-- fixme это должно быть просто ссылкой, форма здесь ни к чему  -->
 <form method="post" action="<?= DeleteNotActivatedUsers::getUrl() ?>">
-    <button type="submit">Удалить неактивированых пользователей более 7 дней</button>
+    <button type="submit">Удалить не активированных пользователей более 7 дней</button>
 </form><br>
 
 <div>
@@ -23,7 +26,7 @@ use Auth\App\Action\Reg;
     <form  method="post" action="<?= Logon::getUrl(); ?>">
         <div>
             <label for="login">Имя пользователя или e-mail</label><br>
-            <input type="text" id="login" name="<?= Reg::POST_NAME_LOGIN; ?>" required>
+            <input type="text" id="login" name="<?= Reg::POST_NAME_LOGIN; ?>" required tabindex="1">
 
         </div>
 
@@ -33,15 +36,15 @@ use Auth\App\Action\Reg;
                 <label for="pass">Пароль</label>
                 <a href="<?=  RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
             </div>
-            <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required>
+            <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required tabindex="2">
         </div>
 
         <br>
         <div>
-            <?php if (!empty($errors) && $errors[Logon::POST_NAME_SUBMIT]) :?>
+            <button type="submit" tabindex="3">Войти</button>
+	        <?php if (!empty($errors) && $errors[Logon::POST_NAME_SUBMIT]) :?>
                 <small style="color: red;"><?= $errors[Logon::POST_NAME_SUBMIT]; ?></small><br>
-            <?php endif ?>
-            <button type="submit">Войти</button>
+	        <?php endif ?>
         </div>
 
         <br>

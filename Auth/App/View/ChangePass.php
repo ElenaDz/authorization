@@ -7,7 +7,6 @@ use Auth\App\Action\ChangePass;
  */
 ?>
 <div>
-    <!-- fixme здесь урл должен быть с емейлом и кодом смены пароля ok -->
     <form method="post"  action="<?= $activation_link; ?>">
 
         <label for="email">E-mail</label><br>

@@ -2,8 +2,6 @@
 
 namespace Auth\App\Action;
 
-use Auth\App\Enum\Error;
-use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\App\Service\Auth;
 use Auth\Sys\Response;
@@ -33,7 +31,6 @@ class ChangePass  extends _Base
             throw new \Exception($exception->getMessage());
         }
 
-        // fixme поднять обе проверки наверх выше обработки POST ok
         if ($user->getPassChangeCode() !== $code) {
             throw new \Exception('Код не совпадает с кодом пользователя');
         }
@@ -49,7 +46,7 @@ class ChangePass  extends _Base
 
             $user->resetPassChangeCode();
 
-//            надо подумать над бизнес логикой
+			// надо подумать над бизнес логикой
             $user->setPass($pass_post);
 
             Auth::loginUser($user);
@@ -59,6 +56,8 @@ class ChangePass  extends _Base
             return;
         }
 
+		// fixme для получения url у нас есть метод getUrl, смотри например как получается url для активации, тут так же
+	    /** @see \Auth\App\Action\ActivationUser::getUrl */
         $activation_link = self::getUrl().'&'. self::POST_NAME_EMAIL. '='. $email.'&' . self::POST_NAME_CODE. '='. $code;
 
         $content = Views::get(

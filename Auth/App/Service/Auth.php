@@ -48,12 +48,11 @@ class Auth
      */
     public static function logonByPassword($login_or_email, $pass)
     {
-		// fixme используй функцию getByLoginOrEmailOrFall я писал подробнее в другом fixme ok
         try {
             $user = Users::getByLoginOrEmailOrFall($login_or_email);
 
         } catch (\Exception $exception ) {
-            throw new \Exception($exception->getMessage());
+            throw new \DomainException($exception->getMessage());
         }
 
         if ( ! $user->verifyPass($pass)) {
@@ -63,9 +62,10 @@ class Auth
         self::loginUser($user);
     }
 
-	// fixme переименовать в loginUser(User $user) чтобы избавиться от повторного запроса пользователя из БД ok
     public static function loginUser(User $user)
     {
+		// todo добавить проверку что аккаунт пользователя активирован
+	    
         $user->genToken();
 
         $user->save();
@@ -92,13 +92,11 @@ class Auth
 		$result = setcookie(
 			self::COOKIE_NAME_TOKEN,
 			$user->getToken(),
-			[
-				'expires' => time() + (3600 * 24 * 30 * 1),
-				'path' => '/',
-				'secure' => Request::isDevelopment() ? false : true,
-				'httponly' => true,
-				'samesite' => 'Lax'
-			]
+			time() + (3600 * 24 * 30 * 1),
+			'/',
+			'',
+			Request::isDevelopment() ? false : true,
+			true
 		);
 
 		if ( ! $result) {
@@ -110,6 +108,8 @@ class Auth
 	{
 		unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
 
+		// todo добавь проверку что заголовки уже были отправлены с помощью headers_sent() так как если они отправлены куки уже не установить
+		//  кидай исключение если $with_error true
 		$result = setcookie(
 			self::COOKIE_NAME_TOKEN,
 			'',
