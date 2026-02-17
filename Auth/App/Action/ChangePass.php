@@ -45,9 +45,36 @@ class ChangePass  extends _Base
                 throw new \Exception('Пароли не совпадают');
             }
 
-            $user->resetPassChangeCode();
+            $activation_link = Url::getUrlAbsolute(
+                ChangePass::getUrl([
+                    ChangePass::POST_NAME_EMAIL => $email,
+                    ChangePass::POST_NAME_CODE => $user->getPassChangeCode()
+                ])
+            );
 
-            $user->setPass($pass_post);
+            try {
+                $user->setPass($pass_post);
+
+            } catch (\Exception $exception ) {
+                $errors[self::POST_NAME_PASS] = $exception->getMessage();
+
+                $content = Views::get(
+                    __DIR__ . '/../View/ChangePass.php',
+                    [
+                        'email'  => $email,
+                        'activation_link'  => $activation_link,
+                        'errors' => $errors
+                    ]
+                );
+
+                self::showLayout(
+                    'Смена пароля',
+                    $content
+                );
+                return;
+            }
+
+            $user->resetPassChangeCode();
 
             Auth::loginUser($user);
 
