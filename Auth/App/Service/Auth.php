@@ -65,7 +65,7 @@ class Auth
     public static function loginUser(User $user)
     {
 		// todo добавить проверку что аккаунт пользователя активирован
-	    
+
         $user->genToken();
 
         $user->save();

@@ -11,7 +11,7 @@ require __DIR__.'/Auth/autoload.php';
     <?php if ( ! \Auth\App\Service\Auth::isAuthorized()): ?>
     	<a href="<?= \Auth\App\Action\Logon::getUrl(); ?>">
             Вход
-        </a>
+        </a><br>
 
     <?php else: ?>
 
@@ -21,8 +21,7 @@ require __DIR__.'/Auth/autoload.php';
         </form>
 
     <?php endif; ?>
-
-    <br>
+    
     <br>
     <a href="<?= \Auth\App\Action\TestBox::getUrl(); ?>">
         Тестовая площадка
