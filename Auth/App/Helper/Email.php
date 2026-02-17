@@ -34,7 +34,7 @@ class Email
 		$mail->Password   = 'tkioaxwinulqjvgq';
 		$mail->Port       = 587;
 
-		$mail->addAddress('Lenagosu@yandex.ru');
+		$mail->addAddress($to);
 
 		// здесь указать email с того же аккаунта, что выше был указан пароль, может совпадать с email to
 		$mail->setFrom("Lenagosu@yandex.ru");
