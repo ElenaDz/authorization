@@ -163,7 +163,7 @@ class Users extends _Base
         if ($user->getId() && empty($user_from_db)) {
             throw new \Exception(
                 sprintf(
-                    'Пользователь с id = "%s" не найден в базе данных',
+                    'Пользователь с id = "%s" не найден в БД',
                     $user->getId()
                 )
             );
@@ -185,7 +185,6 @@ class Users extends _Base
             );
         }
 
-		// todo в блоке set должны быть все поля из БД ok
         $prepare = self::getPDO()->prepare(
             'UPDATE 
                         users 
@@ -202,7 +201,6 @@ class Users extends _Base
                         id = :id'
         );
 
-		// todo значение всех полей нужно получаться с помощью метода getPrivatePropValueByUser не стоит использовать геттеры ok
         $prepare->execute([
             'id'                        => self::getPrivatePropValueByUser($user, User::NAME_ID),
             'login'                     => self::getPrivatePropValueByUser($user, User::NAME_LOGIN),

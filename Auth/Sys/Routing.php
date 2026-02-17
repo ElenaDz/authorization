@@ -1,6 +1,8 @@
 <?php
 namespace Auth\Sys;
 
+use Auth\App\Action\_Base;
+
 class Routing
 {
 	public static function getUrl($class_name_action, array $params = []): string
@@ -29,12 +31,19 @@ class Routing
 	{
 		$class_name_action = $_GET[ACTION_NAME];
 
+		$params = $_GET;
+
+		unset($params[ACTION_NAME]);
+
+		self::runAction($class_name_action, $params);
+	}
+
+	public static function runAction($class_name_action, array $params = [])
+	{
 		self::isValidAction($class_name_action);
 
 		$action = new $class_name_action;
 
-		$params = $_GET;
-		unset($params[ACTION_NAME]);
 		call_user_func_array($action, $params);
 	}
 

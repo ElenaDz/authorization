@@ -15,7 +15,6 @@ class Email
 		require_once __DIR__ . '/../../../vendor/PHPMailer/src/PHPMailer.php';
 		require_once __DIR__ . '/../../../vendor/PHPMailer/src/SMTP.php';
 
-		// $subject = implode(', ', $subject);
 		$mail = new PHPMailer(true);
 
 		$mail->CharSet    = PHPMailer::CHARSET_UTF8;

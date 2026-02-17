@@ -11,6 +11,10 @@ class DeleteNotActivatedUsers extends _Base
     {
         $users = Users::getNotActivated();
 
+		$count = count($users);
+
+	    $count_deleted = 0;
+
         foreach ($users as $user)
         {
             $created_at = $user->getCreatedAt();
@@ -26,6 +30,21 @@ class DeleteNotActivatedUsers extends _Base
             }
 
             $user->delete();
+
+	        $count_deleted ++;
+
         }
+
+	    $is_cron_run = php_sapi_name() === 'cli';
+
+		if ( ! $is_cron_run) {
+			echo sprintf(
+				"Всего не активированных пользователей: <b>%s</b><br>".
+				"Из них удалено: <b>%s</b>",
+				$count,
+				$count_deleted
+			);
+
+		}
     }
 }

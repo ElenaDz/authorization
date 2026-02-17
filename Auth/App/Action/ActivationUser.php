@@ -28,7 +28,7 @@ class ActivationUser extends _Base
             throw new \Exception($exception->getMessage());
         }
 
-		// todo добавь проверку что аккаунт еще не активирован ок
+		// todo логика проверки активирован или нет должна быть в сущности User создай там метод isActivated
         if (empty($user->getActivationCode()))
         {
             throw new \Exception('Аккаунт уже был активирован ранее');

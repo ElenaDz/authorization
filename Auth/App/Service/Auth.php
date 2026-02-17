@@ -64,10 +64,10 @@ class Auth
 
     public static function loginUser(User $user)
     {
-		// todo добавить проверку что аккаунт пользователя активирован ок
+		// todo используй метод isActivated
         if (!empty($user->getActivationCode()))
         {
-            throw new \Exception('Аккаунт ещё не активирован');
+            throw new \DomainException('Чтобы авторизоваться, вам нужно активировать аккаунт, проверьте почту');
         }
 
         $user->genToken();
@@ -112,11 +112,13 @@ class Auth
 	{
 		unset($_COOKIE[self::COOKIE_NAME_TOKEN]);
 
-		// todo добавь проверку что заголовки уже были отправлены с помощью headers_sent() так как если они отправлены куки уже не установить
-		//  кидай исключение если $with_error true (ок?)
-        if (headers_sent() && $with_error)
+        if (headers_sent())
         {
-            throw new \Exception('Заголовки уже были отправлены');
+			if ($with_error) {
+				throw new \Exception('Заголовки уже были отправлены');
+			}
+
+			return;
         }
 
 		$result = setcookie(
