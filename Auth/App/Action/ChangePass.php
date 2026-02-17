@@ -2,6 +2,7 @@
 
 namespace Auth\App\Action;
 
+use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\App\Service\Auth;
 use Auth\Sys\Response;
@@ -46,7 +47,6 @@ class ChangePass  extends _Base
 
             $user->resetPassChangeCode();
 
-			// надо подумать над бизнес логикой
             $user->setPass($pass_post);
 
             Auth::loginUser($user);
@@ -56,9 +56,12 @@ class ChangePass  extends _Base
             return;
         }
 
-		// fixme для получения url у нас есть метод getUrl, смотри например как получается url для активации, тут так же
+		// fixme для получения url у нас есть метод getUrl, смотри например как получается url для активации, тут так же ok
 	    /** @see \Auth\App\Action\ActivationUser::getUrl */
-        $activation_link = self::getUrl().'&'. self::POST_NAME_EMAIL. '='. $email.'&' . self::POST_NAME_CODE. '='. $code;
+        $activation_link = ChangePass::getUrl([
+            ChangePass::POST_NAME_EMAIL => $email,
+            ChangePass::POST_NAME_CODE => $code
+        ]);
 
         $content = Views::get(
             __DIR__ . '/../View/ChangePass.php',

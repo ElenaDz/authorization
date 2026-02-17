@@ -24,7 +24,7 @@ class Reg extends _Base
 		$login = null;
 		$email = null;
 
-        if ($_POST[self::POST_NAME_LOGIN])
+        if (!empty($_POST) && $_POST[self::POST_NAME_LOGIN])
         {
             $login = $_POST[self::POST_NAME_LOGIN];
             $pass = $_POST[self::POST_NAME_PASS];

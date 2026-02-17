@@ -185,28 +185,34 @@ class Users extends _Base
             );
         }
 
-		// todo в блоке set должны быть все поля из БД
+		// todo в блоке set должны быть все поля из БД ok
         $prepare = self::getPDO()->prepare(
             'UPDATE 
                         users 
                     SET 
+                        login = :login,
                         hash = :hash, 
+                        email = :email, 
                         token = :token,
-                        activation_code = NULL,
+                        activation_code = :activation_code,
+                        created_at = :created_at,
                         pass_change_code = :pass_change_code,
                         pass_change_code_at = :pass_change_code_at
                     WHERE 
                         id = :id'
         );
 
-
-		// todo значение всех полей нужно получаться с помощью метода getPrivatePropValueByUser не стоит использовать геттеры
+		// todo значение всех полей нужно получаться с помощью метода getPrivatePropValueByUser не стоит использовать геттеры ok
         $prepare->execute([
-            'id'                        => $user->getId(),
+            'id'                        => self::getPrivatePropValueByUser($user, User::NAME_ID),
+            'login'                     => self::getPrivatePropValueByUser($user, User::NAME_LOGIN),
             'hash'                      => self::getPrivatePropValueByUser($user, User::NAME_HASH),
+            'email'                     => self::getPrivatePropValueByUser($user, User::NAME_EMAIL),
             'token'                     => self::getPrivatePropValueByUser($user, User::NAME_TOKEN),
-            'pass_change_code'          => $user->getPassChangeCode() ?? null,
-            'pass_change_code_at'       => $user->getPassChangeCode() ? $user->getPassChangeCodeAt() : null
+            'activation_code'           => self::getPrivatePropValueByUser($user, User::NAME_ACTIVATION_CODE),
+            'created_at'                => self::getPrivatePropValueByUser($user, User::NAME_CREATED_AT),
+            'pass_change_code'          => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE),
+            'pass_change_code_at'       => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE_AT)
         ]);
     }
 

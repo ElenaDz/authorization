@@ -7,17 +7,16 @@ use Auth\App\Action\Reg;
 
 /**
  * @var array $errors
+ * @var $login
  */
 
-// todo форма должна заполнятся ранее введенными данными кроме пароля
+// todo форма должна заполнятся ранее введенными данными кроме пароля ok
 
 // todo обрати внимание я добавил tabindex элементам попробуй как он работает с помощью кнопки tab,
-//  это очень важно для тех кто не берет мышку во время заполнения формы, например я
+//  это очень важно для тех кто не берет мышку во время заполнения формы, например я ok
 ?>
-<!-- fixme это должно быть просто ссылкой, форма здесь ни к чему  -->
-<form method="post" action="<?= DeleteNotActivatedUsers::getUrl() ?>">
-    <button type="submit">Удалить не активированных пользователей более 7 дней</button>
-</form><br>
+<!-- fixme это должно быть просто ссылкой, форма здесь ни к чему ok -->
+<a href="<?= DeleteNotActivatedUsers::getUrl() ?>">Удалить не активированных пользователей более 7 дней</a><br>
 
 <div>
     <div class="title" style="font-weight: bold">Войти на DriveMusic</div>
@@ -26,7 +25,7 @@ use Auth\App\Action\Reg;
     <form  method="post" action="<?= Logon::getUrl(); ?>">
         <div>
             <label for="login">Имя пользователя или e-mail</label><br>
-            <input type="text" id="login" name="<?= Reg::POST_NAME_LOGIN; ?>" required tabindex="1">
+            <input type="text" id="login" autocomplete name="<?= Reg::POST_NAME_LOGIN; ?>" value="<?= $login ?>" required tabindex="1">
 
         </div>
 

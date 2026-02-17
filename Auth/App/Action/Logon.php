@@ -37,7 +37,8 @@ class Logon extends _Base
 		$content = Views::get(
 			__DIR__ . '/../View/Logon.php',
 			[
-                'errors' => $errors
+                'errors' => $errors,
+                'login' => $_POST[self::POST_NAME_LOGIN] ?? null
 			]
 		);
 

@@ -7,8 +7,15 @@ use Auth\App\Service\Auth;
 
 class User extends _Base
 {
+    const NAME_ID = 'id';
+    const NAME_LOGIN = 'login';
     const NAME_HASH = 'hash';
+    const NAME_EMAIL = 'email';
     const NAME_TOKEN = 'token';
+    const NAME_ACTIVATION_CODE = 'activation_code';
+    const NAME_CREATED_AT = 'created_at';
+    const NAME_PASS_CHANGE_CODE = 'pass_change_code';
+    const NAME_PASS_CHANGE_CODE_AT = 'pass_change_code_at';
 
     private $id;
     private $login;
@@ -74,17 +81,19 @@ class User extends _Base
         $this->pass_change_code_at = date('Y-m-d H:i:s');
     }
 
+    public function resetPassChangeCode()
+    {
+        $this->pass_change_code = null;
+
+        $this->pass_change_code_at = null;
+    }
+
     /**
      * @return string|null
      */
     public function getPassChangeCodeAt()
     {
         return $this->pass_change_code_at;
-    }
-
-    public function resetPassChangeCode()
-    {
-        $this->pass_change_code = null;
     }
 
 	private function setLogin($login)
