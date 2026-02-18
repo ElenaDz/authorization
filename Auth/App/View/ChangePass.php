@@ -3,14 +3,14 @@ use Auth\App\Action\ChangePass;
 
 /**
  * @var $email
- * @var $activation_link
+ * @var $change_pass_link
  * @var array $errors
  */
 ?>
 <h1>Смена пароля</h1>
 
 <div>
-    <form method="post"  action="<?= $activation_link; ?>">
+    <form method="post"  action="<?= $change_pass_link; ?>">
 
         <label for="email">E-mail</label><br>
         <input type="email" id="email" autocomplete name="<?= ChangePass::POST_NAME_EMAIL; ?>" required value="<?= $email ?>" tabindex="1"><br>

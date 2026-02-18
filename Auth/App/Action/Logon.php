@@ -38,7 +38,7 @@ class Logon extends _Base
 			__DIR__ . '/../View/Logon.php',
 			[
                 'errors' => $errors,
-                'login' => $_POST[self::POST_NAME_LOGIN] ?? null
+                'login' => $_POST[self::POST_NAME_LOGIN] ?? $param_optional['login'] ?? null
 			]
 		);
 

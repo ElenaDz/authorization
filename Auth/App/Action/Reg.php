@@ -86,41 +86,42 @@ class Reg extends _Base
 
             $id = Users::add($user);
 
-			// fixme в какой ситуации метод добавления пользователя должен вернуть пустой id ? если есть такая ситуация то нужно бросать исключение
-            if ( ! empty($id))
-			{
-                $activation_link = Url::getUrlAbsolute(
-					ActivationUser::getUrl([
-						ActivationUser::PARAM_NAME_LOGIN => $login,
-                        ActivationUser::PARAM_NAME_CODE => $user->getActivationCode()
-                    ])
-                );
-
-                $message = Views::get(
-                    __DIR__ . '/../View/Email/Reg.php',
-                    [
-                        'login' => $login,
-                        'activation_link' => $activation_link,
-                    ]
-                );
-
-                Email::send(
-                    "Подтверждения электронной почты $email",
-                    $message,
-                    $email
-                );
-
-                $content = Views::get(
-                    __DIR__ . '/../View/Block/Reg/RegSuccess.php'
-                );
-
-                self::showLayout(
-                    'Регистрация',
-                    $content
-                );
-
-                return;
+			// fixme в какой ситуации метод добавления пользователя должен вернуть пустой id ? если есть такая ситуация то нужно бросать исключение ок
+            if ( empty($id)) {
+                throw new \Exception('Пользователь не добавлен');
             }
+
+            $activation_link = Url::getUrlAbsolute(
+                ActivationUser::getUrl([
+                    ActivationUser::PARAM_NAME_LOGIN => $login,
+                    ActivationUser::PARAM_NAME_CODE => $user->getActivationCode()
+                ])
+            );
+
+            $message = Views::get(
+                __DIR__ . '/../View/Email/Reg.php',
+                [
+                    'login' => $login,
+                    'activation_link' => $activation_link,
+                ]
+            );
+
+            Email::send(
+                "Подтверждения электронной почты $email",
+                $message,
+                $email
+            );
+
+            $content = Views::get(
+                __DIR__ . '/../View/Block/Reg/RegSuccess.php'
+            );
+
+            self::showLayout(
+                'Регистрация',
+                $content
+            );
+
+            return;
         }
 
         $content = Views::get(

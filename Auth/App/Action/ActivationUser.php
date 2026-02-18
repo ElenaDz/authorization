@@ -21,24 +21,17 @@ class ActivationUser extends _Base
             throw new \Exception('Нет кода активации');
         }
 
-        try {
-            $user = Users::getByLoginOrEmailOrFall($login);
+        $user = Users::getByLoginOrEmailOrFall($login);
 
-		// fixme ловим исключение и тут же бросаем его снова Зачем?
-        } catch (\Exception $exception ) {
-            throw new \Exception($exception->getMessage());
-        }
+		// fixme ловим исключение и тут же бросаем его снова Зачем?ok
 
-		// todo логика проверки активирован или нет должна быть в сущности User создай там метод isActivated
-        if (empty($user->getActivationCode()))
+		// todo логика проверки активирован или нет должна быть в сущности User создай там метод isActivated ok
+        if ($user->isActivated())
         {
             throw new \Exception('Аккаунт уже был активирован ранее');
         }
 
-        if ( ! $user->validActivationCode($code))
-        {
-            throw new \Exception('Код активации не валиден');
-        }
+        $user->validActivationCode($code);
 
         $user->resetActivationCode();
 

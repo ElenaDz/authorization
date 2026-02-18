@@ -48,18 +48,21 @@ class User extends _Base
         return (int) $this->id;
     }
 
-	// todo метод не должен возвращать значение, а должен бросать исключения если код не валиден
-    public  function validActivationCode($code): bool
+	// todo метод не должен возвращать значение, а должен бросать исключения если код не валиден ok
+    public  function validActivationCode($code)
     {
-        return $this->getActivationCode() == $code;
+        if ( $this->getActivationCode() !== $code) {
+            throw new \Exception('Код активации не валиден');
+        }
     }
 
-	// todo реализовать и использовать
-	public function validPassChangeCode()
+	// todo реализовать и использовать ok
+	public function validPassChangeCode($code)
 	{
-
+        if ($this->getPassChangeCode() !== $code) {
+            throw new \Exception('Код смены пароля не валиден');
+        }
 	}
-
 
     /**
      * @return string|null
@@ -73,6 +76,11 @@ class User extends _Base
 	{
 		$this->activation_code = null;
 	}
+
+    public function isActivated()
+    {
+        return empty($this->getActivationCode());
+    }
 
     /**
      * @return string|null
@@ -219,13 +227,13 @@ class User extends _Base
             throw new \DomainException('Пароль должен быть не больше 30 символов');
         }
 
-		// todo тут нужно добавить русские буквы
-        if ( ! preg_match('/[A-Z]/', $pass)) {
+		// todo тут нужно добавить русские буквы ок
+        if ( ! preg_match('/[A-ZА-ЯЁ]/', $pass)) {
             throw new \DomainException('Пароль должен содержать хотя бы одну заглавную букву');
         }
 
-		// todo тут нужно добавить русские буквы
-        if ( ! preg_match('/[a-z]/', $pass)) {
+		// todo тут нужно добавить русские буквы ок
+        if ( ! preg_match('/[a-zа-яё]/', $pass)) {
             throw new \DomainException('Пароль должен содержать хотя бы одну строчную букву');
         }
 

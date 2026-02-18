@@ -51,7 +51,7 @@ class Auth
 		$user = Users::getByLoginOrEmailOrFall($login_or_email);
 
         if ( ! $user->verifyPass($pass)) {
-            throw new \DomainException('Не правильный пароль');
+            throw new \Exception('Не правильный пароль');
         }
 
         self::loginUser($user);
@@ -59,10 +59,9 @@ class Auth
 
     public static function loginUser(User $user)
     {
-		// todo используй метод isActivated
-        if ( ! empty($user->getActivationCode()))
-        {
-            throw new \DomainException('Чтобы авторизоваться, вам нужно активировать аккаунт, проверьте почту');
+		// todo используй метод isActivated ok
+        if ( ! $user->isActivated()) {
+            throw new \Exception('Чтобы авторизоваться, вам нужно активировать аккаунт, проверьте почту');
         }
 
         $user->genToken();
