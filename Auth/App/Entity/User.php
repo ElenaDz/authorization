@@ -48,10 +48,18 @@ class User extends _Base
         return (int) $this->id;
     }
 
+	// todo метод не должен возвращать значение, а должен бросать исключения если код не валиден
     public  function validActivationCode($code): bool
     {
         return $this->getActivationCode() == $code;
     }
+
+	// todo реализовать и использовать
+	public function validPassChangeCode()
+	{
+
+	}
+
 
     /**
      * @return string|null
@@ -107,6 +115,8 @@ class User extends _Base
 		$this->login = $login;
 	}
 
+	// fixme логин и емейл эти те данные которые пришли к нам от пользователя и там могут быть XSS инфекции, чтобы
+	//  защититься от них нужно во всех местах где эти данные вставляются в html использовать функцию htmlspecialchars
     public function getLogin() : string
     {
         return $this->login;
@@ -209,12 +219,14 @@ class User extends _Base
             throw new \DomainException('Пароль должен быть не больше 30 символов');
         }
 
+		// todo тут нужно добавить русские буквы
         if ( ! preg_match('/[A-Z]/', $pass)) {
-            throw new \DomainException('Пароль должен содержать хотя бы одну заглавную латинскую букву');
+            throw new \DomainException('Пароль должен содержать хотя бы одну заглавную букву');
         }
 
+		// todo тут нужно добавить русские буквы
         if ( ! preg_match('/[a-z]/', $pass)) {
-            throw new \DomainException('Пароль должен содержать хотя бы одну строчную латинскую букву');
+            throw new \DomainException('Пароль должен содержать хотя бы одну строчную букву');
         }
 
         if ( ! preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {

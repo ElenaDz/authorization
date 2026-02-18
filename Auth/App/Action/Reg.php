@@ -24,7 +24,7 @@ class Reg extends _Base
 		$login = null;
 		$email = null;
 
-        if (!empty($_POST) && $_POST[self::POST_NAME_LOGIN])
+        if ( ! empty($_POST) && $_POST[self::POST_NAME_LOGIN])
         {
             $login = $_POST[self::POST_NAME_LOGIN];
             $pass = $_POST[self::POST_NAME_PASS];
@@ -34,28 +34,29 @@ class Reg extends _Base
             try {
                 User::validEmail($email);
 
-            } catch (\Exception $e){
+            } catch (\DomainException $e){
                 $errors[self::POST_NAME_EMAIL] =  $e->getMessage();
             }
 
             try {
                 User::validLogin($login);
 
-            } catch (\Exception $e){
+            } catch (\DomainException $e) {
                 $errors[self::POST_NAME_LOGIN] =  $e->getMessage();
             }
 
             try {
                 User::validPassword($pass);
 
-            } catch (\Exception $e){
+            } catch (\DomainException $e){
                 $errors[self::POST_NAME_PASS] =  $e->getMessage();
             }
 
             if (Users::hasByLogin($login)) {
-                $errors[self::POST_NAME_LOGIN] = 'Пользователь с таким Именем уже есть';
+                $errors[self::POST_NAME_LOGIN] = 'Пользователь с таким именем уже есть';
+            }
 
-            } elseif (Users::hasByEmail($email)) {
+			if (Users::hasByEmail($email)) {
                 $errors[self::POST_NAME_EMAIL] = 'Пользователь с таким email уже есть';
             }
 
@@ -81,47 +82,44 @@ class Reg extends _Base
                 return;
             }
 
-            try {
-                $user = User::create($login, $pass, $email);
+            $user = User::create($login, $pass, $email);
 
-                $id = Users::add($user);
+            $id = Users::add($user);
 
-                if ( ! empty($id))
-				{
-                    $activation_link = Url::getUrlAbsolute(
-						ActivationUser::getUrl([
-							ActivationUser::PARAM_NAME_LOGIN => $login,
-	                        ActivationUser::PARAM_NAME_CODE => $user->getActivationCode()
-	                    ])
-                    );
+			// fixme в какой ситуации метод добавления пользователя должен вернуть пустой id ? если есть такая ситуация то нужно бросать исключение
+            if ( ! empty($id))
+			{
+                $activation_link = Url::getUrlAbsolute(
+					ActivationUser::getUrl([
+						ActivationUser::PARAM_NAME_LOGIN => $login,
+                        ActivationUser::PARAM_NAME_CODE => $user->getActivationCode()
+                    ])
+                );
 
-                    $message = Views::get(
-                        __DIR__ . '/../View/Email/Reg.php',
-                        [
-                            'login' => $login,
-                            'activation_link' => $activation_link,
-                        ]
-                    );
+                $message = Views::get(
+                    __DIR__ . '/../View/Email/Reg.php',
+                    [
+                        'login' => $login,
+                        'activation_link' => $activation_link,
+                    ]
+                );
 
-                    Email::send(
-                        "Подтверждения электронной почты $email",
-                        $message,
-                        $email
-                    );
+                Email::send(
+                    "Подтверждения электронной почты $email",
+                    $message,
+                    $email
+                );
 
-                    $content = Views::get(
-                        __DIR__ . '/../View/Block/Reg/RegSuccess.php'
-                    );
+                $content = Views::get(
+                    __DIR__ . '/../View/Block/Reg/RegSuccess.php'
+                );
 
-                    self::showLayout(
-                        'Регистрация',
-                        $content
-                    );
-                    return;
-                }
+                self::showLayout(
+                    'Регистрация',
+                    $content
+                );
 
-            } catch (\Exception $exception){
-                throw new \Exception($exception->getMessage());
+                return;
             }
         }
 

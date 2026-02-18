@@ -24,6 +24,7 @@ class ActivationUser extends _Base
         try {
             $user = Users::getByLoginOrEmailOrFall($login);
 
+		// fixme ловим исключение и тут же бросаем его снова Зачем?
         } catch (\Exception $exception ) {
             throw new \Exception($exception->getMessage());
         }

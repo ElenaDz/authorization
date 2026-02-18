@@ -85,7 +85,7 @@ class Users extends _Base
         $user = self::getByLoginOrEmail($login_or_email);
         if ( ! $user)
         {
-            throw new \Exception(
+            throw new \DomainException(
                 sprintf(
                     'Пользователь "%s" не найден',
                     $login_or_email
@@ -112,7 +112,7 @@ class Users extends _Base
             'email' => $email
         ]);
 
-        return !empty($results->fetchColumn());
+        return ! empty($results->fetchColumn());
     }
 
 	/**

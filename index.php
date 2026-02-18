@@ -20,7 +20,8 @@ require __DIR__.'/Auth/autoload.php';
 
     <?php else: ?>
 
-        <b><?= \Auth\App\Service\Auth::getUser()->getEmail(); ?></b>
+        <b><?= \Auth\App\Service\Auth::getUser()->getLogin(); ?></b>
+        ( <?= \Auth\App\Service\Auth::getUser()->getEmail(); ?> )
         <form method="post" action="<?= \Auth\App\Action\Logout::getUrl()?>">
             <button type="submit">Выход</button>
         </form>

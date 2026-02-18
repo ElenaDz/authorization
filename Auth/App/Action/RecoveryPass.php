@@ -14,11 +14,12 @@ class RecoveryPass extends _Base
 
     public function __invoke()
     {
-        if (!empty($_POST) && $_POST[self::POST_NAME_EMAIL])
+        if ( ! empty($_POST) && $_POST[self::POST_NAME_EMAIL])
 		{
             $email_post = $_POST[self::POST_NAME_EMAIL];
 
-            if (! Users::hasByEmail($email_post)){
+            if ( ! Users::hasByEmail($email_post))
+			{
                 $content = Views::get(
                     __DIR__ . '/../View/Block/RecoveryPass/RecoveryError.php'
                 );
@@ -29,12 +30,7 @@ class RecoveryPass extends _Base
                 );
             }
 
-            try {
-                $user = Users::getByLoginOrEmailOrFall($email_post);
-
-            } catch (\Exception $exception ) {
-                throw new \Exception($exception->getMessage());
-            }
+            $user = Users::getByLoginOrEmailOrFall($email_post);
 
             $user->genPassChangeCode();
 
@@ -71,6 +67,7 @@ class RecoveryPass extends _Base
                 'Восстановление пароля',
                 $content
             );
+
             return;
         }
 

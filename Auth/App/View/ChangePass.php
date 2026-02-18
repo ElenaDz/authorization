@@ -7,6 +7,8 @@ use Auth\App\Action\ChangePass;
  * @var array $errors
  */
 ?>
+<h1>Смена пароля</h1>
+
 <div>
     <form method="post"  action="<?= $activation_link; ?>">
 
@@ -20,7 +22,8 @@ use Auth\App\Action\ChangePass;
             <small style="color: red;"><?= $errors[ChangePass::POST_NAME_PASS]; ?></small><br>
         <?php endif ?>
 
-        <label for="pass_confirm">Пароль еще раз</label>
+        <br>
+        <label for="pass_confirm">Пароль еще раз</label><br>
         <input type="password" id="pass_confirm" name="<?= ChangePass::POST_NAME_PASSWORD_CONFIRM; ?>" required tabindex="3"><br>
 
         <br>
