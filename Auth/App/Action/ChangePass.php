@@ -66,8 +66,10 @@ class ChangePass  extends _Base
                 $errors[self::POST_NAME_PASS] = 'Пароли не совпадают';
             }
 
-//            fixme оптимизировать код
-            if (!empty($errors) && count($errors) > 0)
+			// fixme оптимизировать код
+	        // fixme в этом контролере 3 раза получают шаблон ChangePass из за этого код совершенно не понятный,
+	        //  это дублирование кода которое мы всячески стараемся избегать, избавься от всех вызовов кроме самого последнего
+            if ( ! empty($errors) && count($errors) > 0)
             {
                 $content = Views::get(
                     __DIR__ . '/../View/ChangePass.php',
@@ -115,6 +117,7 @@ class ChangePass  extends _Base
 			// todo после смены пароля нельзя делать автоматическую авторизацию, ни на одном сайте такого нет, ok
 	        //  после смены пароля происходит редирект на форму ввода пароля (логина) и нужно вводить пароль
             $user->save();
+
 
             Response::redirect(Logon::getUrl(['param_optional' => ['login' => $user->getLogin()]]));
 
