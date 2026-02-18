@@ -23,9 +23,6 @@ class ActivationUser extends _Base
 
         $user = Users::getByLoginOrEmailOrFall($login);
 
-		// fixme ловим исключение и тут же бросаем его снова Зачем?ok
-
-		// todo логика проверки активирован или нет должна быть в сущности User создай там метод isActivated ok
         if ($user->isActivated())
         {
             throw new \Exception('Аккаунт уже был активирован ранее');

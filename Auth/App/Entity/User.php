@@ -1,9 +1,7 @@
 <?php
 namespace Auth\App\Entity;
 
-use Auth\App\Enum\Error;
 use Auth\App\Model\Users;
-use Auth\App\Service\Auth;
 
 class User extends _Base
 {
@@ -48,18 +46,18 @@ class User extends _Base
         return (int) $this->id;
     }
 
-	// todo метод не должен возвращать значение, а должен бросать исключения если код не валиден ok
     public  function validActivationCode($code)
     {
         if ( $this->getActivationCode() !== $code) {
+	        // fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции
             throw new \Exception('Код активации не валиден');
         }
     }
 
-	// todo реализовать и использовать ok
 	public function validPassChangeCode($code)
 	{
         if ($this->getPassChangeCode() !== $code) {
+			// fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции
             throw new \Exception('Код смены пароля не валиден');
         }
 	}
@@ -227,12 +225,10 @@ class User extends _Base
             throw new \DomainException('Пароль должен быть не больше 30 символов');
         }
 
-		// todo тут нужно добавить русские буквы ок
         if ( ! preg_match('/[A-ZА-ЯЁ]/', $pass)) {
             throw new \DomainException('Пароль должен содержать хотя бы одну заглавную букву');
         }
 
-		// todo тут нужно добавить русские буквы ок
         if ( ! preg_match('/[a-zа-яё]/', $pass)) {
             throw new \DomainException('Пароль должен содержать хотя бы одну строчную букву');
         }

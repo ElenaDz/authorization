@@ -32,10 +32,10 @@ class ChangePass  extends _Base
 
         $user = Users::getByLoginOrEmailOrFall($email);
 
-		// todo завести метод validPassChangeCode ok
         $user->validPassChangeCode($code);
 
-	    // todo добавить проверку что с момента создания кода смены пароля прошло не больше 5 минут ok
+	    // fixme это не здесь должно быть а в методе validPassChangeCode
+	    // fixme имена переменных ниже (нотация)
         $codeTime = new DateTime($user->getPassChangeCodeAt());
         $now = new DateTime();
 
@@ -53,7 +53,6 @@ class ChangePass  extends _Base
             $pass_post = $_POST[self::POST_NAME_PASS];
             $pass_confirm_post = $_POST[self::POST_NAME_PASSWORD_CONFIRM];
 
-            // fixme имя переменной не правильное ok
             $change_pass_link = Url::getUrlAbsolute(
                 ChangePass::getUrl([
                     ChangePass::POST_NAME_EMAIL => $email,
@@ -61,7 +60,6 @@ class ChangePass  extends _Base
                 ])
             );
 
-			// todo эту ошибка должна показываться рядом с паролем ok
             if ($pass_post != $pass_confirm_post) {
                 $errors[self::POST_NAME_PASS] = 'Пароли не совпадают';
             }
@@ -114,17 +112,17 @@ class ChangePass  extends _Base
 
             $user->resetPassChangeCode();
 
-			// todo после смены пароля нельзя делать автоматическую авторизацию, ни на одном сайте такого нет, ok
-	        //  после смены пароля происходит редирект на форму ввода пароля (логина) и нужно вводить пароль
             $user->save();
 
-
-            Response::redirect(Logon::getUrl(['param_optional' => ['login' => $user->getLogin()]]));
+            Response::redirect(
+				// fixme замени магическую строку login на константу смотри пример ниже
+	            /** @see \Auth\App\Action\ActivationUser::PARAM_NAME_LOGIN */
+				Logon::getUrl(['login' => $user->getLogin()])
+            );
 
             return;
         }
 
-		// fixme имя переменной не правильное ok
         $change_pass_link = ChangePass::getUrl([
             ChangePass::POST_NAME_EMAIL => $email,
             ChangePass::POST_NAME_CODE => $code
@@ -142,6 +140,5 @@ class ChangePass  extends _Base
             'Смена пароля',
             $content
         );
-
     }
 }

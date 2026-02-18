@@ -11,7 +11,8 @@ class Logon extends _Base
     const POST_NAME_PASS = 'password';
     const POST_NAME_SUBMIT = 'submit';
 
-    public function __invoke($param_optional = null)
+
+    public function __invoke($login = null)
 	{
         if (Auth::isAuthorized()) {
             Response::redirect('/');
@@ -19,7 +20,7 @@ class Logon extends _Base
 
         $errors = [];
 
-        if (!empty($_POST) && $_POST[self::POST_NAME_LOGIN])
+        if ( ! empty($_POST) && $_POST[self::POST_NAME_LOGIN])
         {
             $login = $_POST[self::POST_NAME_LOGIN];
             $pass = $_POST[self::POST_NAME_PASS];
@@ -38,7 +39,7 @@ class Logon extends _Base
 			__DIR__ . '/../View/Logon.php',
 			[
                 'errors' => $errors,
-                'login' => $_POST[self::POST_NAME_LOGIN] ?? $param_optional['login'] ?? null
+                'login' => $_POST[self::POST_NAME_LOGIN] ?? $login ?? null
 			]
 		);
 

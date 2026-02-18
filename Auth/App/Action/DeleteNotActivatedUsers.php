@@ -26,7 +26,6 @@ class DeleteNotActivatedUsers extends _Base
             $interval = $created_at->diff($now);
 
             if ($interval->days <= 7) {
-				// fixme ошибка здесь return выходит их функции а не переходит к следующему пользователю как задумано ok
                 continue;
             }
 
