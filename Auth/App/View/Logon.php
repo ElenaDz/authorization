@@ -11,34 +11,44 @@ use Auth\App\Action\Reg;
  */
 ?>
 
-<h1>Войти на DriveMusic</h1>
+<div class="title_form">
+    <h1>Войти на DriveMusic</h1>
+    <a class="exit" href="/"></a>
+</div>
+
 
 <form  method="post" action="<?= Logon::getUrl(); ?>">
-    <div>
-        <label for="login">Имя пользователя или e-mail</label><br>
-        <input type="text" id="login" autocomplete name="<?= Reg::POST_NAME_LOGIN; ?>" value="<?= $login ?>" required tabindex="1">
+    <div class="item">
+        <label for="login">Имя пользователя или e-mail</label>
+        <input type="text"
+               id="login"
+               autocomplete="on"
+               name="<?= Reg::POST_NAME_LOGIN; ?>"
+               value="<?= $login ?>"
+               required
+               tabindex="1">
     </div>
 
     <br>
-    <div>
-        <div>
+    <div class="item">
+        <div class="pass_a">
             <label for="pass">Пароль</label>
             <a href="<?=  RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
         </div>
         <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required tabindex="2">
     </div>
 
-    <br>
-    <div>
+    <div class="item">
         <button type="submit" tabindex="3">Войти</button>
         <?php if ( ! empty($errors) && $errors[Logon::POST_NAME_SUBMIT]) :?>
-            <small style="color: red;"><?= $errors[Logon::POST_NAME_SUBMIT]; ?></small><br>
+            <small style="color: red;"><?= $errors[Logon::POST_NAME_SUBMIT]; ?></small>
         <?php endif ?>
     </div>
 
-    <br>
-    <div>
-        <span>Нет аккаунта?</span>
-        <a href="<?= Reg::getUrl(); ?>">Зарегистрируйтесь</a>
+    <div class="item">
+        <div class="reg_a">
+            <span>Нет аккаунта?</span>&nbsp
+            <a href="<?= Reg::getUrl(); ?>">Зарегистрируйтесь</a>
+        </div>
     </div>
 </form>

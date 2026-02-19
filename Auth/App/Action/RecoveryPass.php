@@ -10,24 +10,29 @@ use Auth\Sys\Views;
 class RecoveryPass extends _Base
 {
     const POST_NAME_EMAIL = 'email';
-    const POST_NAME_CODE = 'code';
+    const POST_NAME_EMAIL_ERROR = 'email_error';
 
-    public function __invoke()
+    public function __invoke($email_error = null)
     {
         if ( ! empty($_POST) && $_POST[self::POST_NAME_EMAIL])
 		{
-            $email_post = $_POST[self::POST_NAME_EMAIL];
+            $email_post = htmlspecialchars($_POST[self::POST_NAME_EMAIL]);
 
             if ( ! Users::hasByEmail($email_post))
 			{
                 $content = Views::get(
-                    __DIR__ . '/../View/Block/RecoveryPass/RecoveryError.php'
+                    __DIR__ . '/../View/Block/RecoveryPass/RecoveryError.php',
+                    [
+                        'email_error' => $email_post
+                    ]
                 );
 
                 self::showLayout(
                     'Электронная почта не найдена',
                     $content
                 );
+
+                return;
             }
 
             $user = Users::getByLoginOrEmailOrFall($email_post);
@@ -72,7 +77,10 @@ class RecoveryPass extends _Base
         }
 
         $content = Views::get(
-            __DIR__ . '/../View/RecoveryPass.php'
+            __DIR__ . '/../View/RecoveryPass.php',
+            [
+                'email_error' => $email_error
+            ]
         );
 
         self::showLayout(

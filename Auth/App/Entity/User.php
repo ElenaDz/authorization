@@ -2,6 +2,7 @@
 namespace Auth\App\Entity;
 
 use Auth\App\Model\Users;
+use DateTime;
 
 class User extends _Base
 {
@@ -24,7 +25,6 @@ class User extends _Base
     private $created_at;
     private $pass_change_code;
     private $pass_change_code_at;
-
 
 	public static function create($login, $pass, $email): User
     {
@@ -49,16 +49,29 @@ class User extends _Base
     public  function validActivationCode($code)
     {
         if ( $this->getActivationCode() !== $code) {
-	        // fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции
-            throw new \Exception('Код активации не валиден');
+	        // fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции ок
+            throw new \Exception('Код активации не совпадает с кодом из базы данных');
         }
     }
 
 	public function validPassChangeCode($code)
 	{
         if ($this->getPassChangeCode() !== $code) {
-			// fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции
-            throw new \Exception('Код смены пароля не валиден');
+			// fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции ок
+
+            throw new \Exception('Код смены пароля не совпадает с кодом из базы данных');
+        }
+
+        $code_time = new DateTime($this->getPassChangeCodeAt());
+        $now = new DateTime();
+
+        $diff_in_seconds = abs($now->getTimestamp() - $code_time->getTimestamp());
+
+        if ($diff_in_seconds >= 300)
+        {
+            throw new \Exception(
+                'Истёк срок действия ссылки для смены пароля. Запросите ссылку для востановления пароля ещё раз.'
+            );
         }
 	}
 
@@ -122,7 +135,7 @@ class User extends _Base
 	}
 
 	// fixme логин и емейл эти те данные которые пришли к нам от пользователя и там могут быть XSS инфекции, чтобы
-	//  защититься от них нужно во всех местах где эти данные вставляются в html использовать функцию htmlspecialchars
+	//  защититься от них нужно во всех местах где эти данные вставляются в html использовать функцию htmlspecialchars (ok?)
     public function getLogin() : string
     {
         return $this->login;
@@ -184,18 +197,15 @@ class User extends _Base
         $this->token = null;
     }
 
-
 	public function save()
 	{
 		Users::save($this);
 	}
 
-
 	public function delete()
 	{
 		Users::deleteById($this->getId());
 	}
-
 
     public static function validLogin($login)
     {

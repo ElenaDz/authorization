@@ -1,0 +1,146 @@
+body{
+  position: relative;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.model_fon {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 60%;
+  z-index: 2;
+}
+
+.b_authentication {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.inner_authentication {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px;
+  border-radius: 24px;
+  width: 440px;
+  height: fit-content;
+  background-color: #E9F3FF;
+
+  div {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  h1 {
+    margin: 0 0 20px;
+    height: 28px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .title_form {
+    justify-content: space-between;
+    flex-direction: unset;
+  }
+
+  .exit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background-image: url("/img/exit.svg");
+  }
+
+  form {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    font-size: 14px;
+    font-weight: 400;
+
+
+    .reg_a, .pass_a {
+      flex-direction: unset;
+    }
+
+    label, input {
+      display: flex;
+      justify-content: start;
+      align-items: start;
+      width: 100%;
+    }
+
+    div {
+      height: fit-content;
+    }
+
+    label {
+      height: 30px;
+      align-items: start;
+
+      &[hidden] {
+        height: 0;
+      }
+    }
+
+    input {
+      height: 40px;
+      border: 2px solid #d0e1f5;
+      border-radius: 12px;
+    }
+
+    input:hover {
+      border: 2px solid #8dbeff;
+    }
+
+    input:focus {
+      border: 2px solid #8dbeff!important;
+    }
+
+    .item {
+      flex-direction: column;
+
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+
+    a {
+      text-decoration: none;
+      display: flex;
+      white-space: nowrap;
+      width: fit-content;
+      color: #187bfa;
+    }
+
+    button {
+      color: white;
+      background-color: #1A81F6;
+      border-radius: 24px;
+      padding: 12px 24px;
+      height: 40px;
+      width: fit-content;
+      min-width: 88px;
+      border: 0;
+      font-weight: 600;
+    }
+  }
+}
