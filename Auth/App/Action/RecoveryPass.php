@@ -10,6 +10,10 @@ use Auth\Sys\Views;
 class RecoveryPass extends _Base
 {
     const POST_NAME_EMAIL = 'email';
+
+	// fixme это не POST
+	// fixme это не email_error а просто email которые подставляется в форму смотри ссылку ниже как там подставляется Login
+	/** @see \Auth\App\Action\Logon::__invoke */
     const POST_NAME_EMAIL_ERROR = 'email_error';
 
     public function __invoke($email_error = null)

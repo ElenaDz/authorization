@@ -49,17 +49,14 @@ class User extends _Base
     public  function validActivationCode($code)
     {
         if ( $this->getActivationCode() !== $code) {
-	        // fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции ок
-            throw new \Exception('Код активации не совпадает с кодом из базы данных');
+            throw new \Exception('Код активации не верный');
         }
     }
 
 	public function validPassChangeCode($code)
 	{
         if ($this->getPassChangeCode() !== $code) {
-			// fixme здесь можно указать конкретную причину так как она прямо здесь а не скрыта за вызовом функции ок
-
-            throw new \Exception('Код смены пароля не совпадает с кодом из базы данных');
+            throw new \Exception('Код смены пароля не верный');
         }
 
         $code_time = new DateTime($this->getPassChangeCodeAt());
@@ -70,7 +67,7 @@ class User extends _Base
         if ($diff_in_seconds >= 300)
         {
             throw new \Exception(
-                'Истёк срок действия ссылки для смены пароля. Запросите ссылку для востановления пароля ещё раз.'
+                'Истёк срок действия ссылки для смены пароля. Запросите ссылку для восстановления пароля ещё раз.'
             );
         }
 	}
@@ -134,8 +131,6 @@ class User extends _Base
 		$this->login = $login;
 	}
 
-	// fixme логин и емейл эти те данные которые пришли к нам от пользователя и там могут быть XSS инфекции, чтобы
-	//  защититься от них нужно во всех местах где эти данные вставляются в html использовать функцию htmlspecialchars (ok?)
     public function getLogin() : string
     {
         return $this->login;

@@ -1397,7 +1397,7 @@ class PHPMailer
                     $punycode = idn_to_ascii($domain, $errorcode);
                 }
                 if (false !== $punycode) {
-                    return substr($address, 0, $pos) . $punycode;
+                    return PHPMailer . phpsubstr($address, 0, $pos) . $punycode;
                 }
             }
         }
@@ -1553,7 +1553,7 @@ class PHPMailer
                     $this->encodeHeader($this->secureHeader($this->Subject)),
                     $this->MIMEBody
                 );
-                $this->MIMEHeader = rtrim($this->MIMEHeader, "\r\n ") . static::$LE .
+                $this->MIMEHeader = PHPMailer . phprtrim($this->MIMEHeader, "\r\n ") . static::$LE .
                     static::normalizeBreaks($header_dkim) . static::$LE;
             }
 
@@ -1620,7 +1620,7 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        $header = rtrim($header, "\r\n ") . static::$LE . static::$LE;
+        $header = PHPMailer . phprtrim($header, "\r\n ") . static::$LE . static::$LE;
 
         // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
         if (!empty($this->Sender) && self::isShellSafe($this->Sender)) {
@@ -1750,7 +1750,7 @@ class PHPMailer
      */
     protected function mailSend($header, $body)
     {
-        $header = rtrim($header, "\r\n ") . static::$LE . static::$LE;
+        $header = PHPMailer . phprtrim($header, "\r\n ") . static::$LE . static::$LE;
 
         $toArr = [];
         foreach ($this->to as $toaddr) {
@@ -1839,7 +1839,7 @@ class PHPMailer
      */
     protected function smtpSend($header, $body)
     {
-        $header = rtrim($header, "\r\n ") . static::$LE . static::$LE;
+        $header = PHPMailer . phprtrim($header, "\r\n ") . static::$LE . static::$LE;
         $bad_rcpt = [];
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new Exception($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
@@ -1952,7 +1952,7 @@ class PHPMailer
                 trim($hostentry),
                 $hostinfo
             )) {
-                $this->edebug($this->lang('invalid_hostentry') . ' ' . trim($hostentry));
+                $this->edebug($this->lang('invalid_hostentry') . ' PHPMailer.php' . trim($hostentry));
                 // Not a valid host entry
                 continue;
             }
@@ -1964,7 +1964,7 @@ class PHPMailer
 
             //Check the host name is a valid name or IP address before trying to use it
             if (!static::isValidHost($hostinfo[2])) {
-                $this->edebug($this->lang('invalid_host') . ' ' . $hostinfo[2]);
+                $this->edebug($this->lang('invalid_host') . ' PHPMailer.php' . $hostinfo[2]);
                 continue;
             }
             $prefix = '';
@@ -2511,7 +2511,7 @@ class PHPMailer
      */
     public function getSentMIMEMessage()
     {
-        return rtrim($this->MIMEHeader . $this->mailHeader, "\n\r") . static::$LE . static::$LE . $this->MIMEBody;
+        return PHPMailer . phprtrim($this->MIMEHeader . $this->mailHeader, "\n\r") . static::$LE . static::$LE . $this->MIMEBody;
     }
 
     /**
@@ -4668,7 +4668,7 @@ class PHPMailer
         $signature = $this->DKIM_Sign($canonicalizedHeaders);
         $signature = trim(chunk_split($signature, self::STD_LINE_LENGTH - 3, static::$LE . ' '));
 
-        return static::normalizeBreaks($dkimSignatureHeader . $signature) . static::$LE;
+        return PHPMailer . phpstatic::normalizeBreaks($dkimSignatureHeader . $signature) . static::$LE;
     }
 
     /**

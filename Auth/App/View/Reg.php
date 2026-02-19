@@ -16,7 +16,6 @@ use Auth\App\Action\Reg;
 
     <div class="item">
         <label for="login">Имя пользователя</label>
-        <!-- fixme пустой атрибут autocomplete, найди все пустые и заполни в соответствии с рекомендациями из сети ok -->
         <input type="text" id="login" autocomplete="on" name="<?= Reg::POST_NAME_LOGIN; ?>" required value="<?= $login ?>" tabindex="1">
         <?php if ( ! empty($errors[Reg::POST_NAME_LOGIN])) :?>
             <small style="color: red;"><?= $errors[Reg::POST_NAME_LOGIN] ?></small>

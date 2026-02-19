@@ -1,0 +1,128 @@
+body {
+  position: relative;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.model_fon {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 60%;
+  z-index: 2;
+}
+
+.b_authentication {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.inner_authentication {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px;
+  border-radius: 24px;
+  width: 440px;
+  height: fit-content;
+  background-color: #E9F3FF;
+}
+.inner_authentication div {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+}
+.inner_authentication h1 {
+  margin: 0 0 20px;
+  height: 28px;
+  font-size: 24px;
+  font-weight: 600;
+}
+.inner_authentication .title_form {
+  justify-content: space-between;
+  flex-direction: unset;
+}
+.inner_authentication .exit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  background-image: url("/Auth/assets/img/exit.svg");
+}
+.inner_authentication form {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  font-size: 14px;
+  font-weight: 400;
+}
+.inner_authentication form .reg_a, .inner_authentication form .pass_a {
+  flex-direction: unset;
+}
+.inner_authentication form label, .inner_authentication form input {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width: 100%;
+}
+.inner_authentication form div {
+  height: fit-content;
+}
+.inner_authentication form label {
+  height: 30px;
+  align-items: start;
+}
+.inner_authentication form label[hidden] {
+  display: none;
+}
+.inner_authentication form input {
+  height: 40px;
+  border: 2px solid #d0e1f5;
+  border-radius: 12px;
+}
+.inner_authentication form input:hover {
+  border: 2px solid #8dbeff;
+}
+.inner_authentication form input:focus {
+  border: 2px solid #8dbeff !important;
+}
+.inner_authentication form .item {
+  flex-direction: column;
+}
+.inner_authentication form .item:not(:last-child) {
+  margin-bottom: 20px;
+}
+.inner_authentication form a {
+  text-decoration: none;
+  display: flex;
+  white-space: nowrap;
+  width: fit-content;
+  color: #187bfa;
+}
+.inner_authentication form button {
+  color: white;
+  background-color: #1A81F6;
+  border-radius: 24px;
+  padding: 12px 24px;
+  height: 40px;
+  width: fit-content;
+  min-width: 88px;
+  border: 0;
+  font-weight: 600;
+}
