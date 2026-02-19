@@ -97,7 +97,7 @@ a {
       align-items: start;
 
       &[hidden] {
-        height: 0;
+        display: none;
       }
     }
 
