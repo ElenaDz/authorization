@@ -58,6 +58,11 @@ $getUrl = function ($file_path)
     <br>
     <a href="<?= \Auth\App\Action\TestBox::getUrl(); ?>">
         Тестовая площадка
+    </a><br>
+
+    <br>
+    <a href="https://www.figma.com/design/Wcdl2WmNjDCYluMBndX2DJ/DriveMusic?node-id=201-1057">
+        Шаблон в Figma
     </a>
 
     <br>
