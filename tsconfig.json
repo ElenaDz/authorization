@@ -4,6 +4,6 @@
     "sourceMap": false,
     "target": "es2015",
     "module": "es6",
-    "outDir": "js"
+    "outDir": "Auth/assets/js"
   }
 }

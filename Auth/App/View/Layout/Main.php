@@ -15,14 +15,20 @@
     <title><?= $title; ?></title>
 </head>
 <body>
-    <div>
-        <!-- todo блок авторизации стоит из двух элементов это модальная форма и форма авторизации -->
-        <div class="model_fon"></div>
-        <div class="b_authentication">
-            <div class="inner_authentication">
-                <?= $content; ?>
-            </div>
+    <!-- fixme здесь модального окна быть не должно здесь только форма авторизации, модальное окно находиться там же
+          где auth btn в нашем случае этот index.php -->
+    <div class="model_fon"></div>
+    <div
+        id="<?= $id = uniqid('auth_'); ?>"
+        class="b_auth"
+    >
+        <div class="inner_authentication">
+            <?= $content; ?>
         </div>
     </div>
+
+    <script>
+        new Auth($('#'+'<?= $id ?>'));
+    </script>
 </body>
 </html>

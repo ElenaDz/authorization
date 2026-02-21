@@ -18,7 +18,6 @@ use Auth\App\Action\Reg;
     <a class="exit" href="/"></a>
 </div>
 
-
 <form  method="post" action="<?= Logon::getUrl(); ?>">
     <div class="item">
         <label for="login">Имя пользователя или e-mail</label>

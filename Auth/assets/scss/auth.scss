@@ -1,4 +1,9 @@
-body{
+
+@import "mixin";
+@import "var";
+
+// fixme ты не можешь писать стили для тегов так как рискуешь сломать стили сайта куда это будет вставляться
+body {
   position: relative;
   margin: 0;
 }
@@ -14,9 +19,10 @@ a {
   background-color: black;
   opacity: 60%;
   z-index: 2;
+
 }
 
-.b_authentication {
+.b_auth {
   position: absolute;
   width: 100vw;
   height: 100vh;
