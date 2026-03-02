@@ -9,7 +9,6 @@ use Auth\App\Action\ChangePass;
 ?>
 <div class="title_form">
     <h1>Смена пароля</h1>
-    <a class="exit" href="/"></a>
 </div>
 
 <form method="post"  action="<?= $change_pass_link; ?>">
@@ -21,7 +20,7 @@ use Auth\App\Action\ChangePass;
             autocomplete="on"
             name="<?= ChangePass::POST_NAME_EMAIL; ?>"
             required
-            value="<?= $email ?>"
+            value="<?= htmlspecialchars($email) ?>"
             tabindex="1"
         >
     </div>

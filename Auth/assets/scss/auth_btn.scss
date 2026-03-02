@@ -4,5 +4,23 @@
 
 .b_auth_btn
 {
+  a {
+    text-decoration: none;
+  }
+
+  .open, .exit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 88px;
+    width: fit-content;
+    height: 40px;
+    background-color: #1A81F6;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    margin-left: 10px;
+    box-sizing: border-box;
+  }
 
 }

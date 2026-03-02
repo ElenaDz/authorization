@@ -60,9 +60,9 @@ class ChangePass  extends _Base
                 $user->save();
 
                 Response::redirect(
-	                // fixme не внимательно заменила, разве это POST?
+	                // fixme не внимательно заменила, разве это POST? ok
 	                /** @see \Auth\App\Action\ActivationUser::PARAM_NAME_LOGIN */
-                    Logon::getUrl([Logon::POST_NAME_LOGIN => $user->getLogin()])
+                    Logon::getUrl([ActivationUser::PARAM_NAME_LOGIN => $user->getLogin()])
                 );
 
                 return;

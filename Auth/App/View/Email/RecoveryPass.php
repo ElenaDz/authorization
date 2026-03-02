@@ -7,7 +7,7 @@ use Auth\App\Config\Main;
  */
 ?>
 <div>
-    <div>Здравствуйте, <?= $login ?>!</div>
+    <div>Здравствуйте, <?= htmlspecialchars($login) ?>!</div>
     <div>Вы или кто-то другой запросили новый пароль на сайте <?= Main::getDomain(); ?>.
         Для смены пароля, пожалуйста, перейдите по ссылке <a href=<?= $activation_link ?>>сменить пароль</a>
     </div>

@@ -4,5 +4,49 @@
 
 .b_auth_modal
 {
+  display: none;
 
+  a {
+    text-decoration: none;
+  }
+
+  .model_fon {
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 60%;
+    z-index: 2;
+  }
+
+  .exit {
+    position: absolute;
+    top: 25%;
+    right: 34%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background-image: url("/Auth/assets/img/exit.svg");
+    z-index: 4;
+    cursor: pointer;
+  }
+
+  &.open {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+
+
+    .model_fon {
+      display: flex;
+    }
+  }
 }

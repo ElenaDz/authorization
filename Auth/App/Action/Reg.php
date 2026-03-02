@@ -26,11 +26,11 @@ class Reg extends _Base
 
         if ( ! empty($_POST) && $_POST[self::POST_NAME_LOGIN])
         {
-			// fixme htmlspecialchars можно использовать только в шаблонах, здесь нельзя
-            $login = htmlspecialchars($_POST[self::POST_NAME_LOGIN]);
+			// fixme htmlspecialchars можно использовать только в шаблонах, здесь нельзя ok
+            $login =$_POST[self::POST_NAME_LOGIN];
             $pass = $_POST[self::POST_NAME_PASS];
             $pass_confirm = $_POST[self::POST_NAME_PASSWORD_CONFIRM];
-            $email = htmlspecialchars($_POST[self::POST_NAME_EMAIL]);
+            $email = $_POST[self::POST_NAME_EMAIL];
 
             try {
                 User::validEmail($email);

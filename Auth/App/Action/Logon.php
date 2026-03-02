@@ -22,7 +22,7 @@ class Logon extends _Base
 
         if ( ! empty($_POST) && $_POST[self::POST_NAME_LOGIN])
         {
-            $login = htmlspecialchars($_POST[self::POST_NAME_LOGIN]);
+            $login = $_POST[self::POST_NAME_LOGIN];
             $pass = $_POST[self::POST_NAME_PASS];
 
             try {

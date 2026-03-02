@@ -11,8 +11,6 @@ class Auth
 
 		// @ts-ignore
 		this.$context[0].Auth = this;
-
-		console.log('test');
 	}
 
 	public static create($context = $('.b_auth')): Auth

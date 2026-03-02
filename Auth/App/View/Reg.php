@@ -9,21 +9,20 @@ use Auth\App\Action\Reg;
 ?>
 <div class="title_form">
     <h1>Регистрация на DriveMusic</h1>
-    <a class="exit" href="/"></a>
 </div>
 
 <form method="post"  action="<?= Reg::getUrl(); ?>">
 
     <div class="item">
         <label for="login">Имя пользователя</label>
-        <input type="text" id="login" autocomplete="on" name="<?= Reg::POST_NAME_LOGIN; ?>" required value="<?= $login ?>" tabindex="1">
+        <input type="text" id="login" autocomplete="on" name="<?= Reg::POST_NAME_LOGIN; ?>" required value="<?= htmlspecialchars($login) ?>" tabindex="1">
         <?php if ( ! empty($errors[Reg::POST_NAME_LOGIN])) :?>
             <small style="color: red;"><?= $errors[Reg::POST_NAME_LOGIN] ?></small>
         <?php endif ?>
     </div>
     <div class="item">
         <label for="email">E-mail</label>
-        <input type="email" id="email" autocomplete="on" name="<?= Reg::POST_NAME_EMAIL; ?>" required value="<?= $email ?>" tabindex="2">
+        <input type="email" id="email" autocomplete="on" name="<?= Reg::POST_NAME_EMAIL; ?>" required value="<?= htmlspecialchars($email) ?>" tabindex="2">
         <?php if ( ! empty($errors[Reg::POST_NAME_EMAIL])) :?>
             <small style="color: red;"><?= $errors[Reg::POST_NAME_EMAIL] ?></small>
         <?php endif ?>

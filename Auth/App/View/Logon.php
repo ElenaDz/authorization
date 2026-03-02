@@ -13,9 +13,6 @@ use Auth\App\Action\Reg;
 
 <div class="title_form">
     <h1>Войти на DriveMusic</h1>
-    <!-- fixme крестик это не ссылка, это элемент по клику на который удаляется из дом авторизация или скрывается
-          переход на другую страницу не происходит -->
-    <a class="exit" href="/"></a>
 </div>
 
 <form  method="post" action="<?= Logon::getUrl(); ?>">
@@ -25,7 +22,7 @@ use Auth\App\Action\Reg;
                id="login"
                autocomplete="on"
                name="<?= Reg::POST_NAME_LOGIN; ?>"
-               value="<?= $login ?>"
+               value="<?= htmlspecialchars($login) ?>"
                required
                tabindex="1"
         >
@@ -48,9 +45,9 @@ use Auth\App\Action\Reg;
     </div>
 
     <div class="item">
-        <div class="reg_a">
+        <div class="reg">
             <span>Нет аккаунта?</span>&nbsp
-            <a href="<?= Reg::getUrl(); ?>">Зарегистрируйтесь</a>
+            <a class="reg_a" href="<?= Reg::getUrl(); ?>">Зарегистрируйтесь</a>
         </div>
     </div>
 </form>

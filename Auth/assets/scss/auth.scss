@@ -2,34 +2,23 @@
 @import "mixin";
 @import "var";
 
-// fixme ты не можешь писать стили для тегов так как рискуешь сломать стили сайта куда это будет вставляться
+// fixme ты не можешь писать стили для тегов так как рискуешь сломать стили сайта куда это будет вставляться ок
 body {
   position: relative;
   margin: 0;
 }
 
-a {
-  text-decoration: none;
-}
-
-.model_fon {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  opacity: 60%;
-  z-index: 2;
-
-}
-
 .b_auth {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .inner_authentication {
@@ -63,15 +52,6 @@ a {
     flex-direction: unset;
   }
 
-  .exit {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 24px;
-    height: 24px;
-    background-image: url("/Auth/assets/img/exit.svg");
-  }
-
   form {
     display: flex;
     justify-content: start;
@@ -83,7 +63,7 @@ a {
     font-weight: 400;
 
 
-    .reg_a, .pass_a {
+    .reg, .pass_a {
       flex-direction: unset;
     }
 

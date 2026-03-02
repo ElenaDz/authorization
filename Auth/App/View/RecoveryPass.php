@@ -2,14 +2,13 @@
 use Auth\App\Action\RecoveryPass;
 
 /**
- * @var $email_error
+ * @var $email
  */
 
 ?>
 
 <div class="title_form">
     <h1>Восстановить пароль</h1>
-    <a class="exit" href="/"></a>
 </div>
 
 <div>
@@ -20,7 +19,7 @@ use Auth\App\Action\RecoveryPass;
 
         <div class="item">
             <label for="email" hidden></label><br>
-            <input type="email" id="email" autocomplete="on" name="<?= RecoveryPass::POST_NAME_EMAIL; ?>" required value="<?= $email_error ?>">
+            <input type="email" id="email" autocomplete="on" name="<?= RecoveryPass::POST_NAME_EMAIL; ?>" required value="<?= htmlspecialchars($email) ?>">
         </div>
 
         <div class="item">

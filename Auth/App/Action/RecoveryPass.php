@@ -11,16 +11,16 @@ class RecoveryPass extends _Base
 {
     const POST_NAME_EMAIL = 'email';
 
-	// fixme это не POST
-	// fixme это не email_error а просто email которые подставляется в форму смотри ссылку ниже как там подставляется Login
+	// fixme это не POST ok
+	// fixme это не email_error а просто email которые подставляется в форму смотри ссылку ниже как там подставляется Login ok
 	/** @see \Auth\App\Action\Logon::__invoke */
-    const POST_NAME_EMAIL_ERROR = 'email_error';
+    const GET_NAME_EMAIL = 'email';
 
-    public function __invoke($email_error = null)
+    public function __invoke($email = null)
     {
         if ( ! empty($_POST) && $_POST[self::POST_NAME_EMAIL])
 		{
-            $email_post = htmlspecialchars($_POST[self::POST_NAME_EMAIL]);
+            $email_post = $_POST[self::POST_NAME_EMAIL];
 
             if ( ! Users::hasByEmail($email_post))
 			{
@@ -83,7 +83,7 @@ class RecoveryPass extends _Base
         $content = Views::get(
             __DIR__ . '/../View/RecoveryPass.php',
             [
-                'email_error' => $email_error
+                'email' => $email
             ]
         );
 

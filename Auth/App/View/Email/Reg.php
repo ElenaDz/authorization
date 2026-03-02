@@ -7,7 +7,7 @@ use Auth\App\Config\Main;
  */
 ?>
 <div>
-    <div>Здравствуйте, <?= $login ?>!</div>
+    <div>Здравствуйте, <?= htmlspecialchars($login) ?>!</div>
     <div>
         Для подтверждения электронной почты и активации вашего аккаунта на сайте
         <?= Main::getDomain(); ?>, пожалуйста, перейдите по <a href=<?= $activation_link ?>>этой ссылке</a>
