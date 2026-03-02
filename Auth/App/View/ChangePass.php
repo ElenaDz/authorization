@@ -28,7 +28,7 @@ use Auth\App\Action\ChangePass;
     <div class="item">
         <label for="pass">Пароль (буквы, цифры, знаки препинания)</label>
         <input type="password" id="pass" name="<?= ChangePass::POST_NAME_PASSWORD; ?>" required tabindex="2">
-        <?php if (!empty($errors[ChangePass::POST_NAME_PASSWORD])) :?>
+        <?php if ( ! empty($errors[ChangePass::POST_NAME_PASSWORD])) :?>
             <small style="color: red;"><?= $errors[ChangePass::POST_NAME_PASSWORD]; ?></small>
         <?php endif ?>
     </div>

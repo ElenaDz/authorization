@@ -1,7 +1,7 @@
 .idea/
 
 /_ide/jquery.d.ts
-js/auth_btn.js
-js/auth_modal.js
-js/auth.js
+js/auth.one_file.js
 
+
+Auth/assets/js/auth.one_file.js

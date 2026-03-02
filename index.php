@@ -38,8 +38,6 @@ $getUrl = function ($file_path)
 </head>
 
 <body>
-    <!-- todo перенести b_auth_modal ниже чтобы не было проблем с тем что модальное окно не перекрывает содержание страницы ok-->
-
     <div class="b_auth_btn">
 
         <?php if ( ! \Auth\App\Service\Auth::isAuthorized()): ?>
@@ -79,10 +77,8 @@ $getUrl = function ($file_path)
         </li>
     </ul>
 
+    <!-- todo лучше добавить этот элемент в dom с помощью js когда он понадобиться -->
     <div class="b_auth_modal">
-        <!-- fixme крестик это не ссылка, это элемент по клику на который удаляется из дом авторизация или скрывается ok
-         переход на другую страницу не происходит -->
-        <?= $content ?>
         <div class="exit"></div>
         <div class="model_fon"></div>
     </div>
@@ -112,6 +108,7 @@ $getUrl = function ($file_path)
     <script>
         $(function() {
             Auth.create($('body'));
+			// todo только эта одна строка должна быть здесь, остальное должно вызываться по мере надобности
             AuthBtn.create($('body'));
             AuthModal.create($('body'));
         });
