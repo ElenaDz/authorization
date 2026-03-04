@@ -77,12 +77,7 @@ $getUrl = function ($file_path)
         </li>
     </ul>
 
-    <!-- todo лучше добавить этот элемент в dom с помощью js когда он понадобиться -->
-    <div class="b_auth_modal">
-        <div class="exit"></div>
-        <div class="model_fon"></div>
-    </div>
-
+    <!-- todo лучше добавить этот элемент в dom с помощью js когда он понадобиться ok-->
 
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
@@ -108,9 +103,7 @@ $getUrl = function ($file_path)
     <script>
         $(function() {
             Auth.create($('body'));
-			// todo только эта одна строка должна быть здесь, остальное должно вызываться по мере надобности
-            AuthBtn.create($('body'));
-            AuthModal.create($('body'));
+			// todo только эта одна строка должна быть здесь, остальное должно вызываться по мере надобности ok
         });
     </script>
 </body>

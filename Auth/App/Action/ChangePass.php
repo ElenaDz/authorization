@@ -14,6 +14,7 @@ class ChangePass  extends _Base
     const POST_NAME_CODE = 'code';
     const POST_NAME_PASSWORD = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
+    const PARAM_NAME_LOGIN = 'login';
 
     public function __invoke($email = null, $code = null)
     {
@@ -60,8 +61,8 @@ class ChangePass  extends _Base
                 $user->save();
 
                 Response::redirect(
-					// fixme исправить константу
-                    Logon::getUrl([ActivationUser::PARAM_NAME_LOGIN => $user->getLogin()])
+					// fixme исправить константу ok
+                    Logon::getUrl([ChangePass::PARAM_NAME_LOGIN => $user->getLogin()])
                 );
 
                 return;

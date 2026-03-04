@@ -32,7 +32,7 @@ use Auth\App\Action\Reg;
     <div class="item">
         <div class="pass_a">
             <label for="pass">Пароль</label>
-            <a href="<?=  RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
+            <a class="recover_pass_a" href="<?=  RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
         </div>
         <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required tabindex="2">
     </div>

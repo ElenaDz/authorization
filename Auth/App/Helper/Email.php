@@ -31,11 +31,7 @@ class Email
 		$mail->Password   = 'AyCi9dR7zD5jPQC';
 		$mail->Port       = 587;
 
-		$mail->addAddress(
-			Request::isDevelopment() && strtolower(substr($to, 0, 4)) === 'lena'
-			? 'Lenagosu@yandex.ru'
-			: $to
-		);
+		$mail->addAddress($to);
 
 		// здесь указать email с того же аккаунта, что выше был указан пароль, может совпадать с email to
 		$mail->setFrom("no-reply@drivemusic.me");

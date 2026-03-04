@@ -10,8 +10,8 @@ use Auth\Sys\Views;
 class RecoveryPass extends _Base
 {
     const POST_NAME_EMAIL = 'email';
-	// fixme в других местах это названо PARAM а здесь GET нужно исправить либо в других местах либо здесь
-    const GET_NAME_EMAIL = 'email';
+	// fixme в других местах это названо PARAM а здесь GET нужно исправить либо в других местах либо здесь ok
+    const PARAM_NAME_EMAIL = 'email';
 
     public function __invoke($email = null)
     {

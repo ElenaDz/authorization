@@ -10,6 +10,11 @@
     text-decoration: none;
   }
 
+  .content_modal{
+    position: relative;
+    z-index: 4;
+  }
+
   .model_fon {
     display: none;
     position: absolute;
@@ -22,8 +27,8 @@
 
   .exit {
     position: absolute;
-    top: 25%;
-    right: 34%;
+    top: 25px;
+    right: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
