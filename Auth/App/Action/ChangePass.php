@@ -14,8 +14,10 @@ class ChangePass  extends _Base
     const POST_NAME_CODE = 'code';
     const POST_NAME_PASSWORD = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
-	// fixme заменить PARAM на GET
-    const PARAM_NAME_LOGIN = 'login';
+	// fixme заменить PARAM на GET ok
+    const GET_NAME_LOGIN = 'login';
+    const GET_NAME_EMAIL = 'email';
+    const GET_NAME_CODE = 'code';
 
     public function __invoke($email = null, $code = null)
     {
@@ -62,8 +64,8 @@ class ChangePass  extends _Base
                 $user->save();
 
                 Response::redirect(
-					// fixme исправить константу
-                    Logon::getUrl([ChangePass::PARAM_NAME_LOGIN => $user->getLogin()])
+					// fixme исправить константу ok
+                    Logon::getUrl([ChangePass::GET_NAME_LOGIN => $user->getLogin()])
                 );
 
                 return;
@@ -72,9 +74,9 @@ class ChangePass  extends _Base
 
 	    $change_pass_link = Url::getUrlAbsolute(
 		    ChangePass::getUrl([
-				// fixme исправить константу
-			    ChangePass::POST_NAME_EMAIL => $email,
-			    ChangePass::POST_NAME_CODE => $code
+				// fixme исправить константу ok
+			    ChangePass::GET_NAME_EMAIL => $email,
+			    ChangePass::GET_NAME_CODE => $code
 		    ])
 	    );
 

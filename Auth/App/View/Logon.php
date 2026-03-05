@@ -17,11 +17,11 @@ use Auth\App\Action\Reg;
 <form  method="post" action="<?= Logon::getUrl(); ?>">
     <div class="item">
         <label for="login">Имя пользователя или e-mail</label>
-        <!-- fixme исправить константу -->
+        <!-- fixme исправить константу ok-->
         <input type="text"
                id="login"
                autocomplete="on"
-               name="<?= Reg::POST_NAME_LOGIN; ?>"
+               name="<?= Logon::POST_NAME_LOGIN; ?>"
                value="<?= htmlspecialchars($login) ?>"
                required
                tabindex="1"
@@ -34,8 +34,8 @@ use Auth\App\Action\Reg;
             <label for="pass">Пароль</label>
             <a class="recover_pass_a" href="<?= RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
         </div>
-        <!-- fixme исправить константу -->
-        <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required tabindex="2">
+        <!-- fixme исправить константу ok-->
+        <input type="password" id="pass" name="<?= Logon::POST_NAME_PASS; ?>" required tabindex="2">
     </div>
 
     <div class="item">

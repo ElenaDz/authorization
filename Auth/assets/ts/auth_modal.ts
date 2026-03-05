@@ -2,31 +2,41 @@ class AuthModal
 {
     public readonly $context: JQuery;
 
+    static readonly CLASS_MODAL  = '.b_auth_modal';
+
     constructor($context: JQuery)
     {
+        if ($context.length == 0)
+        {
+            this.render();
+
+            $context = $(AuthModal.CLASS_MODAL);
+        }
+
         this.$context = $context;
-        // fixme я просил не использовать этот метод комментирования только ручное с помощью // одна строка /** */ много строк
-        // fixme вернуть этот код он нужен
-        //
-        // // @ts-ignore
-        // if (this.$context[0].AuthModal) return this.$context[0].AuthModal;
-        //
-        // // @ts-ignore
-        // this.$context[0].AuthModal = this;
+
+        // fixme вернуть этот код он нужен ok
+
+        // @ts-ignore
+        if (this.$context[0].AuthModal) return this.$context[0].AuthModal;
+
+        // @ts-ignore
+        this.$context[0].AuthModal = this;
 
         this.initExit();
     }
 
-    // todo сделай приватным и вызывай из конструктора
-    public static renderModal()
+    // todo сделай приватным и вызывай из конструктора ok
+    private render()
     {
         $('body').prepend(this.getHtml());
     }
 
-    private static getHtml() {
+    private getHtml() {
         return `
             <div class="b_auth_modal">
                 <div class="content_modal">
+                    <div class="inner_content"></div>
                     <div class="exit"></div>
                 </div>
                 <div class="model_fon"></div>
@@ -34,19 +44,19 @@ class AuthModal
         `;
     }
 
-    // fixme переписать этот метод на использование метода close
+    // fixme переписать этот метод на использование метода close ок
     private initExit()
     {
         this.$context.find('.exit').on('click',() =>
         {
-            // fixme не удалять а скрывать, удаление в контекте, что ты создаешь объекты этого класса может вызывать проблемы
-            this.$context.remove();
+            // fixme не удалять а скрывать, удаление в контекте, что ты создаешь объекты этого класса может вызывать проблемы ок
+            this.close();
         });
 
         $('html').on('click',(e) =>
         {
             if ($(e.target).hasClass('model_fon')) {
-                this.$context.remove();
+                this.close();
             }
         });
     }
@@ -58,31 +68,29 @@ class AuthModal
 
     public close()
     {
-        // todo
+        // todo ок
+        this.$context.removeClass('open');
     }
 
-
-    // fixme переименовать в setContent
-    public setForm(form: string)
+    // fixme переименовать в setContent ok
+    public setContent(content: string)
     {
-        this.deleteForm();
+        this.deleteContent();
 
-        this.$context.find('.content_modal').prepend(form);
+        this.$context.find('.inner_content').prepend(content);
 
-        // fixme удалить, этот скрипт должен быть инлайн скриптом в html который ты здесь вставляешь
-        Auth.create();
-        // fixme удалить, вижу везде эти вызовы видимо это связано с тем что ты удаляешь а не скрываешь, поэтому удалять и нельзя
-        AuthModal.create();
+        // fixme удалить, этот скрипт должен быть инлайн скриптом в html который ты здесь вставляешь ok
+        // fixme удалить, вижу везде эти вызовы видимо это связано с тем что ты удаляешь а не скрываешь, поэтому удалять и нельзя ok
     }
 
-    // fixme переименовать в deleteContent
-    private deleteForm()
+    // fixme переименовать в deleteContent ok
+    public deleteContent()
     {
-        // fixme переписать в соответствии с новым названием
-        this.$context.find('.b_auth').remove();
+        // fixme переписать в соответствии с новым названием ok
+        this.$context.find('.inner_content').empty();
     }
 
-    public static create($context = $('.b_auth_modal')): AuthModal
+    public static create($context = $(AuthModal.CLASS_MODAL)): AuthModal
     {
         return new AuthModal($context);
     }

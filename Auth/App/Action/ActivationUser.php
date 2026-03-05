@@ -8,9 +8,9 @@ use Auth\Sys\Response;
 
 class ActivationUser extends _Base
 {
-	// fixme заменить PARAM на GET
-	const PARAM_NAME_LOGIN = 'login';
-	const PARAM_NAME_CODE = 'code';
+	// fixme заменить PARAM на GET ok
+	const GET_NAME_LOGIN = 'login';
+	const GET_NAME_CODE = 'code';
 
 
     public function __invoke($login = null, $code = null)

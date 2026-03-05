@@ -101,7 +101,9 @@ class Routing
 		$_params = [];
 		foreach ($ref_params as $ref_param)
 		{
-			$_params[$ref_param->getName()] = $params[$ref_param->getName()] ?: $ref_param->getDefaultValue();
+			$_params[$ref_param->getName()] = array_key_exists($ref_param->getName(),$params)
+                ? $params[$ref_param->getName()]
+                : $ref_param->getDefaultValue();
 		}
 
 		call_user_func_array($action, $_params);

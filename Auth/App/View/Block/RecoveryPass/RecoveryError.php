@@ -12,7 +12,7 @@ use Auth\App\Action\RecoveryPass;
         <span>
             Указанный адрес электронной почты <?= htmlspecialchars($email_error) ?> не найден или введён неверно.
             Пожалуйста,
-            <a href="<?=  RecoveryPass::getUrl([RecoveryPass::PARAM_NAME_EMAIL => $email_error]); ?>">
+            <a href="<?=  RecoveryPass::getUrl([RecoveryPass::GET_NAME_EMAIL => $email_error]); ?>">
                 введите правильный адрес
             </a>.
         </span>

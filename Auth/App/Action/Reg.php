@@ -92,8 +92,8 @@ class Reg extends _Base
 
             $activation_link = Url::getUrlAbsolute(
                 ActivationUser::getUrl([
-                    ActivationUser::PARAM_NAME_LOGIN => $login,
-                    ActivationUser::PARAM_NAME_CODE => $user->getActivationCode()
+                    ActivationUser::GET_NAME_LOGIN => $login,
+                    ActivationUser::GET_NAME_CODE => $user->getActivationCode()
                 ])
             );
 

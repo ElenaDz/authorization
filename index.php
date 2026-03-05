@@ -100,7 +100,7 @@ $getUrl = function ($file_path)
 
     <script>
         $(function() {
-            Auth.create($('body'));
+            AuthBtn.create($('body'));
 			// todo только эта одна строка должна быть здесь, остальное должно вызываться по мере надобности ok
         });
     </script>
