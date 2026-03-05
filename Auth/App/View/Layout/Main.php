@@ -2,7 +2,6 @@
 /** @var string $title */
 /** @var string $content */
 
-// todo вернуть сюда все что здесь было раньше, все что должно быть на html странице ok
 ?>
 <!DOCTYPE html>
 <html lang="en">

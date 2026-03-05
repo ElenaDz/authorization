@@ -1,6 +1,5 @@
 <?php
 
-use Auth\App\Action\DeleteNotActivatedUsers;
 use Auth\App\Action\Logon;
 use Auth\App\Action\RecoveryPass;
 use Auth\App\Action\Reg;
@@ -18,6 +17,7 @@ use Auth\App\Action\Reg;
 <form  method="post" action="<?= Logon::getUrl(); ?>">
     <div class="item">
         <label for="login">Имя пользователя или e-mail</label>
+        <!-- fixme исправить константу -->
         <input type="text"
                id="login"
                autocomplete="on"
@@ -32,8 +32,9 @@ use Auth\App\Action\Reg;
     <div class="item">
         <div class="pass_a">
             <label for="pass">Пароль</label>
-            <a class="recover_pass_a" href="<?=  RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
+            <a class="recover_pass_a" href="<?= RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
         </div>
+        <!-- fixme исправить константу -->
         <input type="password" id="pass" name="<?= Reg::POST_NAME_PASS; ?>" required tabindex="2">
     </div>
 

@@ -1,6 +1,7 @@
 class AuthBtn
 {
     private readonly $context: JQuery;
+
     private auth_modal: AuthModal;
     private auth: Auth;
 
@@ -26,7 +27,6 @@ class AuthBtn
 
             $.get(logon.attr('href'), (data) =>
             {
-
                 let element = Auth.getHtmlData(data).querySelector('.b_auth');
 
                 let form = $(element)[0].outerHTML;

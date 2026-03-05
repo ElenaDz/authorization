@@ -1,6 +1,8 @@
 class AuthModal {
     constructor($context) {
         this.$context = $context;
+        // fixme я просил не использовать этот метод комментирования только ручное с помощью // одна строка /** */ много строк
+        // fixme вернуть этот код он нужен
         //
         // // @ts-ignore
         // if (this.$context[0].AuthModal) return this.$context[0].AuthModal;
@@ -9,22 +11,24 @@ class AuthModal {
         // this.$context[0].AuthModal = this;
         this.initExit();
     }
+    // todo сделай приватным и вызывай из конструктора
     static renderModal() {
         $('body').prepend(this.getHtml());
     }
     static getHtml() {
         return `
-                <div class="b_auth_modal">
-                    <div class="content_modal">
-                        <div class="exit"></div>
-                    </div>
-                    
-                    <div class="model_fon"></div>
-                </div>  
-            `;
+            <div class="b_auth_modal">
+                <div class="content_modal">
+                    <div class="exit"></div>
+                </div>
+                <div class="model_fon"></div>
+            </div>  
+        `;
     }
+    // fixme переписать этот метод на использование метода close
     initExit() {
         this.$context.find('.exit').on('click', () => {
+            // fixme не удалять а скрывать, удаление в контекте, что ты создаешь объекты этого класса может вызывать проблемы
             this.$context.remove();
         });
         $('html').on('click', (e) => {
@@ -36,13 +40,21 @@ class AuthModal {
     open() {
         this.$context.addClass('open');
     }
+    close() {
+        // todo
+    }
+    // fixme переименовать в setContent
     setForm(form) {
         this.deleteForm();
         this.$context.find('.content_modal').prepend(form);
+        // fixme удалить, этот скрипт должен быть инлайн скриптом в html который ты здесь вставляешь
         Auth.create();
+        // fixme удалить, вижу везде эти вызовы видимо это связано с тем что ты удаляешь а не скрываешь, поэтому удалять и нельзя
         AuthModal.create();
     }
+    // fixme переименовать в deleteContent
     deleteForm() {
+        // fixme переписать в соответствии с новым названием
         this.$context.find('.b_auth').remove();
     }
     static create($context = $('.b_auth_modal')) {

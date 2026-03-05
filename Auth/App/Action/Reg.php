@@ -136,4 +136,9 @@ class Reg extends _Base
             $content
         );
 	}
+
+	public static function getUrl(array $params = []): string
+	{
+		return parent::getUrl($params);
+	}
 }

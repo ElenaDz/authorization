@@ -46,4 +46,9 @@ class DeleteNotActivatedUsers extends _Base
 
 		}
     }
+
+	public static function getUrl(array $params = []): string
+	{
+		return parent::getUrl($params);
+	}
 }

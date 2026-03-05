@@ -19,4 +19,9 @@ class Logout extends _Base
 
         Response::redirect('/');
 	}
+
+	public static function getUrl(array $params = []): string
+	{
+		return parent::getUrl($params);
+	}
 }

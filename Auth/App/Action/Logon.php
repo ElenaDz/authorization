@@ -11,7 +11,6 @@ class Logon extends _Base
     const POST_NAME_PASS = 'password';
     const POST_NAME_SUBMIT = 'submit';
 
-
     public function __invoke($login = null)
 	{
         if (Auth::isAuthorized()) {
@@ -47,5 +46,10 @@ class Logon extends _Base
 			'Вход',
 			$content
 		);
+	}
+
+	public static function getUrl(array $params = []): string
+	{
+		return parent::getUrl($params);
 	}
 }
