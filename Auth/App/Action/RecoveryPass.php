@@ -10,7 +10,6 @@ use Auth\Sys\Views;
 class RecoveryPass extends _Base
 {
     const POST_NAME_EMAIL = 'email';
-	// fixme заменить PARAM на GET ok
     const GET_NAME_EMAIL = 'email';
 
     public function __invoke($email = null)
@@ -44,7 +43,6 @@ class RecoveryPass extends _Base
 
             $activation_link = Url::getUrlAbsolute(
 				ChangePass::getUrl([
-					// fixme исправить константы ok
                     ChangePass::GET_NAME_EMAIL => $email_post,
                     ChangePass::GET_NAME_CODE => $user->getPassChangeCode()
                 ])

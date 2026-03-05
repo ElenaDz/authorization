@@ -8,7 +8,6 @@ use Auth\Sys\Response;
 
 class ActivationUser extends _Base
 {
-	// fixme заменить PARAM на GET ok
 	const GET_NAME_LOGIN = 'login';
 	const GET_NAME_CODE = 'code';
 

@@ -1,4 +1,3 @@
-// todo ты задаешься вопросом за что отвечает этот класс? пока ни за что, пока оставляй пустым ok
 class Auth
 {
 	private readonly $context: JQuery;
@@ -12,6 +11,7 @@ class Auth
 
 		// @ts-ignore
 		this.$context[0].Auth = this;
+
 	}
 
 	public static create($context = $('.b_auth')): Auth

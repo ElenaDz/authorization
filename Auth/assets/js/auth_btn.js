@@ -21,7 +21,6 @@ class AuthBtn {
             });
         });
     }
-    // fixme удалить, ответственность за эту функциональность лежит на кнопке авторизации а не на авторизации ok
     initSubmit() {
         this.auth_modal.$context.find('form').on('submit', (e) => {
             e.preventDefault();
@@ -46,8 +45,6 @@ class AuthBtn {
             });
         });
     }
-    // fixme во первых перенести в кнопку авторизации ok
-    // fixme во вторых переделать на работу с любой ссылкой в рамках контанта внутри модального окна ok
     initClickLink() {
         this.auth_modal.$context.find('a').on('click', (e) => {
             e.preventDefault();
@@ -56,10 +53,9 @@ class AuthBtn {
         });
     }
     loadForm(url) {
-        $.get(url, (data) => {
+        $.get(url, (response) => {
             let parser = new DOMParser();
-            let doc = parser.parseFromString(data, 'text/html');
-            // fixme что это? используй jquery там все есть Не знаю что ты тут пытаешься делать, возможно подойдет функцию html() ok
+            let doc = parser.parseFromString(response, 'text/html');
             let content = $(doc).find('body').html();
             this.auth_modal.setContent(content);
         });

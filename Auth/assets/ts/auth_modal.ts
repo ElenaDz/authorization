@@ -15,8 +15,6 @@ class AuthModal
 
         this.$context = $context;
 
-        // fixme вернуть этот код он нужен ok
-
         // @ts-ignore
         if (this.$context[0].AuthModal) return this.$context[0].AuthModal;
 
@@ -26,7 +24,6 @@ class AuthModal
         this.initExit();
     }
 
-    // todo сделай приватным и вызывай из конструктора ok
     private render()
     {
         $('body').prepend(this.getHtml());
@@ -44,12 +41,10 @@ class AuthModal
         `;
     }
 
-    // fixme переписать этот метод на использование метода close ок
     private initExit()
     {
         this.$context.find('.exit').on('click',() =>
         {
-            // fixme не удалять а скрывать, удаление в контекте, что ты создаешь объекты этого класса может вызывать проблемы ок
             this.close();
         });
 
@@ -68,25 +63,18 @@ class AuthModal
 
     public close()
     {
-        // todo ок
         this.$context.removeClass('open');
     }
 
-    // fixme переименовать в setContent ok
     public setContent(content: string)
     {
         this.deleteContent();
 
         this.$context.find('.inner_content').prepend(content);
-
-        // fixme удалить, этот скрипт должен быть инлайн скриптом в html который ты здесь вставляешь ok
-        // fixme удалить, вижу везде эти вызовы видимо это связано с тем что ты удаляешь а не скрываешь, поэтому удалять и нельзя ok
     }
 
-    // fixme переименовать в deleteContent ok
     public deleteContent()
     {
-        // fixme переписать в соответствии с новым названием ok
         this.$context.find('.inner_content').empty();
     }
 

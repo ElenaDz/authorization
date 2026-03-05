@@ -14,10 +14,11 @@ class ChangePass  extends _Base
     const POST_NAME_CODE = 'code';
     const POST_NAME_PASSWORD = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
-	// fixme заменить PARAM на GET ok
+	// fixme в этой акшине нету get параметра login
     const GET_NAME_LOGIN = 'login';
     const GET_NAME_EMAIL = 'email';
     const GET_NAME_CODE = 'code';
+
 
     public function __invoke($email = null, $code = null)
     {
@@ -64,7 +65,7 @@ class ChangePass  extends _Base
                 $user->save();
 
                 Response::redirect(
-					// fixme исправить константу ok
+					// fixme исправить константу (уже 4ый раз прошу исправить эту строку)
                     Logon::getUrl([ChangePass::GET_NAME_LOGIN => $user->getLogin()])
                 );
 
@@ -74,7 +75,6 @@ class ChangePass  extends _Base
 
 	    $change_pass_link = Url::getUrlAbsolute(
 		    ChangePass::getUrl([
-				// fixme исправить константу ok
 			    ChangePass::GET_NAME_EMAIL => $email,
 			    ChangePass::GET_NAME_CODE => $code
 		    ])

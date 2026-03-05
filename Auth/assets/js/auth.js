@@ -1,4 +1,3 @@
-// todo ты задаешься вопросом за что отвечает этот класс? пока ни за что, пока оставляй пустым ok
 class Auth {
     constructor($context) {
         this.$context = $context;
