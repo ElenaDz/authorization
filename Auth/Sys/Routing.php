@@ -44,7 +44,67 @@ class Routing
 
 		$action = new $class_name_action;
 
-		call_user_func_array($action, $params);
+		$ref_class = new \ReflectionClass($class_name_action);
+
+		$ref_params = $ref_class->getMethod('__invoke')->getParameters();
+
+		$param_names = array_map(
+			function ($ref_param) {
+				return $ref_param->getName();
+			},
+			$ref_params
+		);
+
+		$ref_params_required = array_filter(
+			$ref_params,
+			function (\ReflectionParameter $ref_param) {
+				return ! $ref_param->isOptional();
+			}
+		);
+
+		$param_names_required = array_map(
+			function ($ref_param) {
+				return $ref_param->getName();
+			},
+			$ref_params_required
+		);
+
+		foreach ($param_names_required as $param_name_required)
+		{
+			if ( ! array_key_exists($param_name_required, $params)) {
+				throw new \Exception(
+					sprintf(
+						'Обязательный GET параметр не передан "%s"',
+						$param_name_required
+					),
+					404
+				);
+			}
+		}
+
+		// порядок аргументов важен!
+		$params_extra = array_diff(
+			array_keys($params),
+			$param_names
+		);
+		if ( ! empty($params_extra))
+		{
+			throw new \Exception(
+				sprintf(
+					'Переданы лишние параметры "%s"',
+					join(', ', $params_extra)
+				),
+				404
+			);
+		}
+
+		$_params = [];
+		foreach ($ref_params as $ref_param)
+		{
+			$_params[$ref_param->getName()] = $params[$ref_param->getName()] ?: $ref_param->getDefaultValue();
+		}
+
+		call_user_func_array($action, $_params);
 	}
 
 
