@@ -11,6 +11,7 @@ use Auth\Sys\Views;
 class ChangePass  extends _Base
 {
     const POST_NAME_EMAIL = 'email';
+	// fixme не используется
     const POST_NAME_CODE = 'code';
     const POST_NAME_PASSWORD = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
