@@ -6,11 +6,11 @@ class AuthBtn {
             return this.$context[0].AuthBtn;
         // @ts-ignore
         this.$context[0].AuthBtn = this;
+        this.auth_modal = AuthModal.create();
         this.$context.find('.open').on('click', (event) => {
-            this.auth_modal = AuthModal.create();
             event.preventDefault();
             let url = $(event.currentTarget).attr('href');
-            $.get(url, (data) => {
+            $.get(url, (data, textStatus, jqXHR) => {
                 let parser = new DOMParser();
                 let doc = parser.parseFromString(data, 'text/html');
                 let content = $(doc).find('body').html();
@@ -30,10 +30,19 @@ class AuthBtn {
                 data: form.serialize(),
                 type: 'POST',
                 dataType: 'html',
-                success: (response) => {
+                success: (response, textStatus, jqXHR) => {
+                    // fixme у тебя DOMParser 3 раза на этой странице а должно быть 1 раз, вынеси содержание этого в функцию
                     let parser = new DOMParser();
                     let doc = parser.parseFromString(response, 'text/html');
                     let content = $(doc).find('body').html();
+                    // fixme избавиться от этого if , заменить на проверку кода ответа (это будет в jqXHR.status),
+                    //  1) если код ответа 400 и больше например 404 500 и тд
+                    //  то бросаем исключение с полным текстом ответа (сообщение об ошибке, имя файла и номер строки
+                    //  это будет в response)
+                    //  2) если вод ответа >= 300 но < 400 например 301 302 то проверяем куда он если на одну из страниц
+                    //  авторизации то делаем тоже что сделали бы если был клик по ссылке на эту страницу (например клик
+                    //  на Регистрация), иначе делаем редирект с помощью js на нужную страницу (например главную)
+                    //  3) иначе (например код ответа 200) вставляем содержание response в модальное окно
                     if ($(doc).find('.b_auth').length == 0) {
                         this.resetButton(content);
                         this.auth_modal.close();
@@ -41,7 +50,7 @@ class AuthBtn {
                     this.auth_modal.setContent(content);
                     this.initSubmit();
                     this.initClickLink();
-                }
+                },
             });
         });
     }
@@ -60,6 +69,7 @@ class AuthBtn {
             this.auth_modal.setContent(content);
         });
     }
+    // fixme не понадобиться, убрать
     resetButton(button) {
         this.$context.empty();
         this.$context.prepend(button);
