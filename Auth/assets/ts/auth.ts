@@ -12,8 +12,11 @@ class Auth
 		// @ts-ignore
 		this.$context[0].Auth = this;
 
-		// todo добавь тут функционал скрытия сообщения об ошибке когда человек начал менять поле рядом с которым это сообщение об ошибке ok
+		this.initErrorHide();
+	}
 
+	private initErrorHide()
+	{
 		this.$context.find('input').on('input',(input) =>
 		{
 			let $input = $(input.currentTarget);

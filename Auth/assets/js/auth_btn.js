@@ -10,6 +10,7 @@ class AuthBtn {
         this.$context.find('.open').on('click', (event) => {
             event.preventDefault();
             let url = $(event.currentTarget).attr('href');
+            // fixme заменить на вызов request
             $.get(url, (response, textStatus, jqXHR) => {
                 this.auth_modal.setContent(this.getContent(response));
                 this.auth_modal.open();
@@ -18,26 +19,27 @@ class AuthBtn {
             });
         });
     }
+    initAjix() {
+        // todo эти функции связаны, они делают одно дело и их можно вызывать всегда вместе поэтому объедениям их в один вызов
+        //  более того их можно не выносить в отдельные функции а просто вставить код в этот метод, так мы упростим код
+        //  не нужно думать когда что вызывать
+        this.initClickLink();
+        this.initSubmit();
+    }
     initSubmit() {
         this.auth_modal.$context.find('form').on('submit', (e) => {
             e.preventDefault();
             let form = $(e.currentTarget);
+            // fixme заменить на вызов request
             $.ajax({
                 url: form.attr("action"),
                 data: form.serialize(),
                 type: 'POST',
                 dataType: 'html',
                 success: (response, textStatus, jqXHR) => {
-                    // fixme у тебя DOMParser 3 раза на этой странице а должно быть 1 раз, вынеси содержание этого в функцию ok
-                    // fixme избавиться от этого if , заменить на проверку кода ответа (это будет в jqXHR.status), ок
-                    //  1) если код ответа 400 и больше например 404 500 и тд
-                    //  то бросаем исключение с полным текстом ответа (сообщение об ошибке, имя файла и номер строки
-                    //  это будет в response)
-                    //  2) если вод ответа >= 300 но < 400 например 301 302 делаем редирект с помощью js на нужную
-                    //  страницу (например главную)
-                    //  3) иначе (например код ответа 200) вставляем содержание response в модальное окно
                     if (jqXHR.status == 201) {
                         window.location.href = '/';
+                        return;
                     }
                     this.auth_modal.setContent(this.getContent(response));
                     this.initSubmit();
@@ -53,15 +55,27 @@ class AuthBtn {
         this.auth_modal.$context.find('a').on('click', (e) => {
             e.preventDefault();
             let url = $(e.currentTarget).attr('href');
-            this.loadForm(url);
+            // fixme заменить на вызов request
+            $.get(url, (response) => {
+                this.auth_modal.setContent(this.getContent(response));
+                this.initSubmit();
+            });
         });
     }
-    loadForm(url) {
-        $.get(url, (response) => {
-            this.auth_modal.setContent(this.getContent(response));
-            this.initSubmit();
+    request(url, type = 'GET', data = []) {
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+        })
+            .done((response, textStatus, jqXHR) => {
+            // todo
+        })
+            .fail((jqXHR, textStatus, errorThrow) => {
+            // todo
         });
     }
+    // fixme удалить так как после появления метода request всего один вызов этой функции
     getContent(response) {
         let parser = new DOMParser();
         let doc = parser.parseFromString(response, 'text/html');

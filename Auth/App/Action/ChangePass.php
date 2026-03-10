@@ -63,7 +63,6 @@ class ChangePass  extends _Base
                 $user->save();
 
                 Response::redirect(
-					// fixme исправить константу (уже 4ый раз прошу исправить эту строку) ок?
                     Logon::getUrl([Logon::GET_NAME_LOGIN => $user->getLogin()])
                 );
 
