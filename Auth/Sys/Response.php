@@ -11,6 +11,11 @@ class Response
 
     public static function isAjax()
     {
-        return @$_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+        if (array_key_exists('HTTP_X_REQUESTED_WITH', @$_SERVER))
+        {
+            return @$_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+        }
+
+        return false;
     }
 }

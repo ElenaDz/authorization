@@ -19,6 +19,7 @@ class ChangePass  extends _Base
 
     public function __invoke($email = null, $code = null)
     {
+
         if (Auth::isAuthorized()) {
             Response::redirect('/');
         }
@@ -70,12 +71,11 @@ class ChangePass  extends _Base
             }
         }
 
-	    $change_pass_link = Url::getUrlAbsolute(
-		    ChangePass::getUrl([
+	    $change_pass_link = ChangePass::getUrl([
 			    ChangePass::GET_NAME_EMAIL => $email,
 			    ChangePass::GET_NAME_CODE => $code
-		    ])
-	    );
+		    ]);
+
 
         $content = Views::get(
             __DIR__ . '/../View/ChangePass.php',

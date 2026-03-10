@@ -3,7 +3,8 @@ require_once __DIR__ . '/autoload.php';
 
 \Auth\Sys\Error::init();
 
-$job = $argv[1] ? $argv[1] : $_GET['job'];
+
+$job = $_GET['job'];
 
 $params = [];
 
