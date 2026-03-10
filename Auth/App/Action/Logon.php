@@ -10,6 +10,7 @@ class Logon extends _Base
     const POST_NAME_LOGIN = 'login';
     const POST_NAME_PASS = 'password';
     const POST_NAME_SUBMIT = 'submit';
+    const GET_NAME_LOGIN = 'login';
 
     public function __invoke($login = null)
 	{
@@ -27,7 +28,12 @@ class Logon extends _Base
             try {
                 Auth::logonByPassword($login, $pass);
 
-                Response::redirect('/');
+                if (Response::isAjax()) {
+                    http_response_code(201);
+
+                } else {
+                    Response::redirect('/');
+                }
 
             } catch (\DomainException $exception) {
                 $errors[self::POST_NAME_SUBMIT] = $exception->getMessage();

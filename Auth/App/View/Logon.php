@@ -36,7 +36,7 @@ use Auth\App\Action\Reg;
         <input type="password" id="pass" name="<?= Logon::POST_NAME_PASS; ?>" required tabindex="2">
     </div>
 
-    <div class="item">
+    <div class="item<?= ! empty($errors[Logon::POST_NAME_SUBMIT]) ? ' error' : null; ?>">
         <button type="submit" tabindex="3">Войти</button>
         <?php if ( ! empty($errors) && $errors[Logon::POST_NAME_SUBMIT]) :?>
             <small style="color: red;"><?= $errors[Logon::POST_NAME_SUBMIT]; ?></small>

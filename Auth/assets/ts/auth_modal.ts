@@ -8,7 +8,7 @@ class AuthModal
     {
         if ($context.length == 0)
         {
-            this.render();
+            $('body').prepend(this.getHtml());
 
             $context = $(AuthModal.CLASS_MODAL);
         }
@@ -22,12 +22,6 @@ class AuthModal
         this.$context[0].AuthModal = this;
 
         this.initExit();
-    }
-
-    // fixme нет смысла выносить это в отдельный метод, избавься от него
-    private render()
-    {
-        $('body').prepend(this.getHtml());
     }
 
     private getHtml() {
@@ -57,7 +51,6 @@ class AuthModal
         });
     }
 
-
     public open()
     {
         this.$context.addClass('open');
@@ -67,7 +60,6 @@ class AuthModal
     {
         this.$context.removeClass('open');
     }
-
 
     public setContent(content: string)
     {
@@ -80,7 +72,6 @@ class AuthModal
     {
         this.$context.find('.inner_content').empty();
     }
-
 
     public static create($context = $(AuthModal.CLASS_MODAL)): AuthModal
     {

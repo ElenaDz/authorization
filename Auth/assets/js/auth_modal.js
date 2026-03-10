@@ -1,7 +1,7 @@
 class AuthModal {
     constructor($context) {
         if ($context.length == 0) {
-            this.render();
+            $('body').prepend(this.getHtml());
             $context = $(AuthModal.CLASS_MODAL);
         }
         this.$context = $context;
@@ -11,10 +11,6 @@ class AuthModal {
         // @ts-ignore
         this.$context[0].AuthModal = this;
         this.initExit();
-    }
-    // fixme нет смысла выносить это в отдельный метод, избавься от него
-    render() {
-        $('body').prepend(this.getHtml());
     }
     getHtml() {
         return `

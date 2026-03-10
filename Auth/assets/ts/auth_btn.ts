@@ -22,15 +22,9 @@ class AuthBtn
 
             let url = $(event.currentTarget).attr('href');
 
-            $.get(url, (data, textStatus, jqXHR) =>
+            $.get(url, (response, textStatus, jqXHR) =>
             {
-                let parser = new DOMParser();
-
-                let doc = parser.parseFromString(data, 'text/html');
-
-                let content = $(doc).find('body').html();
-
-                this.auth_modal.setContent(content);
+                this.auth_modal.setContent(this.getContent(response));
 
                 this.auth_modal.open();
 
@@ -56,37 +50,33 @@ class AuthBtn
                 dataType:'html',
                 success: (response, textStatus, jqXHR) =>
                 {
-                    // fixme у тебя DOMParser 3 раза на этой странице а должно быть 1 раз, вынеси содержание этого в функцию
-                    let parser = new DOMParser();
+                    // fixme у тебя DOMParser 3 раза на этой странице а должно быть 1 раз, вынеси содержание этого в функцию ok
 
-                    let doc = parser.parseFromString(response, 'text/html');
-
-                    let content = $(doc).find('body').html();
-
-                    // fixme избавиться от этого if , заменить на проверку кода ответа (это будет в jqXHR.status),
+                    // fixme избавиться от этого if , заменить на проверку кода ответа (это будет в jqXHR.status), ок
                     //  1) если код ответа 400 и больше например 404 500 и тд
                     //  то бросаем исключение с полным текстом ответа (сообщение об ошибке, имя файла и номер строки
                     //  это будет в response)
                     //  2) если вод ответа >= 300 но < 400 например 301 302 делаем редирект с помощью js на нужную
                     //  страницу (например главную)
                     //  3) иначе (например код ответа 200) вставляем содержание response в модальное окно
-                    if ($(doc).find('.b_auth').length == 0)
-                    {
-                        this.resetButton(content);
 
-                        this.auth_modal.close();
+                    if (jqXHR.status == 201) {
+
+                        window.location.href = '/';
                     }
 
-                    this.auth_modal.setContent(content);
+                    this.auth_modal.setContent(this.getContent(response));
 
                     this.initSubmit();
 
                     this.initClickLink();
                 },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    throw new Error("Ошибка: " + errorThrown + ". Ответ сервера: " + jqXHR.responseText);
+                }
             });
         });
     }
-
 
     private initClickLink()
     {
@@ -100,28 +90,23 @@ class AuthBtn
         });
     }
 
-
     private loadForm(url: string)
     {
         $.get(url, (response) =>
         {
-            let parser = new DOMParser();
+            this.auth_modal.setContent(this.getContent(response));
 
-            let doc = parser.parseFromString(response, 'text/html');
-
-            let content = $(doc).find('body').html();
-
-            this.auth_modal.setContent(content);
+            this.initSubmit();
         });
     }
 
-
-    // fixme не понадобиться, убрать
-    public resetButton(button: string)
+    public getContent(response: string)
     {
-        this.$context.empty();
+        let parser = new DOMParser();
 
-        this.$context.prepend(button);
+        let doc = parser.parseFromString(response, 'text/html');
+
+        return $(doc).find('body').html();
     }
 
     public static create($context = $('.b_auth_btn')): AuthBtn

@@ -8,4 +8,9 @@ class Response
 		header('Location: ' . $url, true, $permanent ? 301 : 302);
 		exit();
 	}
+
+    public static function isAjax()
+    {
+        return @$_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+    }
 }

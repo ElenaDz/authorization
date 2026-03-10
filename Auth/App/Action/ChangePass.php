@@ -11,12 +11,8 @@ use Auth\Sys\Views;
 class ChangePass  extends _Base
 {
     const POST_NAME_EMAIL = 'email';
-	// fixme не используется
-    const POST_NAME_CODE = 'code';
     const POST_NAME_PASSWORD = 'password';
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
-	// fixme в этой акшине нету get параметра login
-    const GET_NAME_LOGIN = 'login';
     const GET_NAME_EMAIL = 'email';
     const GET_NAME_CODE = 'code';
 
@@ -66,8 +62,8 @@ class ChangePass  extends _Base
                 $user->save();
 
                 Response::redirect(
-					// fixme исправить константу (уже 4ый раз прошу исправить эту строку)
-                    Logon::getUrl([ChangePass::GET_NAME_LOGIN => $user->getLogin()])
+					// fixme исправить константу (уже 4ый раз прошу исправить эту строку) ок?
+                    Logon::getUrl([Logon::GET_NAME_LOGIN => $user->getLogin()])
                 );
 
                 return;

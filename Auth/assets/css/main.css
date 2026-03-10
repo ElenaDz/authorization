@@ -61,6 +61,7 @@ body {
   justify-content: start;
   align-items: start;
   width: 100%;
+  box-sizing: border-box;
 }
 .inner_authentication form div {
   height: fit-content;
@@ -88,6 +89,12 @@ body {
 }
 .inner_authentication form .item:not(:last-child) {
   margin-bottom: 20px;
+}
+.inner_authentication form .item small {
+  display: none;
+}
+.inner_authentication form .item.error small {
+  display: flex;
 }
 .inner_authentication form a {
   text-decoration: none;

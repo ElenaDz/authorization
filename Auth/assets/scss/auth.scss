@@ -71,6 +71,7 @@ body {
       justify-content: start;
       align-items: start;
       width: 100%;
+      box-sizing: border-box;
     }
 
     div {
@@ -105,6 +106,16 @@ body {
 
       &:not(:last-child) {
         margin-bottom: 20px;
+      }
+
+      small {
+        display: none;
+      }
+
+      &.error {
+        small {
+         display: flex;
+        }
       }
     }
 
