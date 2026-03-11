@@ -10,39 +10,23 @@ class AuthBtn {
         this.$context.find('.open').on('click', (event) => {
             event.preventDefault();
             let url = $(event.currentTarget).attr('href');
-            // fixme заменить на вызов request ok
-            this.request(url);
-            this.auth_modal.open();
-        });
-    }
-    initAjix() {
-        // todo эти функции связаны, они делают одно дело и их можно вызывать всегда вместе поэтому объедениям их в один вызов
-        //  более того их можно не выносить в отдельные функции а просто вставить код в этот метод, так мы упростим код
-        //  не нужно думать когда что вызывать ok
-        this.auth_modal.$context.find('form').on('submit', (e) => {
-            // todo необходимо добавить блокировку кнопки отправить, разблокировать ее можно только после получения ответа ok
-            e.preventDefault();
-            let form = $(e.currentTarget);
-            form.find('button').prop('disabled', true);
-            this.request(form.attr("action"), 'POST', form.serialize());
-            // fixme заменить на вызов request ok
-        });
-        this.auth_modal.$context.find('a').on('click', (e) => {
-            e.preventDefault();
-            let url = $(e.currentTarget).attr('href');
-            this.request(url);
-            // fixme заменить на вызов request ok
+            this.request(url)
+                .done(() => {
+                this.auth_modal.open();
+            });
         });
     }
     request(url, type = 'GET', data = '') {
-        $.ajax({
+        return $.ajax({
             url: url,
             type: type,
             data: data,
         })
             .done((response, textStatus, jqXHR) => {
-            // todo ok
             if (jqXHR.status == 201) {
+                // fixme здесь не редирект на главную, а обновление текущей страницы без записи в историю браузера,
+                //  мы можем находиться не на главной во время авторизации и причин переходить на главную из-за
+                //  авторизации нету
                 window.location.href = '/';
                 return;
             }
@@ -53,8 +37,20 @@ class AuthBtn {
             this.initAjix();
         })
             .fail((jqXHR, textStatus, errorThrow) => {
-            // todo ok
             throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
+        });
+    }
+    initAjix() {
+        this.auth_modal.$context.find('form').on('submit', (e) => {
+            e.preventDefault();
+            let form = $(e.currentTarget);
+            form.find('button').prop('disabled', true);
+            this.request(form.attr("action"), 'POST', form.serialize());
+        });
+        this.auth_modal.$context.find('a').on('click', (e) => {
+            e.preventDefault();
+            let url = $(e.currentTarget).attr('href');
+            this.request(url);
         });
     }
     static create($context = $('.b_auth_btn')) {
