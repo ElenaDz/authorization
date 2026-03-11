@@ -10,77 +10,52 @@ class AuthBtn {
         this.$context.find('.open').on('click', (event) => {
             event.preventDefault();
             let url = $(event.currentTarget).attr('href');
-            // fixme заменить на вызов request
-            $.get(url, (response, textStatus, jqXHR) => {
-                this.auth_modal.setContent(this.getContent(response));
-                this.auth_modal.open();
-                this.initClickLink();
-                this.initSubmit();
-            });
+            // fixme заменить на вызов request ok
+            this.request(url);
+            this.auth_modal.open();
         });
     }
     initAjix() {
         // todo эти функции связаны, они делают одно дело и их можно вызывать всегда вместе поэтому объедениям их в один вызов
         //  более того их можно не выносить в отдельные функции а просто вставить код в этот метод, так мы упростим код
-        //  не нужно думать когда что вызывать
-        this.initClickLink();
-        this.initSubmit();
-    }
-    initSubmit() {
+        //  не нужно думать когда что вызывать ok
         this.auth_modal.$context.find('form').on('submit', (e) => {
-            // todo необходимо добавить блокировку кнопки отправить, разблокировать ее можно только после получения ответа
+            // todo необходимо добавить блокировку кнопки отправить, разблокировать ее можно только после получения ответа ok
             e.preventDefault();
             let form = $(e.currentTarget);
-            // fixme заменить на вызов request
-            $.ajax({
-                url: form.attr("action"),
-                data: form.serialize(),
-                type: 'POST',
-                dataType: 'html',
-                success: (response, textStatus, jqXHR) => {
-                    if (jqXHR.status == 201) {
-                        window.location.href = '/';
-                        return;
-                    }
-                    this.auth_modal.setContent(this.getContent(response));
-                    this.initSubmit();
-                    this.initClickLink();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    throw new Error("Ошибка: " + errorThrown + ". Ответ сервера: " + jqXHR.responseText);
-                }
-            });
+            form.find('button').prop('disabled', true);
+            this.request(form.attr("action"), 'POST', form.serialize());
+            // fixme заменить на вызов request ok
         });
-    }
-    initClickLink() {
         this.auth_modal.$context.find('a').on('click', (e) => {
             e.preventDefault();
             let url = $(e.currentTarget).attr('href');
-            // fixme заменить на вызов request
-            $.get(url, (response) => {
-                this.auth_modal.setContent(this.getContent(response));
-                this.initSubmit();
-            });
+            this.request(url);
+            // fixme заменить на вызов request ok
         });
     }
-    request(url, type = 'GET', data = []) {
+    request(url, type = 'GET', data = '') {
         $.ajax({
             url: url,
             type: type,
             data: data,
         })
             .done((response, textStatus, jqXHR) => {
-            // todo
+            // todo ok
+            if (jqXHR.status == 201) {
+                window.location.href = '/';
+                return;
+            }
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(response, 'text/html');
+            let content = $(doc).find('body').html();
+            this.auth_modal.setContent(content);
+            this.initAjix();
         })
             .fail((jqXHR, textStatus, errorThrow) => {
-            // todo
+            // todo ok
+            throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
         });
-    }
-    // fixme удалить так как после появления метода request всего один вызов этой функции
-    getContent(response) {
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(response, 'text/html');
-        return $(doc).find('body').html();
     }
     static create($context = $('.b_auth_btn')) {
         return new AuthBtn($context);
