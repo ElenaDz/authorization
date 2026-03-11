@@ -28,6 +28,7 @@ class AuthBtn {
     }
     initSubmit() {
         this.auth_modal.$context.find('form').on('submit', (e) => {
+            // todo необходимо добавить блокировку кнопки отправить, разблокировать ее можно только после получения ответа
             e.preventDefault();
             let form = $(e.currentTarget);
             // fixme заменить на вызов request
