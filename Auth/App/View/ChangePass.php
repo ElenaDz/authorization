@@ -25,6 +25,7 @@ use Auth\App\Action\ChangePass;
         >
     </div>
 
+    <!-- fixme не хватает класса error -->
     <div class="item">
         <label for="pass">Пароль (буквы, цифры, знаки препинания)</label>
         <input type="password" id="pass" name="<?= ChangePass::POST_NAME_PASSWORD; ?>" required tabindex="2">
