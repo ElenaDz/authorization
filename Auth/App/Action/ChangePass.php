@@ -15,7 +15,7 @@ class ChangePass  extends _Base
     const POST_NAME_PASSWORD_CONFIRM = 'password_confirm';
     const GET_NAME_EMAIL = 'email';
     const GET_NAME_CODE = 'code';
-
+    const COOKIE_NAME_AUTH_BTN_OPEN_URL = 'auth_btn_open_url';
 
     public function __invoke($email = null, $code = null)
     {
@@ -62,6 +62,8 @@ class ChangePass  extends _Base
 
                 $user->save();
 
+                setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL,"",time()-3600,"/");
+
                 Response::redirect(
                     Logon::getUrl([Logon::GET_NAME_LOGIN => $user->getLogin()])
                 );
@@ -75,6 +77,12 @@ class ChangePass  extends _Base
 			    ChangePass::GET_NAME_CODE => $code
 		    ]);
 
+        if (! Response::isAjax())
+        {
+            setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL, $change_pass_link, 0, '/');
+
+            Response::redirect('/');
+        }
 
         $content = Views::get(
             __DIR__ . '/../View/ChangePass.php',

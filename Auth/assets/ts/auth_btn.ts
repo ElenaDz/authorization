@@ -3,6 +3,9 @@ class AuthBtn
     private readonly $context: JQuery;
 
     private auth_modal: AuthModal;
+    private url_from_cookie: string;
+
+    static readonly COOKIE_NAME_AUTH_BTN_OPEN_URL = 'auth_btn_open_url';
 
     constructor($context: JQuery)
     {
@@ -16,8 +19,24 @@ class AuthBtn
 
         this.auth_modal = AuthModal.create();
 
+        this.url_from_cookie = AuthBtn.getCookie(AuthBtn.COOKIE_NAME_AUTH_BTN_OPEN_URL);
+
+        if (this.url_from_cookie)
+        {
+            this.request(this.url_from_cookie, 'POST');
+
+            this.auth_modal.open()
+        }
+
+        this.initOpen();
+    }
+
+    private initOpen()
+    {
         this.$context.find('.open').on('click',(event) =>
         {
+            if (this.url_from_cookie) return;
+
             event.preventDefault();
 
             let url = $(event.currentTarget).attr('href');
@@ -28,6 +47,13 @@ class AuthBtn
                     this.auth_modal.open();
                 });
         });
+    }
+
+    private static getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
     private request(url: string, type = 'GET', data = ''): JQueryPromise<any>
@@ -43,8 +69,8 @@ class AuthBtn
                 {
                     // fixme здесь не редирект на главную, а обновление текущей страницы без записи в историю браузера,
                     //  мы можем находиться не на главной во время авторизации и причин переходить на главную из-за
-                    //  авторизации нету
-                    window.location.href = '/';
+                    //  авторизации нету ок
+                    window.location.replace(window.location.href);
                     return;
                 }
 
