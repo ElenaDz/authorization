@@ -62,7 +62,7 @@ class ChangePass  extends _Base
 
                 $user->save();
 
-                setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL,"",time()-3600,"/");
+                setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL, "", time()-3600, "/");
 
                 Response::redirect(
                     Logon::getUrl([Logon::GET_NAME_LOGIN => $user->getLogin()])

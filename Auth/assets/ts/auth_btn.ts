@@ -5,6 +5,7 @@ class AuthBtn
     private auth_modal: AuthModal;
     private url_from_cookie: string;
 
+    // fixme так нельзя, это значение храниться в php и его нельзя дублировать здесь, ты должна передать его через data атрибут
     static readonly COOKIE_NAME_AUTH_BTN_OPEN_URL = 'auth_btn_open_url';
 
     constructor($context: JQuery)
@@ -19,13 +20,16 @@ class AuthBtn
 
         this.auth_modal = AuthModal.create();
 
+        // todo вынести в отдельный метод initOpenUrl
         this.url_from_cookie = AuthBtn.getCookie(AuthBtn.COOKIE_NAME_AUTH_BTN_OPEN_URL);
+        // todo удаляем куку сразу после получения
 
         if (this.url_from_cookie)
         {
             this.request(this.url_from_cookie, 'POST');
 
-            this.auth_modal.open()
+            // fixme показ модального окна только в случае успешного запроса, он ведь и ошибку может вернуть, смотри строку 48 здесь
+            this.auth_modal.open();
         }
 
         this.initOpen();
@@ -67,9 +71,6 @@ class AuthBtn
             {
                 if (jqXHR.status == 201)
                 {
-                    // fixme здесь не редирект на главную, а обновление текущей страницы без записи в историю браузера,
-                    //  мы можем находиться не на главной во время авторизации и причин переходить на главную из-за
-                    //  авторизации нету ок
                     window.location.replace(window.location.href);
                     return;
                 }
