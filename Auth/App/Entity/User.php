@@ -23,9 +23,16 @@ class User extends _Base
     private $token;
     private $activation_code;
     private $created_at;
+	// todo
+	private $last_login_at;
     private $pass_change_code;
     private $pass_change_code_at;
 
+	// todo
+	private $country;
+	// todo
+	private $ip;
+	
 	public static function create($login, $pass, $email): User
     {
         $user = new self();
