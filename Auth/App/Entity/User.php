@@ -33,9 +33,7 @@ class User extends _Base
 	private $last_login_at;
     private $pass_change_code;
     private $pass_change_code_at;
-	// fixme null по умолчанию
 	private $country;
-	// fixme null по умолчанию
 	private $ip;
 	
 	public static function create($login, $pass, $email): User
