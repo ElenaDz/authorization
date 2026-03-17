@@ -3,6 +3,8 @@ namespace Auth\App\Entity;
 
 use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
+// fixme нельзя менять наймспейс внешней библиотеки SxGeo она должна остаться неизменной и должна лежать в вендор
+// fixme SxGeo нету в гите а должен быть
 use Auth\SxGeo\SxGeo;
 use DateTime;
 
@@ -28,13 +30,12 @@ class User extends _Base
     private $token;
     private $activation_code;
     private $created_at;
-	// todo ok
 	private $last_login_at;
     private $pass_change_code;
     private $pass_change_code_at;
-	// todo ok
+	// fixme null по умолчанию
 	private $country;
-	// todo ok
+	// fixme null по умолчанию
 	private $ip;
 	
 	public static function create($login, $pass, $email): User
@@ -106,7 +107,7 @@ class User extends _Base
         return $this->last_login_at;
     }
 
-    public function genLastLoginAt()
+    public function updateLastLoginAt()
     {
         $this->last_login_at = date('Y-m-d H:i:s');
     }
@@ -146,8 +147,11 @@ class User extends _Base
         return $this->country;
     }
 
+	// fixme лучше не выноси в отдельный метод а оставь в методе setIP
     public function setCountry()
     {
+		// todo где require_once SxGeo
+	    // todo где логика что в разработки путь до библиотеки SxGeo один, а на продакшене другой Аудио мое про SxGeo переслушай
         $sx_geo = new SxGeo();
 
         $this->country = $sx_geo->getCountry($this->ip);
@@ -160,7 +164,10 @@ class User extends _Base
 
     public function setIP()
     {
+		// fixme setter так не пишеться, setter принимает параметр и присвоит его свойству
         $this->ip = Url::getIP();
+
+		// todo ip и страна зависят напрямую изменение ip приводит к изменению страны
     }
 
 	private function setLogin($login)

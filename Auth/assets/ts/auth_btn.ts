@@ -1,11 +1,11 @@
 class AuthBtn
 {
+    private readonly COOKIE_NAME_OPEN_URL = 'cookie_name_open_url';
+
     private readonly $context: JQuery;
 
     private auth_modal: AuthModal;
     private url_from_cookie: string;
-
-    // fixme так нельзя, это значение храниться в php и его нельзя дублировать здесь, ты должна передать его через data атрибут ok
 
     constructor($context: JQuery)
     {
@@ -19,18 +19,18 @@ class AuthBtn
 
         this.auth_modal = AuthModal.create();
 
-       this.initOpenUrl();
+        this.initOpenUrl();
 
         this.initOpen();
     }
 
     private initOpenUrl()
     {
-        // todo вынести в отдельный метод initOpenUrl ok
-        if ( ! this.$context.data('cookie_name_open_url')) return;
+        if ( ! this.$context.data(this.COOKIE_NAME_OPEN_URL)) return;
 
-        this.url_from_cookie = AuthBtn.getCookie(this.$context.data('cookie_name_open_url'));
-        // todo удаляем куку сразу после получения ok
+        this.url_from_cookie = AuthBtn.getCookie(this.$context.data(this.COOKIE_NAME_OPEN_URL));
+
+        // todo удаляем куку сразу после получения Где удаление не вижу?
 
         if (this.url_from_cookie)
         {
@@ -39,8 +39,6 @@ class AuthBtn
                 {
                     this.auth_modal.open();
                 });
-
-            // fixme показ модального окна только в случае успешного запроса, он ведь и ошибку может вернуть, смотри строку 48 здесь ok
         }
     }
 
@@ -48,6 +46,7 @@ class AuthBtn
     {
         this.$context.find('.open').on('click',(event) =>
         {
+            // fixme почему из за того что у нас отрылось какой то окно у нас должна перестать работать кнопка "Вход"
             if (this.url_from_cookie) return;
 
             event.preventDefault();
@@ -62,7 +61,8 @@ class AuthBtn
         });
     }
 
-    private static getCookie(name) {
+    private static getCookie(name)
+    {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
         ));

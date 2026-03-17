@@ -1,6 +1,6 @@
 class AuthBtn {
-    // fixme так нельзя, это значение храниться в php и его нельзя дублировать здесь, ты должна передать его через data атрибут ok
     constructor($context) {
+        this.COOKIE_NAME_OPEN_URL = 'cookie_name_open_url';
         this.$context = $context;
         // @ts-ignore
         if (this.$context[0].AuthBtn)
@@ -12,21 +12,20 @@ class AuthBtn {
         this.initOpen();
     }
     initOpenUrl() {
-        // todo вынести в отдельный метод initOpenUrl ok
-        if (!this.$context.data('cookie_name_open_url'))
+        if (!this.$context.data(this.COOKIE_NAME_OPEN_URL))
             return;
-        this.url_from_cookie = AuthBtn.getCookie(this.$context.data('cookie_name_open_url'));
-        // todo удаляем куку сразу после получения ok
+        this.url_from_cookie = AuthBtn.getCookie(this.$context.data(this.COOKIE_NAME_OPEN_URL));
+        // todo удаляем куку сразу после получения Где удаление не вижу?
         if (this.url_from_cookie) {
             this.request(this.url_from_cookie, 'POST')
                 .done(() => {
                 this.auth_modal.open();
             });
-            // fixme показ модального окна только в случае успешного запроса, он ведь и ошибку может вернуть, смотри строку 48 здесь ok
         }
     }
     initOpen() {
         this.$context.find('.open').on('click', (event) => {
+            // fixme почему из за того что у нас отрылось какой то окно у нас должна перестать работать кнопка "Вход"
             if (this.url_from_cookie)
                 return;
             event.preventDefault();

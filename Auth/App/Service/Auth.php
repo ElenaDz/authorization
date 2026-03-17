@@ -32,9 +32,9 @@ class Auth
             return false;
         }
 
-        self::updateGeoData($user);
-
         self::$user = $user;
+
+	    self::updateUserIp($user);
 
         $user->save();
 
@@ -48,13 +48,15 @@ class Auth
 		return self::$user;
 	}
 
-    private static function updateGeoData($user)
+	// fixme перенести в сущность user чтобы уменьшить сложность, setIP сделать приватным, а setCountry вообще удалить
+    private static function updateUserIp(User $user)
     {
-        if (empty($_COOKIE[Logon::COOKIE_NAME_COUNTRY])) {
+        if (empty($_COOKIE[Logon::COOKIE_NAME_COUNTRY]))
+		{
             $user->setIP();
             $user->setCountry();
 
-            setcookie(Logon::COOKIE_NAME_COUNTRY, 'true', 0, '/');
+            setcookie(Logon::COOKIE_NAME_COUNTRY, true, 0, '/');
         }
     }
 
@@ -69,7 +71,8 @@ class Auth
             throw new \DomainException('Не правильный пароль');
         }
 
-       self::updateGeoData($user);
+		// fixme кажется это нужно вызывать не здесь а в User::create
+        self::updateUserIp($user);
 
         self::loginUser($user);
     }
@@ -80,17 +83,15 @@ class Auth
             throw new \Exception('Чтобы авторизоваться, вам нужно активировать аккаунт, проверьте почту');
         }
 
-		// todo генерировать токен только если он не было выпущен раньше, это нужно чтобы при авторизации в другом браузере ok
-	    //  предыдущая авторизация не слетала из за смены токена
         if (empty($user->getToken())) {
             $user->genToken();
         }
 
-        $user->genLastLoginAt();
-
-        $user->save();
-
         self::setCookieToken($user);
+
+	    $user->updateLastLoginAt();
+
+	    $user->save();
     }
 
 
