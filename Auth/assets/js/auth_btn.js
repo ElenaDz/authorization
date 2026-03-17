@@ -1,4 +1,5 @@
 class AuthBtn {
+    // fixme так нельзя, это значение храниться в php и его нельзя дублировать здесь, ты должна передать его через data атрибут ok
     constructor($context) {
         this.$context = $context;
         // @ts-ignore
@@ -7,15 +8,22 @@ class AuthBtn {
         // @ts-ignore
         this.$context[0].AuthBtn = this;
         this.auth_modal = AuthModal.create();
-        // todo вынести в отдельный метод initOpenUrl
-        this.url_from_cookie = AuthBtn.getCookie(AuthBtn.COOKIE_NAME_AUTH_BTN_OPEN_URL);
-        // todo удаляем куку сразу после получения
-        if (this.url_from_cookie) {
-            this.request(this.url_from_cookie, 'POST');
-            // fixme показ модального окна только в случае успешного запроса, он ведь и ошибку может вернуть, смотри строку 48 здесь
-            this.auth_modal.open();
-        }
+        this.initOpenUrl();
         this.initOpen();
+    }
+    initOpenUrl() {
+        // todo вынести в отдельный метод initOpenUrl ok
+        if (!this.$context.data('cookie_name_open_url'))
+            return;
+        this.url_from_cookie = AuthBtn.getCookie(this.$context.data('cookie_name_open_url'));
+        // todo удаляем куку сразу после получения ok
+        if (this.url_from_cookie) {
+            this.request(this.url_from_cookie, 'POST')
+                .done(() => {
+                this.auth_modal.open();
+            });
+            // fixme показ модального окна только в случае успешного запроса, он ведь и ошибку может вернуть, смотри строку 48 здесь ok
+        }
     }
     initOpen() {
         this.$context.find('.open').on('click', (event) => {
@@ -71,5 +79,3 @@ class AuthBtn {
         return new AuthBtn($context);
     }
 }
-// fixme так нельзя, это значение храниться в php и его нельзя дублировать здесь, ты должна передать его через data атрибут
-AuthBtn.COOKIE_NAME_AUTH_BTN_OPEN_URL = 'auth_btn_open_url';

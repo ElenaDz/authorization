@@ -195,8 +195,11 @@ class Users extends _Base
                         token = :token,
                         activation_code = :activation_code,
                         created_at = :created_at,
+                        last_login_at = :last_login_at,
                         pass_change_code = :pass_change_code,
-                        pass_change_code_at = :pass_change_code_at
+                        pass_change_code_at = :pass_change_code_at,
+                        country = :country,
+                        ip = :ip
                     WHERE 
                         id = :id'
         );
@@ -209,8 +212,11 @@ class Users extends _Base
             'token'                     => self::getPrivatePropValueByUser($user, User::NAME_TOKEN),
             'activation_code'           => self::getPrivatePropValueByUser($user, User::NAME_ACTIVATION_CODE),
             'created_at'                => self::getPrivatePropValueByUser($user, User::NAME_CREATED_AT),
+            'last_login_at'             => self::getPrivatePropValueByUser($user, User::NAME_LAST_LOGIN_AT),
             'pass_change_code'          => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE),
-            'pass_change_code_at'       => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE_AT)
+            'pass_change_code_at'       => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE_AT),
+            'country'                   => self::getPrivatePropValueByUser($user, User::NAME_COUNTRY),
+            'ip'                        => self::getPrivatePropValueByUser($user, User::NAME_IP)
         ]);
     }
 

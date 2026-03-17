@@ -56,13 +56,13 @@ class ChangePass  extends _Base
                 $errors[self::POST_NAME_PASSWORD] = $exception->getMessage();
             }
 
+            setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL, "", time()-3600, "/");
+
             if (empty($errors))
 			{
                 $user->resetPassChangeCode();
 
                 $user->save();
-
-                setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL, "", time()-3600, "/");
 
                 Response::redirect(
                     Logon::getUrl([Logon::GET_NAME_LOGIN => $user->getLogin()])

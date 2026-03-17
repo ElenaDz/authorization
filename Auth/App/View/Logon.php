@@ -3,6 +3,7 @@
 use Auth\App\Action\Logon;
 use Auth\App\Action\RecoveryPass;
 use Auth\App\Action\Reg;
+use Auth\SxGeo\SxGeo;
 
 /**
  * @var array $errors

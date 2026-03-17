@@ -5,8 +5,7 @@ class AuthBtn
     private auth_modal: AuthModal;
     private url_from_cookie: string;
 
-    // fixme так нельзя, это значение храниться в php и его нельзя дублировать здесь, ты должна передать его через data атрибут
-    static readonly COOKIE_NAME_AUTH_BTN_OPEN_URL = 'auth_btn_open_url';
+    // fixme так нельзя, это значение храниться в php и его нельзя дублировать здесь, ты должна передать его через data атрибут ok
 
     constructor($context: JQuery)
     {
@@ -20,19 +19,29 @@ class AuthBtn
 
         this.auth_modal = AuthModal.create();
 
-        // todo вынести в отдельный метод initOpenUrl
-        this.url_from_cookie = AuthBtn.getCookie(AuthBtn.COOKIE_NAME_AUTH_BTN_OPEN_URL);
-        // todo удаляем куку сразу после получения
+       this.initOpenUrl();
+
+        this.initOpen();
+    }
+
+    private initOpenUrl()
+    {
+        // todo вынести в отдельный метод initOpenUrl ok
+        if ( ! this.$context.data('cookie_name_open_url')) return;
+
+        this.url_from_cookie = AuthBtn.getCookie(this.$context.data('cookie_name_open_url'));
+        // todo удаляем куку сразу после получения ok
 
         if (this.url_from_cookie)
         {
-            this.request(this.url_from_cookie, 'POST');
+            this.request(this.url_from_cookie, 'POST')
+                .done(() =>
+                {
+                    this.auth_modal.open();
+                });
 
-            // fixme показ модального окна только в случае успешного запроса, он ведь и ошибку может вернуть, смотри строку 48 здесь
-            this.auth_modal.open();
+            // fixme показ модального окна только в случае успешного запроса, он ведь и ошибку может вернуть, смотри строку 48 здесь ok
         }
-
-        this.initOpen();
     }
 
     private initOpen()

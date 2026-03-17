@@ -1,7 +1,9 @@
 <?php
 namespace Auth\App\Service;
 
+use Auth\App\Action\Logon;
 use Auth\App\Entity\User;
+use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Request;
 
@@ -30,7 +32,11 @@ class Auth
             return false;
         }
 
+        self::updateGeoData($user);
+
         self::$user = $user;
+
+        $user->save();
 
         return true;
     }
@@ -42,6 +48,15 @@ class Auth
 		return self::$user;
 	}
 
+    private static function updateGeoData($user)
+    {
+        if (empty($_COOKIE[Logon::COOKIE_NAME_COUNTRY])) {
+            $user->setIP();
+            $user->setCountry();
+
+            setcookie(Logon::COOKIE_NAME_COUNTRY, 'true', 0, '/');
+        }
+    }
 
     /**
      * @throws \Exception
@@ -54,6 +69,8 @@ class Auth
             throw new \DomainException('Не правильный пароль');
         }
 
+       self::updateGeoData($user);
+
         self::loginUser($user);
     }
 
@@ -63,9 +80,13 @@ class Auth
             throw new \Exception('Чтобы авторизоваться, вам нужно активировать аккаунт, проверьте почту');
         }
 
-		// todo генерировать токен только если он не было выпущен раньше, это нужно чтобы при авторизации в другом браузере
+		// todo генерировать токен только если он не было выпущен раньше, это нужно чтобы при авторизации в другом браузере ok
 	    //  предыдущая авторизация не слетала из за смены токена
-        $user->genToken();
+        if (empty($user->getToken())) {
+            $user->genToken();
+        }
+
+        $user->genLastLoginAt();
 
         $user->save();
 

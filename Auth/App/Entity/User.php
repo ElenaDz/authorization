@@ -1,7 +1,9 @@
 <?php
 namespace Auth\App\Entity;
 
+use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
+use Auth\SxGeo\SxGeo;
 use DateTime;
 
 class User extends _Base
@@ -13,8 +15,11 @@ class User extends _Base
     const NAME_TOKEN = 'token';
     const NAME_ACTIVATION_CODE = 'activation_code';
     const NAME_CREATED_AT = 'created_at';
+    const NAME_LAST_LOGIN_AT = 'last_login_at';
     const NAME_PASS_CHANGE_CODE = 'pass_change_code';
     const NAME_PASS_CHANGE_CODE_AT = 'pass_change_code_at';
+    const NAME_COUNTRY = 'country';
+    const NAME_IP = 'ip';
 
     private $id;
     private $login;
@@ -23,14 +28,13 @@ class User extends _Base
     private $token;
     private $activation_code;
     private $created_at;
-	// todo
+	// todo ok
 	private $last_login_at;
     private $pass_change_code;
     private $pass_change_code_at;
-
-	// todo
+	// todo ok
 	private $country;
-	// todo
+	// todo ok
 	private $ip;
 	
 	public static function create($login, $pass, $email): User
@@ -97,6 +101,16 @@ class User extends _Base
         return empty($this->getActivationCode());
     }
 
+    public function getLastLoginAt()
+    {
+        return $this->last_login_at;
+    }
+
+    public function genLastLoginAt()
+    {
+        $this->last_login_at = date('Y-m-d H:i:s');
+    }
+
     /**
      * @return string|null
      */
@@ -125,6 +139,28 @@ class User extends _Base
     public function getPassChangeCodeAt()
     {
         return $this->pass_change_code_at;
+    }
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function setCountry()
+    {
+        $sx_geo = new SxGeo();
+
+        $this->country = $sx_geo->getCountry($this->ip);
+    }
+
+    public function getIP()
+    {
+        return $this->ip;
+    }
+
+    public function setIP()
+    {
+        $this->ip = Url::getIP();
     }
 
 	private function setLogin($login)
