@@ -25,6 +25,7 @@ class Auth
         if (self::$user) return true;
 
         $user = Users::getByToken($token);
+
         if (empty($user))
         {
             self::unsetCookieToken();
@@ -34,7 +35,7 @@ class Auth
 
         self::$user = $user;
 
-	    self::updateUserIp($user);
+        $user->updateUserIp();
 
         $user->save();
 
@@ -48,17 +49,7 @@ class Auth
 		return self::$user;
 	}
 
-	// fixme перенести в сущность user чтобы уменьшить сложность, setIP сделать приватным, а setCountry вообще удалить
-    private static function updateUserIp(User $user)
-    {
-        if (empty($_COOKIE[Logon::COOKIE_NAME_COUNTRY]))
-		{
-            $user->setIP();
-            $user->setCountry();
-
-            setcookie(Logon::COOKIE_NAME_COUNTRY, true, 0, '/');
-        }
-    }
+	// fixme перенести в сущность user чтобы уменьшить сложность, setIP сделать приватным, а setCountry вообще удалить ok
 
     /**
      * @throws \Exception
@@ -71,8 +62,7 @@ class Auth
             throw new \DomainException('Не правильный пароль');
         }
 
-		// fixme кажется это нужно вызывать не здесь а в User::create
-        self::updateUserIp($user);
+		// fixme кажется это нужно вызывать не здесь а в User::create ok
 
         self::loginUser($user);
     }

@@ -30,7 +30,9 @@ class AuthBtn
 
         this.url_from_cookie = AuthBtn.getCookie(this.$context.data(this.COOKIE_NAME_OPEN_URL));
 
-        // todo удаляем куку сразу после получения Где удаление не вижу?
+        // todo сдлеать рабочий код удаление куки ( этот не работает)
+
+        document.cookie = this.COOKIE_NAME_OPEN_URL + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
         if (this.url_from_cookie)
         {
@@ -46,8 +48,7 @@ class AuthBtn
     {
         this.$context.find('.open').on('click',(event) =>
         {
-            // fixme почему из за того что у нас отрылось какой то окно у нас должна перестать работать кнопка "Вход"
-            if (this.url_from_cookie) return;
+            // fixme почему из за того что у нас отрылось какой то окно у нас должна перестать работать кнопка "Вход" ок
 
             event.preventDefault();
 

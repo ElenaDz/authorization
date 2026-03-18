@@ -19,7 +19,6 @@ class ChangePass  extends _Base
 
     public function __invoke($email = null, $code = null)
     {
-
         if (Auth::isAuthorized()) {
             Response::redirect('/');
         }
@@ -55,8 +54,6 @@ class ChangePass  extends _Base
             {
                 $errors[self::POST_NAME_PASSWORD] = $exception->getMessage();
             }
-
-            setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL, "", time()-3600, "/");
 
             if (empty($errors))
 			{

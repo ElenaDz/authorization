@@ -100,7 +100,7 @@ $getUrl = function ($file_path)
 
     <script>
         $(function() {
-            AuthBtn.create($('body'));
+            AuthBtn.create($('.b_auth_btn'));
         });
     </script>
 </body>

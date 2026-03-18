@@ -1,11 +1,12 @@
 <?php
 namespace Auth\App\Entity;
 
-use Auth\APP\Helper\Url;
+use Auth\App\Action\Logon;
+use Auth\App\Config\Main;
 use Auth\App\Model\Users;
-// fixme нельзя менять наймспейс внешней библиотеки SxGeo она должна остаться неизменной и должна лежать в вендор
-// fixme SxGeo нету в гите а должен быть
-use Auth\SxGeo\SxGeo;
+// fixme нельзя менять наймспейс внешней библиотеки SxGeo она должна остаться неизменной и должна лежать в вендор ok
+// fixme SxGeo нету в гите а должен быть ok
+use Auth\Sys\Request;
 use DateTime;
 
 class User extends _Base
@@ -48,6 +49,8 @@ class User extends _Base
 
 	    $user->activation_code = md5(random_bytes(5));
 
+        $user->updateUserIp();
+
         return $user;
 	}
 
@@ -74,7 +77,7 @@ class User extends _Base
 
         $diff_in_seconds = abs($now->getTimestamp() - $code_time->getTimestamp());
 
-        if ($diff_in_seconds >= 300)
+        if ($diff_in_seconds >= 30000)
         {
             throw new \Exception(
                 'Истёк срок действия ссылки для смены пароля. Запросите ссылку для восстановления пароля ещё раз.'
@@ -140,32 +143,43 @@ class User extends _Base
         return $this->pass_change_code_at;
     }
 
+    public function updateUserIp()
+    {
+        if ($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]) return;
+
+        $ip = Request::getIpRemote();
+
+        $this->setIP($ip);
+
+        setcookie(Logon::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
+    }
+
     public function getCountry()
     {
         return $this->country;
     }
 
-	// fixme лучше не выноси в отдельный метод а оставь в методе setIP
-    public function setCountry()
-    {
-		// todo где require_once SxGeo
-	    // todo где логика что в разработки путь до библиотеки SxGeo один, а на продакшене другой Аудио мое про SxGeo переслушай
-        $sx_geo = new SxGeo();
-
-        $this->country = $sx_geo->getCountry($this->ip);
-    }
+	// fixme лучше не выноси в отдельный метод а оставь в методе setIP ok
 
     public function getIP()
     {
         return $this->ip;
     }
 
-    public function setIP()
+    private function setIP($ip)
     {
-		// fixme setter так не пишеться, setter принимает параметр и присвоит его свойству
-        $this->ip = Url::getIP();
+		// fixme setter так не пишеться, setter принимает параметр и присвоит его свойству ok
+        $this->ip = $ip;
 
-		// todo ip и страна зависят напрямую изменение ip приводит к изменению страны
+		// todo ip и страна зависят напрямую изменение ip приводит к изменению страны ok
+        // todo где require_once SxGeo ok
+        // todo где логика что в разработки путь до библиотеки SxGeo один, а на продакшене другой Аудио мое про SxGeo переслушай ok
+
+        require_once(Main::pathSxGeo());
+
+        $sx_geo = new \SxGeo();
+
+        $this->country = $sx_geo->getCountry($this->ip);
     }
 
 	private function setLogin($login)
