@@ -4,8 +4,6 @@ namespace Auth\App\Entity;
 use Auth\App\Action\Logon;
 use Auth\App\Config\Main;
 use Auth\App\Model\Users;
-// fixme нельзя менять наймспейс внешней библиотеки SxGeo она должна остаться неизменной и должна лежать в вендор ok
-// fixme SxGeo нету в гите а должен быть ok
 use Auth\Sys\Request;
 use DateTime;
 
@@ -151,6 +149,8 @@ class User extends _Base
 
         $this->setIP($ip);
 
+		// fixme добавить проверку что заголовки еще не отправлены, если отправлены куки уже нельзя отправить
+	    // fixme отправлять куки из сущности, плохая идея, подними это на уровень выше там где вызывается этот метод в авторизаии
         setcookie(Logon::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
     }
 
@@ -159,8 +159,6 @@ class User extends _Base
         return $this->country;
     }
 
-	// fixme лучше не выноси в отдельный метод а оставь в методе setIP ok
-
     public function getIP()
     {
         return $this->ip;
@@ -168,14 +166,18 @@ class User extends _Base
 
     private function setIP($ip)
     {
-		// fixme setter так не пишеться, setter принимает параметр и присвоит его свойству ok
         $this->ip = $ip;
 
-		// todo ip и страна зависят напрямую изменение ip приводит к изменению страны ok
-        // todo где require_once SxGeo ok
-        // todo где логика что в разработки путь до библиотеки SxGeo один, а на продакшене другой Аудио мое про SxGeo переслушай ok
+		// todo заменить на использование вот этого
+	    /** @see \Auth\Sys\Request::isDevelopment */
+	    // fixme переписать на тернарный оператор
+	    if (Main::isDev()) {
+		    $path = __DIR__ .'/../../vendor/SxGeo/SxGeo.php';
+	    } else {
+		    $path = __DIR__ .'1';
+	    }
 
-        require_once(Main::pathSxGeo());
+        require_once($path);
 
         $sx_geo = new \SxGeo();
 

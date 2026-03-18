@@ -9,6 +9,8 @@ class Response
 		exit();
 	}
 
+
+	// fixme переместить в Request думаю понятно почему
     public static function isAjax()
     {
         if (array_key_exists('HTTP_X_REQUESTED_WITH', @$_SERVER))

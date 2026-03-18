@@ -18,14 +18,4 @@ class Main
         return (bool)(__DIR__ . '/../../../dev.txt');
     }
 
-    public static function pathSxGeo(): string
-    {
-        if (Main::isDev()) {
-            $path = __DIR__ .'/../../vendor/SxGeo/SxGeo.php';
-        } else {
-            $path = __DIR__ .'1';
-        }
-
-        return $path;
-    }
 }

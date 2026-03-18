@@ -48,8 +48,6 @@ class AuthBtn
     {
         this.$context.find('.open').on('click',(event) =>
         {
-            // fixme почему из за того что у нас отрылось какой то окно у нас должна перестать работать кнопка "Вход" ок
-
             event.preventDefault();
 
             let url = $(event.currentTarget).attr('href');

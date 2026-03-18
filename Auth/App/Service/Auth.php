@@ -49,8 +49,6 @@ class Auth
 		return self::$user;
 	}
 
-	// fixme перенести в сущность user чтобы уменьшить сложность, setIP сделать приватным, а setCountry вообще удалить ok
-
     /**
      * @throws \Exception
      */
@@ -61,8 +59,6 @@ class Auth
         if ( ! $user->verifyPass($pass)) {
             throw new \DomainException('Не правильный пароль');
         }
-
-		// fixme кажется это нужно вызывать не здесь а в User::create ok
 
         self::loginUser($user);
     }

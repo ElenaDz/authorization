@@ -11,8 +11,9 @@ class Logon extends _Base
     const POST_NAME_PASS = 'password';
     const POST_NAME_SUBMIT = 'submit';
     const GET_NAME_LOGIN = 'login';
-	// fixme переименовать COOKIE_NAME_UPDATE_USER_IP_DONE ок
-    const COOKIE_NAME_UPDATE_USER_IP_DONE = 'update_user_ip_done';
+
+	const COOKIE_NAME_UPDATE_USER_IP_DONE = 'update_user_ip_done';
+
 
     public function __invoke($login = null)
 	{
