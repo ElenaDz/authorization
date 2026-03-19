@@ -75,7 +75,7 @@ class User extends _Base
 
         $diff_in_seconds = abs($now->getTimestamp() - $code_time->getTimestamp());
 
-        if ($diff_in_seconds >= 30000)
+        if ($diff_in_seconds >= 300)
         {
             throw new \Exception(
                 'Истёк срок действия ссылки для смены пароля. Запросите ссылку для восстановления пароля ещё раз.'
