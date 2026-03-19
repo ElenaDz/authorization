@@ -1,6 +1,6 @@
 class AuthBtn {
     constructor($context) {
-        this.COOKIE_NAME_OPEN_URL = 'cookie_name_open_url';
+        this.COOKIE_NAME_OPEN_URL = 'auth_btn_open_url';
         this.$context = $context;
         // @ts-ignore
         if (this.$context[0].AuthBtn)
@@ -15,7 +15,6 @@ class AuthBtn {
         if (!this.$context.data(this.COOKIE_NAME_OPEN_URL))
             return;
         this.url_from_cookie = AuthBtn.getCookie(this.$context.data(this.COOKIE_NAME_OPEN_URL));
-        // todo сдлеать рабочий код удаление куки ( этот не работает)
         document.cookie = this.COOKIE_NAME_OPEN_URL + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         if (this.url_from_cookie) {
             this.request(this.url_from_cookie, 'POST')

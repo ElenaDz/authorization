@@ -3,7 +3,6 @@ namespace Auth\App\Service;
 
 use Auth\App\Action\Logon;
 use Auth\App\Entity\User;
-use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Request;
 
@@ -36,6 +35,11 @@ class Auth
         self::$user = $user;
 
         $user->updateUserIp();
+
+        // fixme добавить проверку что заголовки еще не отправлены, если отправлены куки уже нельзя отправить ok
+        if (!headers_sent()) {
+            setcookie(Logon::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
+        }
 
         $user->save();
 

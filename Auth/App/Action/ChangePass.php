@@ -2,9 +2,9 @@
 
 namespace Auth\App\Action;
 
-use Auth\APP\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\App\Service\Auth;
+use Auth\Sys\Request;
 use Auth\Sys\Response;
 use Auth\Sys\Views;
 
@@ -74,7 +74,7 @@ class ChangePass  extends _Base
 			    ChangePass::GET_NAME_CODE => $code
 		    ]);
 
-        if (! Response::isAjax())
+        if (! Request::isAjax())
         {
             setcookie(ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL, $change_pass_link, 0, '/');
 

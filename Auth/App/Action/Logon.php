@@ -2,6 +2,7 @@
 namespace Auth\App\Action;
 
 use Auth\App\Service\Auth;
+use Auth\Sys\Request;
 use Auth\Sys\Response;
 use \Auth\Sys\Views;
 
@@ -31,7 +32,7 @@ class Logon extends _Base
             try {
                 Auth::logonByPassword($login, $pass);
 
-                if (Response::isAjax()) {
+                if (Request::isAjax()) {
                     http_response_code(201);
 
                 } else {

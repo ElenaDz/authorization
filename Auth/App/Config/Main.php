@@ -12,10 +12,4 @@ class Main
     {
 		return 'DriveMusic';
 	}
-
-    public static function isDev(): bool
-    {
-        return (bool)(__DIR__ . '/../../../dev.txt');
-    }
-
 }

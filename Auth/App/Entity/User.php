@@ -2,7 +2,7 @@
 namespace Auth\App\Entity;
 
 use Auth\App\Action\Logon;
-use Auth\App\Config\Main;
+use Auth\APP\Helper\SxGeo;
 use Auth\App\Model\Users;
 use Auth\Sys\Request;
 use DateTime;
@@ -149,9 +149,7 @@ class User extends _Base
 
         $this->setIP($ip);
 
-		// fixme добавить проверку что заголовки еще не отправлены, если отправлены куки уже нельзя отправить
-	    // fixme отправлять куки из сущности, плохая идея, подними это на уровень выше там где вызывается этот метод в авторизаии
-        setcookie(Logon::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
+	    // fixme отправлять куки из сущности, плохая идея, подними это на уровень выше там где вызывается этот метод в авторизаии ok
     }
 
     public function getCountry()
@@ -168,20 +166,7 @@ class User extends _Base
     {
         $this->ip = $ip;
 
-		// todo заменить на использование вот этого
-	    /** @see \Auth\Sys\Request::isDevelopment */
-	    // fixme переписать на тернарный оператор
-	    if (Main::isDev()) {
-		    $path = __DIR__ .'/../../vendor/SxGeo/SxGeo.php';
-	    } else {
-		    $path = __DIR__ .'1';
-	    }
-
-        require_once($path);
-
-        $sx_geo = new \SxGeo();
-
-        $this->country = $sx_geo->getCountry($this->ip);
+        $this->country = SxGeo::getCountryByIp($this->ip);
     }
 
 	private function setLogin($login)

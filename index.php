@@ -38,7 +38,7 @@ $getUrl = function ($file_path)
 </head>
 
 <body>
-    <div class="b_auth_btn" data-cookie_name_open_url="<?= \Auth\App\Action\ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL; ?>">
+    <div class="b_auth_btn" data-auth_btn_open_url="<?= \Auth\App\Action\ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL; ?>">
 
         <?php if ( ! \Auth\App\Service\Auth::isAuthorized()): ?>
             <a class="open" href="<?= \Auth\App\Action\Logon::getUrl(); ?>">
