@@ -36,8 +36,7 @@ class Auth
 
         $user->updateUserIp();
 
-        // fixme добавить проверку что заголовки еще не отправлены, если отправлены куки уже нельзя отправить ok
-        if (!headers_sent()) {
+        if ( ! headers_sent()) {
             setcookie(Logon::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
         }
 

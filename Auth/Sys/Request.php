@@ -32,7 +32,7 @@ class Request
 		return @$_SERVER['REMOTE_ADDR'];
 	}
 
-    // fixme переместить в Request думаю понятно почему ok
+
     public static function isAjax()
     {
         if (array_key_exists('HTTP_X_REQUESTED_WITH', @$_SERVER))

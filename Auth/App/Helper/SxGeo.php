@@ -7,8 +7,7 @@ class SxGeo
 {
 	public static function getCountryByIp($ip)
 	{
-        // fixme переписать на тернарный оператор OK
-        $path = Request::isDevelopment() ? $path = __DIR__ .'/../../vendor/SxGeo/SxGeo.php' : __DIR__ .'1';
+        $path = Request::isDevelopment() ? __DIR__ .'/../../vendor/SxGeo/SxGeo.php' : __DIR__.'/узнать и заполнить';
 
         require_once($path);
 

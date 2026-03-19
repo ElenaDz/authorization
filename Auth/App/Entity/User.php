@@ -148,8 +148,6 @@ class User extends _Base
         $ip = Request::getIpRemote();
 
         $this->setIP($ip);
-
-	    // fixme отправлять куки из сущности, плохая идея, подними это на уровень выше там где вызывается этот метод в авторизаии ok
     }
 
     public function getCountry()
