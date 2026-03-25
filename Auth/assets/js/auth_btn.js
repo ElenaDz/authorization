@@ -16,6 +16,7 @@ class AuthBtn {
         this.url_from_cookie = AuthBtn.getCookie(this.$context.data(this.COOKIE_NAME_OPEN_URL));
         document.cookie = this.COOKIE_NAME_OPEN_URL + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         if (this.url_from_cookie) {
+            this.auth_modal = AuthModal.create();
             this.request(this.url_from_cookie, 'POST')
                 .done(() => {
                 this.auth_modal.open();

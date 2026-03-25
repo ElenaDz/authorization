@@ -34,6 +34,8 @@ class AuthBtn
 
         if (this.url_from_cookie)
         {
+            this.auth_modal = AuthModal.create();
+
             this.request(this.url_from_cookie, 'POST')
                 .done(() =>
                 {

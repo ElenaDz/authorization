@@ -10,15 +10,18 @@ class Request
 
 	public static function getIpRemote()
 	{
-        $remote_addr = null;
-
-        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
+		{
             $remote_addr = $_SERVER["HTTP_CF_CONNECTING_IP"];
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+        {
             $x_forwarded = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            $remote_addr = (strpos($x_forwarded, ',') !== false)
+            $remote_addr =
+	            ( strpos($x_forwarded, ',') !== false )
                 ? trim(explode(',', $x_forwarded)[0])
                 : $x_forwarded;
+
         } else {
             $remote_addr = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         }
