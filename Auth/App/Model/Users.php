@@ -137,16 +137,18 @@ class Users extends _Base
 		$prepare = self::getPDO()->prepare(
 			'INSERT INTO 
                      users
-                    (login, hash, email, activation_code, token) 
+                    (login, hash, email, activation_code, token, country, ip) 
                 VALUES 
-                    (:login, :hash, :email,:activation_code, null)'
+                    (:login, :hash, :email,:activation_code, null, :country, :ip)'
 		);
 
 		$prepare->execute([
 			'login' => $user->getLogin(),
 			'hash' => self::getPrivatePropValueByUser($user, User::NAME_HASH),
 			'email' => $user->getEmail(),
-            'activation_code' => $user->getActivationCode()
+            'activation_code' => $user->getActivationCode(),
+            'country' => $user->getCountry(),
+            'ip' => $user->getIP()
 		]);
 
 		return self::getPDO()->lastInsertId();
