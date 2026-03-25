@@ -12,18 +12,6 @@ class Request
 	{
         $remote_addr = null;
 
-//        if (@$_SERVER["HTTP_CF_CONNECTING_IP"])
-//        {
-//            $remote_addr = @$_SERVER["HTTP_CF_CONNECTING_IP"];
-//
-//        } elseif ( ! empty(@$_SERVER['HTTP_X_FORWARDED_FOR']))
-//        {
-//            $remote_addr = (
-//            ( strpos(@$_SERVER['HTTP_X_FORWARDED_FOR'], ',') !== false )
-//                ? explode(',', @$_SERVER['HTTP_X_FORWARDED_FOR'])[0]
-//                : @$_SERVER['HTTP_X_FORWARDED_FOR']
-//            );
-//        }
         if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
             $remote_addr = $_SERVER["HTTP_CF_CONNECTING_IP"];
         } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {

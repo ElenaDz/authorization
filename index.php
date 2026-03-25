@@ -43,7 +43,7 @@ $getUrl = function ($file_path)
         <?php if ( ! \Auth\App\Service\Auth::isAuthorized()): ?>
             <a class="open" data-href="<?= \Auth\App\Action\Logon::getUrl(); ?>" href="">
                 Вход
-            </a><br>
+            </a>
 
         <?php else: ?>
 
