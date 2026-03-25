@@ -1,7 +1,7 @@
 <?php
 namespace Auth\App\Action;
 
-use Auth\APP\Helper\Email;
+use Auth\App\Helper\Email;
 
 class TestBox extends _Base
 {

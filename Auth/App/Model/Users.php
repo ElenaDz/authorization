@@ -62,35 +62,30 @@ class Users extends _Base
 	}
 
     /**
-     * @param $login_or_email
+     * @param $email
      * @return User|false
      */
-    public static function getByLoginOrEmail($login_or_email)
+    public static function getByEmail($email)
     {
         $pdo = self::getPDO();
 
         $results = $pdo->prepare(
-            'SELECT * FROM users WHERE login = :value OR email = :value  LIMIT 1'
+            'SELECT * FROM users WHERE email = :value  LIMIT 1'
         );
 
 		$results->execute([
-            'value' => $login_or_email
+            'value' => $email
         ]);
 
         return $results->fetchObject(User::class);
     }
 
-    public static function getByLoginOrEmailOrFall($login_or_email)
+    public static function getByEmailOrFall($email)
     {
-        $user = self::getByLoginOrEmail($login_or_email);
+        $user = self::getByEmail($email);
         if ( ! $user)
         {
-            throw new \DomainException(
-                sprintf(
-                    'Пользователь "%s" не найден',
-                    $login_or_email
-                )
-            );
+            throw new \DomainException('Пользователь с такими данными не найден');
         }
 
         return $user;

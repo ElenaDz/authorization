@@ -26,6 +26,15 @@ body {
   height: fit-content;
   background-color: #E9F3FF;
 }
+@media (max-width: 767px) {
+  .inner_authentication {
+    width: 328px;
+    padding: 32px 24px;
+  }
+}
+.inner_authentication span {
+  line-height: 1.5;
+}
 .inner_authentication div {
   display: flex;
   justify-content: start;
@@ -38,6 +47,13 @@ body {
   height: 28px;
   font-size: 24px;
   font-weight: 600;
+  line-height: unset;
+  padding: unset;
+}
+@media (max-width: 767px) {
+  .inner_authentication h1 {
+    margin: 0 0 16px;
+  }
 }
 .inner_authentication .title_form {
   justify-content: space-between;
@@ -55,6 +71,9 @@ body {
 }
 .inner_authentication form .reg, .inner_authentication form .pass_a {
   flex-direction: unset;
+}
+.inner_authentication form .reg span {
+  line-height: unset;
 }
 .inner_authentication form label, .inner_authentication form input {
   display: flex;
@@ -77,6 +96,21 @@ body {
   height: 40px;
   border: 2px solid #d0e1f5;
   border-radius: 12px;
+  background-color: white !important;
+}
+.inner_authentication form input::placeholder {
+  color: #CCCCCC;
+  opacity: 1;
+  font-weight: 400;
+}
+@media (max-width: 767px) {
+  .inner_authentication form input {
+    height: 32px;
+  }
+}
+.inner_authentication form input:-webkit-autofill {
+  box-shadow: inset 20px 20px 0px 20px white;
+  -webkit-text-fill-color: var(--color) !important;
 }
 .inner_authentication form input:hover {
   border: 2px solid #8dbeff;
@@ -90,11 +124,17 @@ body {
 .inner_authentication form .item:not(:last-child) {
   margin-bottom: 20px;
 }
+@media (max-width: 767px) {
+  .inner_authentication form .item:not(:last-child) {
+    margin-bottom: 8px;
+  }
+}
 .inner_authentication form .item small {
   display: none;
 }
-.inner_authentication form .item.error small {
+.inner_authentication form .item.error_auth small {
   display: flex;
+  margin-top: 10px;
 }
 .inner_authentication form a {
   text-decoration: none;
@@ -113,6 +153,12 @@ body {
   min-width: 88px;
   border: 0;
   font-weight: 600;
+}
+@media (max-width: 767px) {
+  .inner_authentication form button {
+    width: 100%;
+    margin-top: 8px;
+  }
 }
 
 .b_auth_btn a {
@@ -161,13 +207,14 @@ body {
   align-items: center;
   width: 24px;
   height: 24px;
-  background-image: url("/Auth/assets/img/exit.svg");
+  background-image: url("data:image/svg+xml;utf8;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNNyA3TDEyIDEyTTEyIDEyTDE3IDE3TTEyIDEyTDcgMTdNMTIgMTJMMTcgNyIgc3Ryb2tlPSIjODlCRkZGIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+DQo8L3N2Zz4NCg==");
   z-index: 4;
   cursor: pointer;
 }
 .b_auth_modal.open {
   display: flex;
-  position: absolute;
+  position: fixed;
+  z-index: 8;
   right: 0;
   top: 0;
   width: 100vw;

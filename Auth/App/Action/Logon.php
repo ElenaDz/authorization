@@ -1,6 +1,7 @@
 <?php
 namespace Auth\App\Action;
 
+use Auth\App\Helper\SxGeo;
 use Auth\App\Service\Auth;
 use Auth\Sys\Request;
 use Auth\Sys\Response;
@@ -8,7 +9,7 @@ use \Auth\Sys\Views;
 
 class Logon extends _Base
 {
-    const POST_NAME_LOGIN = 'login';
+    const POST_NAME_EMAIL = 'email';
     const POST_NAME_PASS = 'password';
     const POST_NAME_SUBMIT = 'submit';
     const GET_NAME_LOGIN = 'login';
@@ -16,7 +17,7 @@ class Logon extends _Base
 	const COOKIE_NAME_UPDATE_USER_IP_DONE = 'update_user_ip_done';
 
 
-    public function __invoke($login = null)
+    public function __invoke($email = null)
 	{
         if (Auth::isAuthorized()) {
             Response::redirect('/');
@@ -24,13 +25,13 @@ class Logon extends _Base
 
         $errors = [];
 
-        if ( ! empty($_POST) && $_POST[self::POST_NAME_LOGIN])
+        if ( ! empty($_POST) && $_POST[self::POST_NAME_EMAIL])
         {
-            $login = $_POST[self::POST_NAME_LOGIN];
+            $email = $_POST[self::POST_NAME_EMAIL];
             $pass = $_POST[self::POST_NAME_PASS];
 
             try {
-                Auth::logonByPassword($login, $pass);
+                Auth::logonByPassword($email, $pass);
 
                 if (Request::isAjax()) {
                     http_response_code(201);
@@ -39,7 +40,7 @@ class Logon extends _Base
                     Response::redirect('/');
                 }
 
-            } catch (\DomainException $exception) {
+            } catch (\Exception $exception) {
                 $errors[self::POST_NAME_SUBMIT] = $exception->getMessage();
             }
         }
@@ -48,7 +49,7 @@ class Logon extends _Base
 			__DIR__ . '/../View/Logon.php',
 			[
                 'errors' => $errors,
-                'login' => $login ?? null
+                'email' => $email ?? null
 			]
 		);
 

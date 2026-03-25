@@ -34,14 +34,15 @@
     align-items: center;
     width: 24px;
     height: 24px;
-    background-image: url("/Auth/assets/img/exit.svg");
+    background-image: url('data:image/svg+xml;utf8;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNNyA3TDEyIDEyTTEyIDEyTDE3IDE3TTEyIDEyTDcgMTdNMTIgMTJMMTcgNyIgc3Ryb2tlPSIjODlCRkZGIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+DQo8L3N2Zz4NCg==');
     z-index: 4;
     cursor: pointer;
   }
 
   &.open {
     display: flex;
-    position: absolute;
+    position: fixed;
+    z-index: 8;
     right: 0;
     top: 0;
     width: 100vw;

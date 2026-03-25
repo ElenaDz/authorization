@@ -1,9 +1,9 @@
 <?php
 namespace Auth\App\Action;
 
-use Auth\APP\Helper\Email;
+use Auth\App\Helper\Email;
 use Auth\App\Entity\User;
-use Auth\APP\Helper\Url;
+use Auth\App\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Views;
 
@@ -52,10 +52,6 @@ class Reg extends _Base
                 $errors[self::POST_NAME_PASS] =  $e->getMessage();
             }
 
-            if (Users::hasByLogin($login)) {
-                $errors[self::POST_NAME_LOGIN] = 'Пользователь с таким именем уже есть';
-            }
-
 			if (Users::hasByEmail($email)) {
                 $errors[self::POST_NAME_EMAIL] = 'Пользователь с таким email уже есть';
             }
@@ -92,7 +88,7 @@ class Reg extends _Base
 
             $activation_link = Url::getUrlAbsolute(
                 ActivationUser::getUrl([
-                    ActivationUser::GET_NAME_LOGIN => $login,
+                    ActivationUser::GET_NAME_EMAIL => $email,
                     ActivationUser::GET_NAME_CODE => $user->getActivationCode()
                 ])
             );

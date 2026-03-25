@@ -11,9 +11,9 @@ class Auth {
     initErrorHide() {
         this.$context.find('input').on('input', (input) => {
             let $input = $(input.currentTarget);
-            $input.parents('.error').removeClass('error');
-            let item_button = this.$context.find('button').parents('.error');
-            item_button.removeClass('error');
+            $input.parents('.error_auth').removeClass('error_auth');
+            let item_button = this.$context.find('button').parents('.error_auth');
+            item_button.removeClass('error_auth');
         });
     }
     static create($context = $('.b_auth')) {

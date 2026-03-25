@@ -32,7 +32,7 @@ class ChangePass  extends _Base
 
         $errors = [];
 
-        $user = Users::getByLoginOrEmailOrFall($email);
+        $user = Users::getByEmailOrFall($email);
 
         $user->validPassChangeCode($code);
 
@@ -61,8 +61,16 @@ class ChangePass  extends _Base
 
                 $user->save();
 
-                Response::redirect(
-                    Logon::getUrl([Logon::GET_NAME_LOGIN => $user->getLogin()])
+                $content = Views::get(
+                    __DIR__ . '/../View/Block/RecoveryPass/RecoverySuccess.php',
+                    [
+                        'email'  => $user->getEmail()
+                    ]
+                );
+
+                self::showLayout(
+                    'Успешная смена пароля',
+                    $content
                 );
 
                 return;

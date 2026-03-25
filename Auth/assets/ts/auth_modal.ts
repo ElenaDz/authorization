@@ -58,7 +58,7 @@ class AuthModal
 
     public close()
     {
-        this.$context.removeClass('open');
+        this.$context.remove();
     }
 
     public setContent(content: string)

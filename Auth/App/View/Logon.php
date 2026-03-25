@@ -7,7 +7,7 @@ use Auth\SxGeo\SxGeo;
 
 /**
  * @var array $errors
- * @var $login
+ * @var $email
  */
 ?>
 
@@ -17,27 +17,26 @@ use Auth\SxGeo\SxGeo;
 
 <form  method="post" action="<?= Logon::getUrl(); ?>">
     <div class="item">
-        <label for="login">Имя пользователя или e-mail</label>
+        <label for="login">E-mail</label>
         <input type="text"
                id="login"
                autocomplete="on"
-               name="<?= Logon::POST_NAME_LOGIN; ?>"
-               value="<?= htmlspecialchars($login) ?>"
+               name="<?= Logon::POST_NAME_EMAIL; ?>"
+               value="<?= htmlspecialchars($email) ?>"
                required
                tabindex="1"
         >
     </div>
 
-    <br>
     <div class="item">
         <div class="pass_a">
             <label for="pass">Пароль</label>
             <a class="recover_pass_a" href="<?= RecoveryPass::getUrl(); ?>">Забыли пароль?</a>
         </div>
-        <input type="password" id="pass" name="<?= Logon::POST_NAME_PASS; ?>" required tabindex="2">
+        <input type="password" id="pass" autocomplete="current-password" name="<?= Logon::POST_NAME_PASS; ?>" required tabindex="2">
     </div>
 
-    <div class="item<?= ! empty($errors[Logon::POST_NAME_SUBMIT]) ? ' error' : null; ?>">
+    <div class="item<?= ! empty($errors[Logon::POST_NAME_SUBMIT]) ? ' error_auth' : null; ?>">
         <button type="submit" tabindex="3">Войти</button>
         <?php if ( ! empty($errors) && $errors[Logon::POST_NAME_SUBMIT]) :?>
             <small style="color: red;"><?= $errors[Logon::POST_NAME_SUBMIT]; ?></small>

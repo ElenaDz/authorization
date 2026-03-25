@@ -21,11 +21,11 @@ class Auth
 		{
 			let $input = $(input.currentTarget);
 
-			$input.parents('.error').removeClass('error');
+			$input.parents('.error_auth').removeClass('error_auth');
 
-			let item_button = this.$context.find('button').parents('.error');
+			let item_button = this.$context.find('button').parents('.error_auth');
 
-			item_button.removeClass('error');
+			item_button.removeClass('error_auth');
 		})
 	}
 

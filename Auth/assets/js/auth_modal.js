@@ -37,7 +37,7 @@ class AuthModal {
         this.$context.addClass('open');
     }
     close() {
-        this.$context.removeClass('open');
+        this.$context.remove();
     }
     setContent(content) {
         this.deleteContent();

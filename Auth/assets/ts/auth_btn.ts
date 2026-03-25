@@ -17,11 +17,11 @@ class AuthBtn
         // @ts-ignore
         this.$context[0].AuthBtn = this;
 
-        this.auth_modal = AuthModal.create();
-
         this.initOpenUrl();
 
         this.initOpen();
+
+
     }
 
     private initOpenUrl()
@@ -48,12 +48,18 @@ class AuthBtn
         {
             event.preventDefault();
 
-            let url = $(event.currentTarget).attr('href');
+            let url = $(event.currentTarget).data('href');
+
+            this.auth_modal = AuthModal.create();
 
             this.request(url)
                 .done(() =>
                 {
                     this.auth_modal.open();
+                })
+                .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) =>
+                {
+                    throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
                 });
         });
     }

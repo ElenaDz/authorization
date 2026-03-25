@@ -7,7 +7,6 @@ class AuthBtn {
             return this.$context[0].AuthBtn;
         // @ts-ignore
         this.$context[0].AuthBtn = this;
-        this.auth_modal = AuthModal.create();
         this.initOpenUrl();
         this.initOpen();
     }
@@ -26,10 +25,14 @@ class AuthBtn {
     initOpen() {
         this.$context.find('.open').on('click', (event) => {
             event.preventDefault();
-            let url = $(event.currentTarget).attr('href');
+            let url = $(event.currentTarget).data('href');
+            this.auth_modal = AuthModal.create();
             this.request(url)
                 .done(() => {
                 this.auth_modal.open();
+            })
+                .fail((jqXHR, textStatus, errorThrow) => {
+                throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
             });
         });
     }

@@ -2,8 +2,8 @@
 
 namespace Auth\App\Action;
 
-use Auth\APP\Helper\Email;
-use Auth\APP\Helper\Url;
+use Auth\App\Helper\Email;
+use Auth\App\Helper\Url;
 use Auth\App\Model\Users;
 use Auth\Sys\Views;
 
@@ -35,7 +35,7 @@ class RecoveryPass extends _Base
                 return;
             }
 
-            $user = Users::getByLoginOrEmailOrFall($email_post);
+            $user = Users::getByEmailOrFall($email_post);
 
             $user->genPassChangeCode();
 
@@ -65,7 +65,7 @@ class RecoveryPass extends _Base
             );
 
             $content = Views::get(
-                __DIR__ . '/../View/Block/RecoveryPass/RecoverySuccess.php'
+                __DIR__ . '/../View/Block/RecoveryPass/RecoveryEmailSuccess.php'
             );
 
             self::showLayout(

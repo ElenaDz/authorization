@@ -143,7 +143,7 @@ class User extends _Base
 
     public function updateUserIp()
     {
-        if ($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]) return;
+        if ( ! empty($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE])) return;
 
         $ip = Request::getIpRemote();
 
@@ -170,10 +170,6 @@ class User extends _Base
 	private function setLogin($login)
 	{
         self::validLogin($login);
-
-        if (Users::hasByLogin($login)) {
-            throw new \Exception('Пользователь с таким Именем уже есть');
-        }
 
 		$this->login = $login;
 	}
@@ -277,11 +273,11 @@ class User extends _Base
             throw new \DomainException('Пароль должен быть не больше 30 символов');
         }
 
-        if ( ! preg_match('/[A-ZА-ЯЁ]/', $pass)) {
+        if ( ! preg_match('/[A-Z]/', $pass)) {
             throw new \DomainException('Пароль должен содержать хотя бы одну заглавную букву');
         }
 
-        if ( ! preg_match('/[a-zа-яё]/', $pass)) {
+        if ( ! preg_match('/[a-z]/', $pass)) {
             throw new \DomainException('Пароль должен содержать хотя бы одну строчную букву');
         }
 

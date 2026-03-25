@@ -13,12 +13,14 @@ use Auth\App\Action\RecoveryPass;
 
 <div>
     <form method="post"  action="<?=  RecoveryPass::getUrl(); ?>">
-        <span>
-            Введите адрес электронной почты, указанный при регистрации вашего аккаунта. Мы направим ссылку для сброса пароля.
-        </span>
+        <div class="item">
+            <span>
+                Введите адрес электронной почты, указанный при регистрации вашего аккаунта. Мы направим ссылку для сброса пароля.
+            </span>
+        </div>
 
         <div class="item">
-            <label for="email" hidden></label><br>
+            <label for="email" hidden></label>
             <input type="email" id="email" autocomplete="on" name="<?= RecoveryPass::POST_NAME_EMAIL; ?>" required value="<?= htmlspecialchars($email) ?>">
         </div>
 
