@@ -133,6 +133,7 @@ class Users extends _Base
 
 	public static function add(User $user): int
 	{
+		// fixme добавить страну и ip
 		$prepare = self::getPDO()->prepare(
 			'INSERT INTO 
                      users
