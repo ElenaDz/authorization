@@ -21,7 +21,38 @@ class AuthBtn
 
         this.initOpen();
 
+       this.initAvatar();
 
+    }
+
+    private initAvatar ()
+    {
+        this.$context.find('.avatar').on('click',(event) =>
+        {
+            this.isOpenListProfileOptions() ? this.closeListProfileOptions() : this.openListProfileOptions();
+        });
+
+        $('body').on('click',(e) =>
+        {
+            if ($(e.target).hasClass('model_fon')) {
+                this.closeListProfileOptions();
+            }
+        });
+    }
+
+    private closeListProfileOptions()
+    {
+        this.$context.removeClass('open_list');
+    }
+
+    private openListProfileOptions()
+    {
+        this.$context.addClass('open_list');
+    }
+
+    private isOpenListProfileOptions()
+    {
+        return  this.$context.hasClass('open_list');
     }
 
     private initOpenUrl()

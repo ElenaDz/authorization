@@ -41,22 +41,40 @@ $getUrl = function ($file_path)
     <div class="b_auth_btn" data-auth_btn_open_url="<?= \Auth\App\Action\ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL; ?>">
 
         <?php if ( ! \Auth\App\Service\Auth::isAuthorized()): ?>
-            <a class="open" data-href="<?= \Auth\App\Action\Logon::getUrl(); ?>" href="">
+            <button class="open" data-href="<?= \Auth\App\Action\Logon::getUrl(); ?>">
                 Вход
-            </a>
+            </button>
 
         <?php else: ?>
 
-            <b><?= \Auth\App\Service\Auth::getUser()->getLogin(); ?></b>
-            ( <?= \Auth\App\Service\Auth::getUser()->getEmail(); ?> )
-            <form method="post" action="<?= \Auth\App\Action\Logout::getUrl()?>">
-                <button class="exit" type="submit">Выход</button>
-            </form>
+            <button class="avatar" data-url_logout="">
+                <?= substr(\Auth\App\Service\Auth::getUser()->getLogin(), 0, 1) ; ?>
+            </button>
+
+            <div class="model_fon"></div>
+            <ul class="list_profile_options">
+                <li class="item">
+                    <a class="my_prof" href="#">
+                        Мой профиль
+                    </a>
+                </li>
+
+                <li class="item">
+                    <form method="post" action="<?= \Auth\App\Action\Logout::getUrl()?>">
+                        <button class="exit" type="submit">Выйти</button>
+                    </form>
+                </li>
+            </ul>
 
         <?php endif; ?>
-
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <br>
     <a href="<?= \Auth\App\Action\TestBox::getUrl(); ?>">
         Тестовая площадка

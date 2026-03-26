@@ -9,6 +9,26 @@ class AuthBtn {
         this.$context[0].AuthBtn = this;
         this.initOpenUrl();
         this.initOpen();
+        this.initAvatar();
+    }
+    initAvatar() {
+        this.$context.find('.avatar').on('click', (event) => {
+            this.isOpenListProfileOptions() ? this.closeListProfileOptions() : this.openListProfileOptions();
+        });
+        $('body').on('click', (e) => {
+            if ($(e.target).hasClass('model_fon')) {
+                this.closeListProfileOptions();
+            }
+        });
+    }
+    closeListProfileOptions() {
+        this.$context.removeClass('open_list');
+    }
+    openListProfileOptions() {
+        this.$context.addClass('open_list');
+    }
+    isOpenListProfileOptions() {
+        return this.$context.hasClass('open_list');
     }
     initOpenUrl() {
         if (!this.$context.data(this.COOKIE_NAME_OPEN_URL))
