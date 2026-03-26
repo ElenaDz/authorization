@@ -162,7 +162,13 @@ body {
 }
 
 .b_auth_btn {
+  min-height: 40px;
+  min-width: 40px;
+  display: flex;
+  width: fit-content;
+  height: fit-content;
   position: relative;
+  margin-left: 16px;
 }
 .b_auth_btn a {
   text-decoration: none;
@@ -187,21 +193,9 @@ body {
 .b_auth_btn.open_list .list_profile_options {
   display: flex;
 }
-.b_auth_btn.open_list .model_fon {
-  display: flex;
-}
-.b_auth_btn .model_fon {
-  display: none;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  opacity: 60%;
-  z-index: 2;
-}
 .b_auth_btn .list_profile_options {
   position: fixed;
-  top: 40px;
+  top: 80px;
   display: none;
   justify-content: center;
   align-items: center;
@@ -213,7 +207,7 @@ body {
   padding: 8px 16px;
   border-radius: 16px;
   box-sizing: border-box;
-  z-index: 4;
+  z-index: 10;
 }
 .b_auth_btn .list_profile_options .item {
   display: flex;
@@ -241,14 +235,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   border: none;
   border-radius: 50%;
   background-color: darkseagreen;
   cursor: pointer;
   position: absolute;
-  z-index: 3;
+  z-index: 10;
 }
 
 .b_auth_modal {

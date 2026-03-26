@@ -51,7 +51,6 @@ $getUrl = function ($file_path)
                 <?= substr(\Auth\App\Service\Auth::getUser()->getLogin(), 0, 1) ; ?>
             </button>
 
-            <div class="model_fon"></div>
             <ul class="list_profile_options">
                 <li class="item">
                     <a class="my_prof" href="#">

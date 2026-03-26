@@ -42,11 +42,19 @@ class AuthBtn
 
     private closeListProfileOptions()
     {
+        this.auth_modal.$context.remove();
+
         this.$context.removeClass('open_list');
     }
 
     private openListProfileOptions()
     {
+        this.auth_modal = AuthModal.create();
+
+        this.auth_modal.open();
+
+        this.auth_modal.$context.find('.exit').remove();
+
         this.$context.addClass('open_list');
     }
 
