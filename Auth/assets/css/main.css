@@ -222,6 +222,11 @@ body {
   box-sizing: border-box;
   z-index: 10;
 }
+@media (max-width: 767px) {
+  .b_auth_btn .list_profile_options {
+    right: 16px;
+  }
+}
 .b_auth_btn .list_profile_options .item {
   display: flex;
   justify-content: start;
