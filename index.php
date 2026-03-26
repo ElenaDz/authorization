@@ -47,9 +47,11 @@ $getUrl = function ($file_path)
 
         <?php else: ?>
 
+        <div class="inner_avatar">
             <button class="avatar" data-url_logout="">
-                <?= substr(\Auth\App\Service\Auth::getUser()->getLogin(), 0, 1) ; ?>
+                <?= mb_substr(\Auth\App\Service\Auth::getUser()->getLogin(), 0, 1) ; ?>
             </button>
+        </div>
 
             <ul class="list_profile_options">
                 <li class="item">
