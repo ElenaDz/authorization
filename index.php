@@ -69,6 +69,7 @@ $getUrl = function ($file_path)
 
         <?php endif; ?>
     </div>
+    <div class="loader"></div>
     <br>
     <br>
     <br>

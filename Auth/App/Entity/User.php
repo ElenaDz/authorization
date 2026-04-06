@@ -265,6 +265,10 @@ class User extends _Base
 
     public static function validPassword($pass)
     {
+        if (preg_match('/[а-яё]/ui', $pass)) {
+            throw new \DomainException('Пароль не должен содержать кириллицу');
+        }
+
         if (mb_strlen($pass) < 6) {
             throw new \DomainException('Пароль должен быть не менее 6 символов');
         }
@@ -273,16 +277,8 @@ class User extends _Base
             throw new \DomainException('Пароль должен быть не больше 30 символов');
         }
 
-        if ( ! preg_match('/[A-Z]/', $pass)) {
-            throw new \DomainException('Пароль должен содержать хотя бы одну заглавную букву');
-        }
-
         if ( ! preg_match('/[a-z]/', $pass)) {
             throw new \DomainException('Пароль должен содержать хотя бы одну строчную букву');
-        }
-
-        if (preg_match('/[а-яё]/ui', $pass)) {
-            throw new \DomainException('Пароль не должен содержать кириллицу');
         }
 
         if ( ! preg_match('/[!"#$%&()*+,. :;<=>?]/', $pass)) {
