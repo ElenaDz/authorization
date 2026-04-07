@@ -3,17 +3,16 @@
 namespace Auth\App\Action\Admin;
 
 
-use Auth\App\Model\Users;
 use Auth\Sys\Views;
 
-class ListUsers extends _BaseAdmin
+class Users extends _BaseAdmin
 {
     public function __invoke()
     {
-        $users = Users::getAll();
+        $users = \Auth\App\Model\Users::getAll();
 
         $content = Views::get(
-            __DIR__ . '/../../View/UsersAdmin.php',
+            __DIR__ . '/../../View/Admin/Users.php',
             [
                 'users' => $users
             ]

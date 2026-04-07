@@ -19,6 +19,8 @@ class Users extends _Base
 			User::class
 		);
 	}
+
+
     public static function getAll()
     {
         $results = self::getPDO()->query (
@@ -52,25 +54,6 @@ class Users extends _Base
             'DELETE FROM users WHERE id ='. (int) $id
         );
     }
-
-	/**
-	 * @param $login
-	 * @return bool
-	 */
-	public static function hasByLogin($login): bool
-    {
-		$pdo = self::getPDO();
-
-	    $results = $pdo->prepare(
-			'SELECT * FROM users WHERE login=:login  LIMIT 1'
-		);
-
-		$results->execute([
-			'login' => $login
-		]);
-
-        return !empty($results->fetchColumn());
-	}
 
     /**
      * @param $email
@@ -227,7 +210,7 @@ class Users extends _Base
             'pass_change_code_at'       => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE_AT),
             'country'                   => self::getPrivatePropValueByUser($user, User::NAME_COUNTRY),
             'ip'                        => self::getPrivatePropValueByUser($user, User::NAME_IP),
-            'city'                        => self::getPrivatePropValueByUser($user, User::NAME_CITY)
+            'city'                      => self::getPrivatePropValueByUser($user, User::NAME_CITY)
         ]);
     }
 

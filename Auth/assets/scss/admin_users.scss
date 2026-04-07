@@ -3,6 +3,8 @@
 @import "var";
 
 
+// todo здесь нужен класс обертка вроде b_admin_users чтобы твои стили не сломали стили на страницу куда будет
+//  встраиваться эта админка
 .admin-panel {
   background: #fff;
   padding: 20px;
@@ -46,7 +48,7 @@
   .email {
     width: 200px;
   }
-  .law {
+  .role {
     width: 160px;
 
     select {

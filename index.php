@@ -37,7 +37,8 @@ $getUrl = function ($file_path)
           rel="stylesheet">
 </head>
 
-<body>
+<body style="padding: 20px;">
+
     <div class="b_auth_btn" data-auth_btn_open_url="<?= \Auth\App\Action\ChangePass::COOKIE_NAME_AUTH_BTN_OPEN_URL; ?>">
 
         <?php if ( ! \Auth\App\Service\Auth::isAuthorized()): ?>
@@ -69,9 +70,12 @@ $getUrl = function ($file_path)
 
         <?php endif; ?>
     </div>
+
+    <!-- fixme я его вижу когда захожу на эту страницу, а не должен -->
     <div class="loader"></div>
+
     <div>
-        <a href="<?= \Auth\App\Action\Admin\ListUsers::getUrl() ?>">Таблица пользователей</a>
+        <a href="<?= \Auth\App\Action\Admin\Users::getUrl() ?>">Таблица пользователей</a>
     </div>
     <br>
 

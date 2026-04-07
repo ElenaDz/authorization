@@ -126,7 +126,7 @@ class Routing
 			);
 		};
 
-		if ( ! is_subclass_of($class_name_action, \Auth\App\Action\_Base::class) &&  ! is_subclass_of($class_name_action, \Auth\App\Action\Admin\_BaseAdmin::class))
+		if ( ! is_subclass_of($class_name_action, \Auth\App\Action\_Base::class))
 		{
 			throw new \Exception(
 				sprintf(
