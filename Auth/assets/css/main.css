@@ -370,6 +370,19 @@ body {
 .users-table .activation {
   width: 90px;
 }
+.users-table .activation button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+.users-table .activation button input {
+  cursor: pointer;
+}
 .users-table .delete {
   width: 100px;
 }

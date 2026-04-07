@@ -12,8 +12,6 @@ class Logon extends _Base
     const POST_NAME_EMAIL = 'email';
     const POST_NAME_PASS = 'password';
     const POST_NAME_SUBMIT = 'submit';
-    const GET_NAME_LOGIN = 'login';
-
 	const COOKIE_NAME_UPDATE_USER_IP_DONE = 'update_user_ip_done';
 
 

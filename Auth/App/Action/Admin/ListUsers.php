@@ -6,7 +6,7 @@ namespace Auth\App\Action\Admin;
 use Auth\App\Model\Users;
 use Auth\Sys\Views;
 
-class UsersAdmin extends _BaseAdmin
+class ListUsers extends _BaseAdmin
 {
     public function __invoke()
     {

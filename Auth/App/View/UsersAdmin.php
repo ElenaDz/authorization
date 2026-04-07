@@ -53,14 +53,17 @@ use Auth\App\Entity\User;
                     <td class="geo"><?= $user->getCountry() ?> <br> <?= $user->getCity() ?></td>
                     <td class="ip"><?= $user->getIP() ?></td>
                     <td class="activation">
-                        <form>
+                        <form action="<?= \Auth\App\Action\Admin\ActivationUser::getUrl() ?>" method="post">
                             <label>
-                                <input type="checkbox" <?= ! $user->getActivationCode() ? 'checked' : '' ?>>
+                                <button type="submit">
+                                    <input type="checkbox" name="id"  value="<?= $user->getId() ?>" <?= ! $user->getActivationCode() ? 'checked' : '' ?>>
+                                </button>
                             </label>
                         </form>
                     </td>
                     <td class="delete">
-                        <form>
+                        <form action="<?=  \Auth\App\Action\Admin\DeleteUser::getUrl() ?>" method="post">
+                            <input type="hidden" name="id" value="<?= $user->getId() ?>">
                             <button class="btn-delete" type="submit">Удалить</button>
                         </form>
                     </td>

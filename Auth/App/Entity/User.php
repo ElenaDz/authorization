@@ -47,7 +47,7 @@ class User extends _Base
 
 	    $user->setPass($pass);
 
-	    $user->activation_code = md5(random_bytes(5));
+	    $user->genActivationCode();
 
         $user->updateUserIp();
 
@@ -84,6 +84,10 @@ class User extends _Base
             );
         }
 	}
+    public function genActivationCode()
+    {
+        $this->activation_code = md5(random_bytes(5));
+    }
 
     /**
      * @return string|null
