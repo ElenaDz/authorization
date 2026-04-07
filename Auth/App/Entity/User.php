@@ -21,6 +21,7 @@ class User extends _Base
     const NAME_PASS_CHANGE_CODE_AT = 'pass_change_code_at';
     const NAME_COUNTRY = 'country';
     const NAME_IP = 'ip';
+    const NAME_CITY = 'city';
 
     private $id;
     private $login;
@@ -34,7 +35,8 @@ class User extends _Base
     private $pass_change_code_at;
 	private $country;
 	private $ip;
-	
+	private $city;
+
 	public static function create($login, $pass, $email): User
     {
         $user = new self();
@@ -155,6 +157,11 @@ class User extends _Base
         return $this->country;
     }
 
+    public function getCity()
+    {
+        return $this->city;
+    }
+
     public function getIP()
     {
         return $this->ip;
@@ -165,6 +172,8 @@ class User extends _Base
         $this->ip = $ip;
 
         $this->country = SxGeo::getCountryByIp($this->ip);
+
+        $this->city = SxGeo::getCityByIp($this->ip);
     }
 
 	private function setLogin($login)

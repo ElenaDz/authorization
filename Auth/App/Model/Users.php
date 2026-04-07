@@ -19,6 +19,17 @@ class Users extends _Base
 			User::class
 		);
 	}
+    public static function getAll()
+    {
+        $results = self::getPDO()->query (
+            'SELECT * FROM users'
+        );
+
+        return $results->fetchAll(
+            \PDO::FETCH_CLASS,
+            User::class
+        );
+    }
 
 	/**
 	 * @return User[]
@@ -136,9 +147,9 @@ class Users extends _Base
 		$prepare = self::getPDO()->prepare(
 			'INSERT INTO 
                      users
-                    (login, hash, email, activation_code, token, country, ip) 
+                    (login, hash, email, activation_code, token, country, ip, city) 
                 VALUES 
-                    (:login, :hash, :email,:activation_code, null, :country, :ip)'
+                    (:login, :hash, :email,:activation_code, null, :country, :ip, :city)'
 		);
 
 		$prepare->execute([
@@ -147,7 +158,8 @@ class Users extends _Base
 			'email' => $user->getEmail(),
             'activation_code' => $user->getActivationCode(),
             'country' => $user->getCountry(),
-            'ip' => $user->getIP()
+            'ip' => $user->getIP(),
+            'city' => $user->getCity()
 		]);
 
 		return self::getPDO()->lastInsertId();
@@ -196,7 +208,8 @@ class Users extends _Base
                         pass_change_code = :pass_change_code,
                         pass_change_code_at = :pass_change_code_at,
                         country = :country,
-                        ip = :ip
+                        ip = :ip,
+                        city = :city
                     WHERE 
                         id = :id'
         );
@@ -213,7 +226,8 @@ class Users extends _Base
             'pass_change_code'          => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE),
             'pass_change_code_at'       => self::getPrivatePropValueByUser($user, User::NAME_PASS_CHANGE_CODE_AT),
             'country'                   => self::getPrivatePropValueByUser($user, User::NAME_COUNTRY),
-            'ip'                        => self::getPrivatePropValueByUser($user, User::NAME_IP)
+            'ip'                        => self::getPrivatePropValueByUser($user, User::NAME_IP),
+            'city'                        => self::getPrivatePropValueByUser($user, User::NAME_CITY)
         ]);
     }
 

@@ -1,0 +1,106 @@
+
+@import "mixin";
+@import "var";
+
+
+.admin-panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  max-width: 1600px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.table-wrapper {
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+
+  .date {
+    width: 140px;
+    max-width: 140px;
+  }
+
+  .email {
+    text-align: left;
+    max-width: 300px;
+  }
+
+  .login {
+    text-align: left;
+    width: 180px;
+  }
+
+  .email {
+    width: 200px;
+  }
+  .law {
+    width: 160px;
+
+    select {
+      width: 100%;
+    }
+  }
+  .ip {
+    width: 90px;
+  }
+  .activation {
+    width: 90px;
+  }
+  .delete {
+    width: 100px;
+  }
+  .geo {
+    width: 110px;
+  }
+}
+
+.users-table th {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  font-weight: 800;
+  color: #333;
+}
+
+.users-table td {
+  text-align: center;
+  border: 1px solid #ddd;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+/* Стилизация элементов управления */
+select, button {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.btn-delete {
+  font-size: 11px;
+  color: #555;
+}
+
+.btn-delete:hover {
+  background: #eee;
+}
+
+.btn-delete-inactive {
+  background: #eee;
+  border-color: #bbb;
+}

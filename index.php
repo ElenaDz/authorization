@@ -70,6 +70,11 @@ $getUrl = function ($file_path)
         <?php endif; ?>
     </div>
     <div class="loader"></div>
+    <div>
+        <a href="<?= \Auth\App\Action\Admin\UsersAdmin::getUrl() ?>">Таблица пользователей</a>
+    </div>
+    <br>
+
     <br>
     <br>
     <br>
