@@ -8,18 +8,18 @@ use Auth\App\Entity\User;
 ?>
 
 
-<!-- fixme переименовать в b_admin_users ок-->
 <div class="b_admin_users">
 
-    <!-- fixme переименовать в toolbar ок-->
     <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
+            <!-- fixme btn в имени класса лишнее, так как это понятно по тегу -->
             <button class="btn-delete-inactive" type="submit">Удалить не активированных</button>
         </form>
     </div>
 
     <div class="table-wrapper">
+        <!-- fixme table в имени класса лишнее, так как это понятно по тегу -->
         <table class="users-table">
             <thead>
                 <tr>
@@ -38,6 +38,7 @@ use Auth\App\Entity\User;
                 <?php foreach ($users as $user) : ?>
 
                     <tr data-user_id="<?= $user->getId() ?>">
+
                         <td class="date"><?= $user->getCreatedAt() ?></td>
                         <td class="date"><?= $user->getLastLoginAt() ?></td>
                         <td class="email"><?= $user->getEmail() ?></td>
@@ -57,55 +58,78 @@ use Auth\App\Entity\User;
                         <td class="ip"><?= $user->getIP() ?></td>
 
                         <td class="activation">
-                            <form class="activation_user" action="<?= \Auth\App\Action\Api\UserSetActivation::getUrl() ?>" method="post">
+                            <!-- fixme слово user лишнее -->
+                            <form class="activation_user" action="<?= \Auth\App\Action\Api\UserActivation::getUrl() ?>" method="post">
+                                <!-- fixme кажется лишнее есть ведь label -->
                                 <div class="wrap_active">
                                     <label>
+                                        <!-- fixme не тот метод использовала  -->
                                         <?php if ($user->getActivationCode()): ?>
+
+                                            <!-- fixme не понял зачем эта кнопка здесь, удалить -->
                                             <button type="submit"></button>
 
+                                            <!-- fixme дублирование, input name="active" должен быть один -->
                                             <input
-                                                    type="checkbox"
-                                                    name="active"
-                                                    value=0
+                                                type="checkbox"
+                                                name="active"
+                                                value=0
                                             >
+
                                         <?php else: ?>
+
                                             <input
-                                                    type="checkbox"
-                                                    name="active"
-                                                    value=1
-                                                    checked
-                                                    onclick="return false;"
+                                                type="checkbox"
+                                                name="active"
+                                                value=1
+                                                checked
+                                                onclick="return false;"
                                             >
+
                                         <?php endif; ?>
 
                                     </label>
                                 </div>
-                                <input type="hidden"
-                                       name="id"
-                                       value="<?= $user->getId() ?>">
+                                <!-- fixme hidden всегда располагаются первыми чтобы их точно заметили, так как про них не знаю их не видно -->
+                                <input
+                                    type="hidden"
+                                    name="id"
+                                    value="<?= $user->getId() ?>"
+                                >
                             </form>
                         </td>
 
                         <td class="delete">
+                            <!-- fixme слово user лишнее -->
                             <form class="delete_user" action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
                                 <input type="hidden" name="id" value="<?= $user->getId() ?>">
+                                <!-- fixme слово btn лишнее -->
                                 <button class="btn-delete" type="submit">Удалить</button>
                             </form>
                         </td>
+
                     </tr>
 
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
+
 </div>
+
+<!-- fixme лучше разместить скрипты сразу после table.users-table  -->
 <script>
+    // fixme здесь нужно перевязываться не к событию отправки формы а к событию смены состояния checkbox
+    // fixme $('.activation_user') плохо не понятно, понятнее $('form.activation')
     $('.activation_user').on('submit',(e) =>
     {
+		// fixme лучше вместо этого в конце писать return false;
         e.preventDefault();
 
         let $form = $(e.currentTarget);
 
+		// fixme это очень не понятно, обойдись без этого, состояние checkbox меняется само когда по нему кликаешь,
+        //  тебе не нужно его менять
         $form.find('input[type="checkbox"]').prop('checked', true);
 
         $.ajax({
@@ -128,10 +152,13 @@ use Auth\App\Entity\User;
 
     $('.delete_user').on('submit',(e) =>
     {
+		// fixme лучше вместо этого в конце писать return false;
         e.preventDefault();
 
         let $form = $(e.currentTarget);
 
+		// fixme лишнее, просто удаляем tr родительский
+        //   let $tr = $form.parents('tr');
         let user_id = $form.find('input[name="id"]').val();
 
         let $user_line = $(`tr[data-user_id="${user_id}"]`)

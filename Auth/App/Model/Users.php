@@ -20,6 +20,21 @@ class Users extends _Base
 		);
 	}
 
+	public static function getByIdOrFall($id)
+	{
+		$user = self::getById($id);
+		if (empty($user))
+		{
+			throw new \Exception(
+				sprintf(
+					'Пользователь с id = "%s" не найден в БД',
+					$id
+				)
+			);
+		}
+		return $user;
+	}
+
 
     public static function getAll()
     {

@@ -74,7 +74,7 @@ $getUrl = function ($file_path)
     <br>
     <br>
     <div>
-        <a href="<?= \Auth\App\Action\Admin\Users::getUrl() ?>">Таблица пользователей</a>
+        <a href="<?= \Auth\App\Action\Admin\Users::getUrl() ?>">Админка</a>
     </div>
     <br>
     <br>

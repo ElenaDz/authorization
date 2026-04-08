@@ -2,9 +2,6 @@
 @import "mixin";
 @import "var";
 
-
-// todo здесь нужен класс обертка вроде b_admin_users чтобы твои стили не сломали стили на страницу куда будет
-//  встраиваться эта админка ок
 .b_admin_users {
   background: #fff;
   padding: 20px;
@@ -13,7 +10,6 @@
   display: flex;
   flex-direction: column;
   max-width: 1600px;
-
 
     .toolbar {
       display: flex;
