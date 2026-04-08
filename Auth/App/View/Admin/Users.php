@@ -121,6 +121,7 @@ use Auth\App\Entity\User;
 <script>
     // fixme здесь нужно перевязываться не к событию отправки формы а к событию смены состояния checkbox
     // fixme $('.activation_user') плохо не понятно, понятнее $('form.activation')
+    // fixme нужно вешать событие на таблицу а не на элемент так как таблица будет подгружаться постранично
     $('.activation_user').on('submit',(e) =>
     {
 		// fixme лучше вместо этого в конце писать return false;
@@ -150,6 +151,7 @@ use Auth\App\Entity\User;
         return false;
     })
 
+	// fixme нужно вешать событие на таблицу, а не на элемент так как таблица будет подгружаться постранично
     $('.delete_user').on('submit',(e) =>
     {
 		// fixme лучше вместо этого в конце писать return false;
