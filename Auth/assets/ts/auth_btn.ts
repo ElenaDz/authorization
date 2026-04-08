@@ -87,6 +87,10 @@ class AuthBtn
     {
         this.$context.find('.open').on('click',(event) =>
         {
+            this.$context.find('.loader').addClass('active');
+
+            this.$context.find('.open').hide();
+
             event.preventDefault();
 
             let url = $(event.currentTarget).data('href');
@@ -97,6 +101,10 @@ class AuthBtn
                 .done(() =>
                 {
                     this.auth_modal.open();
+
+                    this.$context.find('.loader').removeClass('active');
+
+                    this.$context.find('.open').show();
                 })
                 .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) =>
                 {

@@ -12,16 +12,23 @@ class UserSetActivation extends _BaseApi
 
         $user = Users::getById($id);
 
-		// todo проверить найден для пользователь
+        $is_active = $_POST['active'];
 
-		// fixme нужно присылать с сервера состояние флажка, просто проверять состояние из БД не правильно
-        if ($user->getActivationCode()) {
-            $user->resetActivationCode();
-
-        } else {
-            $user->genActivationCode();
-            // todo Уточнить у заказчика, нужно ли деактивировать, и нужно ли посылать письмо с новым кодом активации
+        if (empty($user))
+        {
+            throw new \Exception(
+                sprintf(
+                'Пользователь с id = "%s" не найден в БД',
+                    $id
+            ));
         }
+		// todo проверить найден для пользователь ок
+
+
+		// fixme нужно присылать с сервера состояние флажка, просто проверять состояние из БД не правильно ок
+        if ($is_active) return;
+
+        $user->resetActivationCode();
 
         $user->save();
     }

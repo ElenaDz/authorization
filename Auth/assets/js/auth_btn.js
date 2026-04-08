@@ -49,12 +49,16 @@ class AuthBtn {
     }
     initOpen() {
         this.$context.find('.open').on('click', (event) => {
+            this.$context.find('.loader').addClass('active');
+            this.$context.find('.open').hide();
             event.preventDefault();
             let url = $(event.currentTarget).data('href');
             this.auth_modal = AuthModal.create();
             this.request(url)
                 .done(() => {
                 this.auth_modal.open();
+                this.$context.find('.loader').removeClass('active');
+                this.$context.find('.open').show();
             })
                 .fail((jqXHR, textStatus, errorThrow) => {
                 throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);

@@ -45,6 +45,7 @@ $getUrl = function ($file_path)
             <button class="open" data-href="<?= \Auth\App\Action\Logon::getUrl(); ?>">
                 Вход
             </button>
+            <div class="loader"></div>
 
         <?php else: ?>
 
@@ -70,19 +71,11 @@ $getUrl = function ($file_path)
 
         <?php endif; ?>
     </div>
-
-    <!-- fixme я его вижу когда захожу на эту страницу, а не должен -->
-    <div class="loader"></div>
-
+    <br>
+    <br>
     <div>
         <a href="<?= \Auth\App\Action\Admin\Users::getUrl() ?>">Таблица пользователей</a>
     </div>
-    <br>
-
-    <br>
-    <br>
-    <br>
-    <br>
     <br>
     <br>
     <br>

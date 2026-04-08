@@ -162,23 +162,23 @@ body {
   }
 }
 
-.loader {
-  /* Размер и толщина линий */
+.b_auth_btn a {
+  text-decoration: none;
+  color: inherit;
+}
+.b_auth_btn .loader {
   width: 30px;
   height: 30px;
-  border: 5px solid #1A81F6;
-  /* Цвет основного кольца */
-  border-bottom-color: white;
-  /* Цвет активной части */
-  /* Делаем круглым */
+  border: 5px solid #1A81F6; /* Цвет основного кольца */
+  border-bottom-color: white; /* Цвет активной части */
   border-radius: 50%;
-  /* Настройка анимации */
-  display: inline-block;
+  display: none;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
-
-/* Описание вращения */
+.b_auth_btn .loader.active {
+  display: inline-block;
+}
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -186,10 +186,6 @@ body {
   100% {
     transform: rotate(360deg);
   }
-}
-.b_auth_btn a {
-  text-decoration: none;
-  color: inherit;
 }
 .b_auth_btn .open {
   display: flex;

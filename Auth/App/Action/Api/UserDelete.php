@@ -11,7 +11,15 @@ class UserDelete extends _BaseApi
 
         $user = Users::getById($id);
 
-		// fixme проверить что пользователь есть
+        if (empty($user))
+        {
+            throw new \Exception(
+                sprintf(
+                    'Пользователь с id = "%s" не найден в БД',
+                    $id
+                ));
+        }
+		// fixme проверить что пользователь есть ок
 
         $user->delete();
     }

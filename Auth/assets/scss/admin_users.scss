@@ -4,8 +4,8 @@
 
 
 // todo здесь нужен класс обертка вроде b_admin_users чтобы твои стили не сломали стили на страницу куда будет
-//  встраиваться эта админка
-.admin-panel {
+//  встраиваться эта админка ок
+.b_admin_users {
   background: #fff;
   padding: 20px;
   border-radius: 4px;
@@ -13,111 +13,119 @@
   display: flex;
   flex-direction: column;
   max-width: 1600px;
-}
 
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
 
-.table-wrapper {
-}
-
-.users-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-
-  .date {
-    width: 140px;
-    max-width: 140px;
-  }
-
-  .email {
-    text-align: left;
-    max-width: 300px;
-  }
-
-  .login {
-    text-align: left;
-    width: 180px;
-  }
-
-  .email {
-    width: 200px;
-  }
-  .role {
-    width: 160px;
-
-    select {
-      width: 100%;
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
     }
-  }
-  .ip {
-    width: 90px;
-  }
-  .activation {
-    width: 90px;
 
-    button {
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      font: inherit;
-      color: inherit;
-      cursor: pointer;
-      outline: inherit;
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
 
-      input {
-        cursor: pointer;
+      .date {
+        width: 140px;
+        max-width: 140px;
+      }
+
+      .email {
+        text-align: left;
+        max-width: 300px;
+      }
+
+      .login {
+        text-align: left;
+        width: 180px;
+      }
+
+      .email {
+        width: 200px;
+      }
+      .role {
+        width: 160px;
+
+        select {
+          width: 100%;
+        }
+      }
+      .ip {
+        width: 90px;
+      }
+      .activation {
+        width: 90px;
+
+        .wrap_active {
+          position: relative;
+        }
+
+        button {
+          width: 15px;
+          height: 15px;
+          top: 2px;
+          right: calc(50% - 7.5px);
+          position: absolute;
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          font: inherit;
+          color: inherit;
+          cursor: pointer;
+          outline: inherit;
+
+          input {
+            cursor: pointer;
+          }
+        }
+      }
+      .delete {
+        width: 100px;
+      }
+      .geo {
+        width: 110px;
       }
     }
-  }
-  .delete {
-    width: 100px;
-  }
-  .geo {
-    width: 110px;
-  }
-}
 
-.users-table th {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 10px;
-  font-weight: 800;
-  color: #333;
-}
+    .users-table th {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      font-weight: 800;
+      color: #333;
+    }
 
-.users-table td {
-  text-align: center;
-  border: 1px solid #ddd;
-  padding: 8px;
-  vertical-align: middle;
-}
+    .users-table td {
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: middle;
+    }
 
-/* Стилизация элементов управления */
-select, button {
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  background: #fff;
-  cursor: pointer;
-}
+    /* Стилизация элементов управления */
+    select, button {
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: #fff;
+      cursor: pointer;
+    }
 
-.btn-delete {
-  font-size: 11px;
-  color: #555;
-}
+    .btn-delete {
+      font-size: 11px;
+      color: #555;
+    }
 
-.btn-delete:hover {
-  background: #eee;
-}
+    .btn-delete:hover {
+      background: #eee;
+    }
 
-.btn-delete-inactive {
-  background: #eee;
-  border-color: #bbb;
+    .btn-delete-inactive {
+      background: #eee;
+      border-color: #bbb;
+    }
+
 }

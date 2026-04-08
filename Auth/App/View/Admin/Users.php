@@ -5,15 +5,14 @@
  */
 
 use Auth\App\Entity\User;
-
 ?>
 
 
-<!-- fixme переименовать в b_admin_users-->
-<div class="admin-panel">
+<!-- fixme переименовать в b_admin_users ок-->
+<div class="b_admin_users">
 
-    <!-- fixme переименовать в toolbar-->
-    <div class="panel-header">
+    <!-- fixme переименовать в toolbar ок-->
+    <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
             <button class="btn-delete-inactive" type="submit">Удалить не активированных</button>
@@ -38,7 +37,7 @@ use Auth\App\Entity\User;
             <tbody>
                 <?php foreach ($users as $user) : ?>
 
-                    <tr>
+                    <tr data-user_id="<?= $user->getId() ?>">
                         <td class="date"><?= $user->getCreatedAt() ?></td>
                         <td class="date"><?= $user->getLastLoginAt() ?></td>
                         <td class="email"><?= $user->getEmail() ?></td>
@@ -58,17 +57,37 @@ use Auth\App\Entity\User;
                         <td class="ip"><?= $user->getIP() ?></td>
 
                         <td class="activation">
-                            <form action="<?= \Auth\App\Action\Api\UserSetActivation::getUrl() ?>" method="post">
-                                <label>
-                                    <button type="submit">
-                                        <input type="checkbox" name="id"  value="<?= $user->getId() ?>" <?= ! $user->getActivationCode() ? 'checked' : '' ?>>
-                                    </button>
-                                </label>
+                            <form class="activation_user" action="<?= \Auth\App\Action\Api\UserSetActivation::getUrl() ?>" method="post">
+                                <div class="wrap_active">
+                                    <label>
+                                        <?php if ($user->getActivationCode()): ?>
+                                            <button type="submit"></button>
+
+                                            <input
+                                                    type="checkbox"
+                                                    name="active"
+                                                    value=0
+                                            >
+                                        <?php else: ?>
+                                            <input
+                                                    type="checkbox"
+                                                    name="active"
+                                                    value=1
+                                                    checked
+                                                    onclick="return false;"
+                                            >
+                                        <?php endif; ?>
+
+                                    </label>
+                                </div>
+                                <input type="hidden"
+                                       name="id"
+                                       value="<?= $user->getId() ?>">
                             </form>
                         </td>
 
                         <td class="delete">
-                            <form action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
+                            <form class="delete_user" action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
                                 <input type="hidden" name="id" value="<?= $user->getId() ?>">
                                 <button class="btn-delete" type="submit">Удалить</button>
                             </form>
@@ -79,5 +98,60 @@ use Auth\App\Entity\User;
             </tbody>
         </table>
     </div>
-
 </div>
+<script>
+    $('.activation_user').on('submit',(e) =>
+    {
+        e.preventDefault();
+
+        let $form = $(e.currentTarget);
+
+        $form.find('input[type="checkbox"]').prop('checked', true);
+
+        $.ajax({
+            url: $form.attr("action"),
+            type: 'POST',
+            data: $form.serialize(),
+        })
+            .done(() =>
+            {
+                console.log('Успешная активация пользователя')
+            })
+            .fail(() =>
+            {
+                $form.find('input[type="checkbox"]').prop('checked', false);
+                throw new Error("Ошибка: Пользователь не активирован");
+            })
+
+        return false;
+    })
+
+    $('.delete_user').on('submit',(e) =>
+    {
+        e.preventDefault();
+
+        let $form = $(e.currentTarget);
+
+        let user_id = $form.find('input[name="id"]').val();
+
+        let $user_line = $(`tr[data-user_id="${user_id}"]`)
+
+        $.ajax({
+            url: $form.attr("action"),
+            type: 'POST',
+            data: $form.serialize(),
+        })
+            .done(() =>
+            {
+                $user_line.remove();
+
+                console.log('Пользователь успешно удалён')
+            })
+            .fail(() =>
+            {
+                throw new Error("Ошибка: Пользователь не удалён");
+            })
+
+        return false;
+    })
+</script>

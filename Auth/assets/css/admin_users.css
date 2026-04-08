@@ -1,5 +1,5 @@
 @charset "UTF-8";
-.admin-panel {
+.b_admin_users {
   background: #fff;
   padding: 20px;
   border-radius: 4px;
@@ -7,48 +7,55 @@
   display: flex;
   flex-direction: column;
   max-width: 1600px;
+  /* Стилизация элементов управления */
 }
-
-.panel-header {
+.b_admin_users .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
-
-.users-table {
+.b_admin_users .users-table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
 }
-.users-table .date {
+.b_admin_users .users-table .date {
   width: 140px;
   max-width: 140px;
 }
-.users-table .email {
+.b_admin_users .users-table .email {
   text-align: left;
   max-width: 300px;
 }
-.users-table .login {
+.b_admin_users .users-table .login {
   text-align: left;
   width: 180px;
 }
-.users-table .email {
+.b_admin_users .users-table .email {
   width: 200px;
 }
-.users-table .role {
+.b_admin_users .users-table .role {
   width: 160px;
 }
-.users-table .role select {
+.b_admin_users .users-table .role select {
   width: 100%;
 }
-.users-table .ip {
+.b_admin_users .users-table .ip {
   width: 90px;
 }
-.users-table .activation {
+.b_admin_users .users-table .activation {
   width: 90px;
 }
-.users-table .activation button {
+.b_admin_users .users-table .activation .wrap_active {
+  position: relative;
+}
+.b_admin_users .users-table .activation button {
+  width: 15px;
+  height: 15px;
+  top: 2px;
+  right: calc(50% - 7.5px);
+  position: absolute;
   background: none;
   border: none;
   padding: 0;
@@ -58,50 +65,43 @@
   cursor: pointer;
   outline: inherit;
 }
-.users-table .activation button input {
+.b_admin_users .users-table .activation button input {
   cursor: pointer;
 }
-.users-table .delete {
+.b_admin_users .users-table .delete {
   width: 100px;
 }
-.users-table .geo {
+.b_admin_users .users-table .geo {
   width: 110px;
 }
-
-.users-table th {
+.b_admin_users .users-table th {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 10px;
   font-weight: 800;
   color: #333;
 }
-
-.users-table td {
+.b_admin_users .users-table td {
   text-align: center;
   border: 1px solid #ddd;
   padding: 8px;
   vertical-align: middle;
 }
-
-/* Стилизация элементов управления */
-select, button {
+.b_admin_users select, .b_admin_users button {
   padding: 4px 8px;
   border: 1px solid #ccc;
   border-radius: 3px;
   background: #fff;
   cursor: pointer;
 }
-
-.btn-delete {
+.b_admin_users .btn-delete {
   font-size: 11px;
   color: #555;
 }
-
-.btn-delete:hover {
+.b_admin_users .btn-delete:hover {
   background: #eee;
 }
-
-.btn-delete-inactive {
+.b_admin_users .btn-delete-inactive {
   background: #eee;
   border-color: #bbb;
 }
