@@ -13,13 +13,12 @@ use Auth\App\Entity\User;
     <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
-            <!-- fixme btn в имени класса лишнее, так как это понятно по тегу ок -->
+            <!-- fixme не плоди новые имена, у нас в имени акшина уже есть имя для этого, используй его -->
             <button class="delete_inactive" type="submit">Удалить не активированных</button>
         </form>
     </div>
 
     <div class="table-wrapper">
-        <!-- fixme table в имени класса лишнее, так как это понятно по тегу ок-->
         <table class="users">
             <thead>
                 <tr>
@@ -58,32 +57,30 @@ use Auth\App\Entity\User;
                         <td class="ip"><?= $user->getIP() ?></td>
 
                         <td class="activation">
-                            <!-- fixme слово user лишнее ок -->
                             <form class="activation" action="<?= \Auth\App\Action\Api\UserActivation::getUrl() ?>" method="post">
-                                <!-- fixme hidden всегда располагаются первыми чтобы их точно заметили, так как про них не знаю их не видно ok-->
                                 <input
-                                        type="hidden"
-                                        name="id"
-                                        value="<?= $user->getId() ?>"
+                                    type="hidden"
+                                    name="id"
+                                    value="<?= $user->getId() ?>"
                                 >
-                                <!-- fixme кажется лишнее есть ведь label ok -->
                                 <label>
-                                    <!-- fixme не тот метод использовала  ok-->
+                                    <!-- fixme меняем на то что показано в видео и добавляем live шаблоны -->
+                                    <!-- fixme так как наш флаг может только активировать пользователя
+                                          и не может снять активацию, нужно добавить disabled, если уже активирован -->
                                     <input
-                                            type="checkbox"
-                                            name="activation"
-                                            value="<?= $user->isActivated() ? 0 : 1; ?>"
-                                        <?= $user->isActivated() ? 'checked onclick="return false;"' : ''; ?>
+                                        type="checkbox"
+                                        name="activation"
+                                        value="<?= $user->isActivated() ? 0 : 1; ?>"
+	                                    <?= $user->isActivated() ? 'checked' : null; ?>
+	                                    <?= $user->isActivated() ? 'onclick="return false;"' : ''; ?>
                                     >
                                 </label>
                             </form>
                         </td>
 
                         <td class="delete">
-                            <!-- fixme слово user лишнее ok -->
                             <form class="delete" action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
                                 <input type="hidden" name="id" value="<?= $user->getId() ?>">
-                                <!-- fixme слово btn лишнее ok -->
                                 <button type="submit">Удалить</button>
                             </form>
                         </td>
@@ -93,18 +90,17 @@ use Auth\App\Entity\User;
                 <?php endforeach; ?>
             </tbody>
         </table>
+
         <script>
-            // fixme здесь нужно перевязываться не к событию отправки формы а к событию смены состояния checkbox ok
-            // fixme $('.activation_user') плохо не понятно, понятнее $('form.activation') ok
             // fixme нужно вешать событие на таблицу а не на элемент так как таблица будет подгружаться постранично
+            // fixme input[type="checkbox"] не достаточно может быть много всяких checkbox в строке, нужно указывать еще и класс
             $('table.users').find('input[type="checkbox"]').on('change',(e) =>
             {
-                // fixme лучше вместо этого в конце писать return false ok;
+				console.log('test');
+
                 let $input = $(e.currentTarget);
 
                 let $form = $input.parents('form');
-                // fixme это очень не понятно, обойдись без этого, состояние checkbox меняется само когда по нему кликаешь, ok
-                //  тебе не нужно его менять ok
 
                 $.ajax({
                     url: $form.attr("action"),
@@ -113,27 +109,32 @@ use Auth\App\Entity\User;
                 })
                     .done(() =>
                     {
+						// fixme лучше disabled добавить, а не это
                         $input.attr('onclick', 'return false;');
+
+						// fixme лишнее, в случае успеха флажок останется поставленным, а в случае не удачи снова снимется
                         console.log('Успешная активация пользователя');
                     })
                     .fail(() =>
                     {
+						// todo не написать что пытались сделать и что пошло не так и какой получили ответ от сервера
                         throw new Error("Ошибка: Пользователь не активирован");
                     })
 
                 return false;
-            })
+            });
 
+            // fixme у каждого отдельного элемента должен быть отдельный тег script чтобы их было удобно переносить
             // fixme нужно вешать событие на таблицу, а не на элемент так как таблица будет подгружаться постранично
             $('form.delete').on('submit',(e) =>
             {
-                // fixme лучше вместо этого в конце писать return false ok;
                 let $form = $(e.currentTarget);
 
-                // fixme лишнее, просто удаляем tr родительский ок
+                // fixme искали tr, а получили user_line, не вводи новых названий это только запутывает,
+                //  я не знаю ни какой user_line ни где не видел такого имени
                 let $user_line = $form.parents('tr');
 
-                    $.ajax({
+                $.ajax({
                     url: $form.attr("action"),
                     type: 'POST',
                     data: $form.serialize(),
@@ -142,6 +143,7 @@ use Auth\App\Entity\User;
                     {
                         $user_line.remove();
 
+						// fixme лишнее, и так видно что строка исчезла, а елси ошибка то не исчезла
                         console.log('Пользователь успешно удалён')
                     })
                     .fail(() =>
@@ -155,5 +157,3 @@ use Auth\App\Entity\User;
     </div>
 
 </div>
-
-<!-- fixme лучше разместить скрипты сразу после table.users-table  ok-->

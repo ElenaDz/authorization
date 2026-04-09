@@ -96,8 +96,10 @@ class User extends _Base
     {
         return $this->activation_code;
     }
+
     public function activation()
     {
+		// fixme ты вызываешь не static метод с помощью self так нельзя
         self::resetActivationCode();
     }
 
