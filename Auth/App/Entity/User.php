@@ -96,8 +96,12 @@ class User extends _Base
     {
         return $this->activation_code;
     }
+    public function activation()
+    {
+        self::resetActivationCode();
+    }
 
-	public function resetActivationCode()
+	private function resetActivationCode()
 	{
 		$this->activation_code = null;
 	}

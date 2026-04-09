@@ -30,7 +30,7 @@ class ActivationUser extends _Base
 
         $user->validActivationCode($code);
 
-        $user->resetActivationCode();
+        $user->activation();
 
         Auth::loginUser($user);
 

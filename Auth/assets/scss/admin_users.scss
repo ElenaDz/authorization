@@ -18,7 +18,7 @@
       margin-bottom: 15px;
     }
 
-    .users-table {
+    .users {
       width: 100%;
       border-collapse: collapse;
       text-align: center;
@@ -54,7 +54,7 @@
       .activation {
         width: 90px;
 
-        .wrap_active {
+        label {
           position: relative;
         }
 
@@ -80,13 +80,22 @@
       }
       .delete {
         width: 100px;
+
+        button {
+          font-size: 11px;
+          color: #555;
+
+          &:hover {
+            background: #eee;
+          }
+        }
       }
       .geo {
         width: 110px;
       }
     }
 
-    .users-table th {
+    .users th {
       background-color: #f9f9f9;
       border: 1px solid #ddd;
       padding: 10px;
@@ -94,7 +103,7 @@
       color: #333;
     }
 
-    .users-table td {
+    .users td {
       text-align: center;
       border: 1px solid #ddd;
       padding: 8px;
@@ -110,16 +119,7 @@
       cursor: pointer;
     }
 
-    .btn-delete {
-      font-size: 11px;
-      color: #555;
-    }
-
-    .btn-delete:hover {
-      background: #eee;
-    }
-
-    .btn-delete-inactive {
+    .delete_inactive {
       background: #eee;
       border-color: #bbb;
     }

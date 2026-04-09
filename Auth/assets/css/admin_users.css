@@ -15,42 +15,42 @@
   align-items: center;
   margin-bottom: 15px;
 }
-.b_admin_users .users-table {
+.b_admin_users .users {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
 }
-.b_admin_users .users-table .date {
+.b_admin_users .users .date {
   width: 140px;
   max-width: 140px;
 }
-.b_admin_users .users-table .email {
+.b_admin_users .users .email {
   text-align: left;
   max-width: 300px;
 }
-.b_admin_users .users-table .login {
+.b_admin_users .users .login {
   text-align: left;
   width: 180px;
 }
-.b_admin_users .users-table .email {
+.b_admin_users .users .email {
   width: 200px;
 }
-.b_admin_users .users-table .role {
+.b_admin_users .users .role {
   width: 160px;
 }
-.b_admin_users .users-table .role select {
+.b_admin_users .users .role select {
   width: 100%;
 }
-.b_admin_users .users-table .ip {
+.b_admin_users .users .ip {
   width: 90px;
 }
-.b_admin_users .users-table .activation {
+.b_admin_users .users .activation {
   width: 90px;
 }
-.b_admin_users .users-table .activation .wrap_active {
+.b_admin_users .users .activation label {
   position: relative;
 }
-.b_admin_users .users-table .activation button {
+.b_admin_users .users .activation button {
   width: 15px;
   height: 15px;
   top: 2px;
@@ -65,23 +65,30 @@
   cursor: pointer;
   outline: inherit;
 }
-.b_admin_users .users-table .activation button input {
+.b_admin_users .users .activation button input {
   cursor: pointer;
 }
-.b_admin_users .users-table .delete {
+.b_admin_users .users .delete {
   width: 100px;
 }
-.b_admin_users .users-table .geo {
+.b_admin_users .users .delete button {
+  font-size: 11px;
+  color: #555;
+}
+.b_admin_users .users .delete button:hover {
+  background: #eee;
+}
+.b_admin_users .users .geo {
   width: 110px;
 }
-.b_admin_users .users-table th {
+.b_admin_users .users th {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 10px;
   font-weight: 800;
   color: #333;
 }
-.b_admin_users .users-table td {
+.b_admin_users .users td {
   text-align: center;
   border: 1px solid #ddd;
   padding: 8px;
@@ -94,14 +101,7 @@
   background: #fff;
   cursor: pointer;
 }
-.b_admin_users .btn-delete {
-  font-size: 11px;
-  color: #555;
-}
-.b_admin_users .btn-delete:hover {
-  background: #eee;
-}
-.b_admin_users .btn-delete-inactive {
+.b_admin_users .delete_inactive {
   background: #eee;
   border-color: #bbb;
 }
