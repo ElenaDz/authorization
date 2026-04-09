@@ -96,8 +96,6 @@ use Auth\App\Entity\User;
             // fixme input[type="checkbox"] не достаточно может быть много всяких checkbox в строке, нужно указывать еще и класс
             $('table.users').find('input[type="checkbox"]').on('change',(e) =>
             {
-				console.log('test');
-
                 let $input = $(e.currentTarget);
 
                 let $form = $input.parents('form');
