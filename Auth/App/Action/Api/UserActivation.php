@@ -15,11 +15,11 @@ class UserActivation extends _BaseApi
 
         $user = Users::getByIdOrFall($id);
 
-		// fixme что-то тут не так слева активирован а справа НЕ активирован
-	    //   проблема в том что имена не совпадают а всем было бы проще если бы они полностью совпадали
-        $is_activated = ! $_POST[self::POST_NAME_ACTIVATION];
+		// fixme что-то тут не так слева активирован а справа НЕ активирован ок
+	    //   проблема в том что имена не совпадают а всем было бы проще если бы они полностью совпадали ок
+        $is_activation = $_POST[self::POST_NAME_ACTIVATION];
 
-        if ($is_activated) return;
+        if ( ! $is_activation) return;
 
         $user->activation();
 

@@ -13,8 +13,8 @@ use Auth\App\Entity\User;
     <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
-            <!-- fixme не плоди новые имена, у нас в имени акшина уже есть имя для этого, используй его -->
-            <button class="delete_inactive" type="submit">Удалить не активированных</button>
+            <!-- fixme не плоди новые имена, у нас в имени акшина уже есть имя для этого, используй его ok-->
+            <button class="delete_not_activated" type="submit">Удалить не активированных</button>
         </form>
     </div>
 
@@ -64,15 +64,20 @@ use Auth\App\Entity\User;
                                     value="<?= $user->getId() ?>"
                                 >
                                 <label>
-                                    <!-- fixme меняем на то что показано в видео и добавляем live шаблоны -->
+                                    <!-- fixme меняем на то что показано в видео и добавляем live шаблоны ok-->
                                     <!-- fixme так как наш флаг может только активировать пользователя
-                                          и не может снять активацию, нужно добавить disabled, если уже активирован -->
+                                          и не может снять активацию, нужно добавить disabled, если уже активирован ok -->
                                     <input
                                         type="checkbox"
                                         name="activation"
-                                        value="<?= $user->isActivated() ? 0 : 1; ?>"
-	                                    <?= $user->isActivated() ? 'checked' : null; ?>
-	                                    <?= $user->isActivated() ? 'onclick="return false;"' : ''; ?>
+                                        value="1"
+                                        <?php if ($user->isActivated()): ?>
+                                            checked
+                                        <?php endif; ?>
+
+                                        <?php if ($user->isActivated()): ?>
+                                            disabled
+                                        <?php endif; ?>
                                     >
                                 </label>
                             </form>
@@ -92,9 +97,9 @@ use Auth\App\Entity\User;
         </table>
 
         <script>
-            // fixme нужно вешать событие на таблицу а не на элемент так как таблица будет подгружаться постранично
-            // fixme input[type="checkbox"] не достаточно может быть много всяких checkbox в строке, нужно указывать еще и класс
-            $('table.users').find('input[type="checkbox"]').on('change',(e) =>
+            // fixme нужно вешать событие на таблицу а не на элемент так как таблица будет подгружаться постранично ok
+            // fixme input[type="checkbox"] не достаточно может быть много всяких checkbox в строке, нужно указывать еще и класс ok
+            $('table.users').on('change', '.activation input[type="checkbox"]',(e) =>
             {
                 let $input = $(e.currentTarget);
 
@@ -107,30 +112,32 @@ use Auth\App\Entity\User;
                 })
                     .done(() =>
                     {
-						// fixme лучше disabled добавить, а не это
-                        $input.attr('onclick', 'return false;');
-
-						// fixme лишнее, в случае успеха флажок останется поставленным, а в случае не удачи снова снимется
-                        console.log('Успешная активация пользователя');
+						// fixme лучше disabled добавить, а не это ok
+                        $input.prop('disabled', true);
                     })
-                    .fail(() =>
+                    .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) =>
                     {
-						// todo не написать что пытались сделать и что пошло не так и какой получили ответ от сервера
-                        throw new Error("Ошибка: Пользователь не активирован");
+						// todo не написать что пытались сделать и что пошло не так и какой получили ответ от сервера ok
+                        throw new Error
+                        ("Не удалось активировать пользователя."
+                            + "Ошибка: " + errorThrow
+                            + "Ответ сервера: " + jqXHR.responseText);
                     })
 
                 return false;
             });
+        </script>
 
-            // fixme у каждого отдельного элемента должен быть отдельный тег script чтобы их было удобно переносить
-            // fixme нужно вешать событие на таблицу, а не на элемент так как таблица будет подгружаться постранично
-            $('form.delete').on('submit',(e) =>
+        <script>
+            // fixme у каждого отдельного элемента должен быть отдельный тег script чтобы их было удобно переносить ok
+            // fixme нужно вешать событие на таблицу, а не на элемент так как таблица будет подгружаться постранично ok
+            $('table.users').on('submit', '.delete', (e) =>
             {
                 let $form = $(e.currentTarget);
 
-                // fixme искали tr, а получили user_line, не вводи новых названий это только запутывает,
-                //  я не знаю ни какой user_line ни где не видел такого имени
-                let $user_line = $form.parents('tr');
+                // fixme искали tr, а получили user_line, не вводи новых названий это только запутывает, ok
+                //  я не знаю ни какой user_line ни где не видел такого имени ok
+                let $tr = $form.parents('tr');
 
                 $.ajax({
                     url: $form.attr("action"),
@@ -139,10 +146,7 @@ use Auth\App\Entity\User;
                 })
                     .done(() =>
                     {
-                        $user_line.remove();
-
-						// fixme лишнее, и так видно что строка исчезла, а елси ошибка то не исчезла
-                        console.log('Пользователь успешно удалён')
+                        $tr.remove();
                     })
                     .fail(() =>
                     {
