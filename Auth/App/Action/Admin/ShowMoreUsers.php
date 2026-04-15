@@ -4,6 +4,7 @@ namespace Auth\App\Action\Admin;
 
 use Auth\Sys\Views;
 
+// fixme удаляем
 class ShowMoreUsers extends _BaseAdmin
 {
     const POST_NAME_OFFSET = 'offset';

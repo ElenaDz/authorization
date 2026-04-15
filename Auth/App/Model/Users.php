@@ -121,8 +121,7 @@ class Users extends _Base
     public static function getByEmailOrFall($email)
     {
         $user = self::getByEmail($email);
-        if ( ! $user)
-        {
+        if ( ! $user) {
             throw new \DomainException('Пользователь с такими данными не найден');
         }
 

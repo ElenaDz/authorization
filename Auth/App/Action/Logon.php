@@ -17,7 +17,7 @@ class Logon extends _Base
 
     public function __invoke($email = null)
 	{
-        if (Auth::isAuthorized()) {
+		if (Auth::isAuthorized()) {
             Response::redirect('/');
         }
 
@@ -38,6 +38,8 @@ class Logon extends _Base
                     Response::redirect('/');
                 }
 
+			// fixme ловим только DomainException, проверь после смены, что все необходимые сообщения для пользователя
+	        //  кидаются именно с помощью DomainException, возможно ты сменила на Exception именно потому что что-то не ловилось
             } catch (\Exception $exception) {
                 $errors[self::POST_NAME_SUBMIT] = $exception->getMessage();
             }

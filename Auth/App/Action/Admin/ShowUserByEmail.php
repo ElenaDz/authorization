@@ -4,6 +4,7 @@ namespace Auth\App\Action\Admin;
 
 use Auth\Sys\Views;
 
+// fixme удаляем
 class ShowUserByEmail extends _BaseAdmin
 {
     const POST_NAME_PART_EMAIL = 'part_email';

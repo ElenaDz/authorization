@@ -9,6 +9,8 @@ use Auth\App\Entity\User;
 
 
 <div class="b_admin_users">
+
+    <!-- todo вынеси блок поиска в отдельный шаблон в папку Users -->
     <div class="search">
         <form action="<?= \Auth\App\Action\Admin\ShowUserByEmail::getUrl()?>" method="post">
             <label for="part_email">
@@ -20,10 +22,11 @@ use Auth\App\Entity\User;
 
     <div class="line"></div>
 
+
     <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
-            <!-- fixme не плоди новые имена, у нас в имени акшина уже есть имя для этого, используй его ok-->
+            <!-- todo эта кнопка должна быть активна только если в БД действительно есть не активированные пользователи -->
             <button class="delete_not_activated" type="submit">Удалить не активированных</button>
         </form>
     </div>
@@ -44,16 +47,21 @@ use Auth\App\Entity\User;
                 </tr>
             </thead>
             <tbody>
-                <?php require __DIR__ . '/UserTr.php'; ?>
+                <?php
+                // todo нельзя require, нужно использовать Views::get
+                require __DIR__ . '/Users/Tbody.php';
+                ?>
             </tbody>
         </table>
 
         <form class="wrap_show_more" action="<?= \Auth\App\Action\Admin\ShowMoreUsers::getUrl()?>" method="post">
             <button class="show_more">
+                <!-- fixme передавай сюда limit чтобы показывать вместо этой цифры 100 -->
                 Показать ещё 100 пользователей
             </button>
         </form>
 
+        <!-- fixme размести скрипт непосредственно под тем html элементом к которому он относиться -->
         <script>
             $('.search input').on('keydown', (e) =>
             {
@@ -110,9 +118,8 @@ use Auth\App\Entity\User;
             });
         </script>
 
+        <!-- fixme размести скрипты непосредственно под тем html элементом к которому они относиться, тоесть под таблицей -->
         <script>
-            // fixme нужно вешать событие на таблицу а не на элемент так как таблица будет подгружаться постранично ok
-            // fixme input[type="checkbox"] не достаточно может быть много всяких checkbox в строке, нужно указывать еще и класс ok
             $('table.users').on('change', '.activation input[type="checkbox"]',(e) =>
             {
                 let $input = $(e.currentTarget);
@@ -126,16 +133,16 @@ use Auth\App\Entity\User;
                 })
                     .done(() =>
                     {
-						// fixme лучше disabled добавить, а не это ok
                         $input.prop('disabled', true);
                     })
                     .fail((jqXHR, textStatus, errorThrow) =>
                     {
-						// todo не написать что пытались сделать и что пошло не так и какой получили ответ от сервера ok
-                        throw new Error
-                        ("Не удалось активировать пользователя."
-                            + "Ошибка: " + errorThrow
-                            + "Ответ сервера: " + jqXHR.responseText);
+						// fixme протестируй, не снимается флажок в случае ошибки, а должен
+                        throw new Error(
+							"Не удалось активировать пользователя. "+
+                            "Ошибка: " + errorThrow+". "+
+                            "Ответ сервера: " + jqXHR.responseText
+                        );
                     })
 
                 return false;
@@ -143,15 +150,13 @@ use Auth\App\Entity\User;
         </script>
 
         <script>
-            // fixme у каждого отдельного элемента должен быть отдельный тег script чтобы их было удобно переносить ok
-            // fixme нужно вешать событие на таблицу, а не на элемент так как таблица будет подгружаться постранично ok
             $('table.users').on('submit', '.delete', (e) =>
             {
                 let $form = $(e.currentTarget);
 
-                // fixme искали tr, а получили user_line, не вводи новых названий это только запутывает, ok
-                //  я не знаю ни какой user_line ни где не видел такого имени ok
                 let $tr = $form.parents('tr');
+
+				// todo подтверждать удаление с помощью confirm('Удалить пользователя <user name>')
 
                 $.ajax({
                     url: $form.attr("action"),
@@ -165,7 +170,7 @@ use Auth\App\Entity\User;
                     .fail(() =>
                     {
                         throw new Error("Ошибка: Пользователь не удалён");
-                    })
+                    });
 
                 return false;
             })

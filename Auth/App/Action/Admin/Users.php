@@ -9,6 +9,7 @@ class Users extends _BaseAdmin
 {
     public function __invoke()
     {
+		// fixme сделай 10 для тестирования
         $limit = 200;
 
         $users = \Auth\App\Model\Users::getWithOffset($limit, 0);

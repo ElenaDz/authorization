@@ -31,15 +31,15 @@ use Auth\App\Entity\User;
 
         <td class="activation">
             <form class="activation" action="<?= \Auth\App\Action\Api\UserActivation::getUrl() ?>" method="post">
+                <!-- fixme использовать константы для name -->
                 <input
                     type="hidden"
                     name="id"
                     value="<?= $user->getId() ?>"
                 >
                 <label>
-                    <!-- fixme меняем на то что показано в видео и добавляем live шаблоны ok-->
-                    <!-- fixme так как наш флаг может только активировать пользователя
-                          и не может снять активацию, нужно добавить disabled, если уже активирован ok -->
+                    <!-- fixme использовать константы для name -->
+                    <!-- fixme не совпадают имена activation и isActivated, лучше чтобы полностью совпадали, чтобы не было вопросов -->
                     <input
                         type="checkbox"
                         name="activation"
@@ -58,6 +58,7 @@ use Auth\App\Entity\User;
 
         <td class="delete">
             <form class="delete" action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
+                <!-- fixme использовать константу для name -->
                 <input type="hidden" name="id" value="<?= $user->getId() ?>">
                 <button type="submit">Удалить</button>
             </form>
