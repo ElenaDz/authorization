@@ -48,6 +48,35 @@ class Users extends _Base
         );
     }
 
+    public static function getAllByPartEmail($part_email)
+    {
+        $results = self::getPDO()->prepare (
+            'SELECT * FROM users WHERE email LIKE :part_email'
+        );
+
+        $results->execute([
+            'part_email' => '%' . $part_email . '%'
+        ]);
+
+
+        return $results->fetchAll(
+            \PDO::FETCH_CLASS,
+            User::class
+        );
+    }
+
+    public static function getWithOffset($limit, $offset)
+    {
+        $results = self::getPDO()->query (
+            'SELECT * FROM users LIMIT '. $limit .' OFFSET '. $offset
+        );
+
+        return $results->fetchAll(
+            \PDO::FETCH_CLASS,
+            User::class
+        );
+    }
+
 	/**
 	 * @return User[]
 	 */

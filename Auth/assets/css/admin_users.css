@@ -97,3 +97,44 @@
   background: #eee;
   border-color: #bbb;
 }
+.b_admin_users .search {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  justify-content: start;
+  align-items: center;
+}
+.b_admin_users .search form {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: start;
+}
+.b_admin_users .search label {
+  margin-right: 15px;
+  font-weight: 500;
+  font-size: 20px;
+}
+.b_admin_users .search input {
+  display: flex;
+  height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.b_admin_users .line {
+  display: flex;
+  width: 100%;
+  height: 1px;
+  margin: 15px 0;
+  background-color: #bbbbbb;
+}
+.b_admin_users .wrap_show_more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  height: 25px;
+}

@@ -9,7 +9,9 @@ class Users extends _BaseAdmin
 {
     public function __invoke()
     {
-        $users = \Auth\App\Model\Users::getAll();
+        $limit = 200;
+
+        $users = \Auth\App\Model\Users::getWithOffset($limit, 0);
 
         $content = Views::get(
             __DIR__ . '/../../View/Admin/Users.php',

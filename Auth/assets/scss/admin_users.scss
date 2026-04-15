@@ -115,4 +115,48 @@
       border-color: #bbb;
     }
 
+  .search {
+    display: flex;
+    width: 100%;
+    height: 30px;
+    justify-content: start;
+    align-items: center;
+
+    form {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: start;
+    }
+
+    label {
+      margin-right: 15px;
+      font-weight: 500;
+      font-size: 20px;
+    }
+
+    input {
+      display: flex;
+      height: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 300px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  .line {
+    display: flex;
+    width: 100%;
+    height: 1px;
+    margin: 15px 0;
+    background-color: #bbbbbb;
+  }
+  .wrap_show_more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    height: 25px;
+  }
 }
