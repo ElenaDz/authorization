@@ -109,6 +109,7 @@ use Auth\Sys\Views;
 
             $('.show_more').on('click', (e) =>
             {
+
 				// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
                 return  true;
 
