@@ -32,15 +32,12 @@ use Auth\App\Entity\User;
 
         <td class="activation">
             <form class="activation" action="<?= \Auth\App\Action\Api\UserActivation::getUrl() ?>" method="post">
-                <!-- fixme использовать константы для name ok-->
                 <input
                     type="hidden"
                     name="<?= \Auth\App\Action\Admin\Users::POST_NAME_ID ?>"
                     value="<?= $user->getId() ?>"
                 >
                 <label>
-                    <!-- fixme использовать константы для name ok-->
-                    <!-- fixme не совпадают имена activation и isActivated, лучше чтобы полностью совпадали, чтобы не было вопросов ok-->
                     <input
                         type="checkbox"
                         name="<?= \Auth\App\Action\Admin\Users::POST_NAME_IS_ACTIVATED ?>"
@@ -65,7 +62,10 @@ use Auth\App\Entity\User;
             </form>
         </td>
     </tr>
+
 <?php endforeach; ?>
+
+<!-- fixme этот скрипт должен находиться под table -->
 <script>
     $('table.users').on('submit', '.delete', (e) =>
     {
@@ -75,10 +75,9 @@ use Auth\App\Entity\User;
 
         let user_login = $tr.find('.login').text();
 
-        if (!confirm(`Удалить пользователя ${user_login}?`)) {
+        if ( ! confirm(`Удалить пользователя ${user_login}?`)) {
             return false;
         }
-        // todo подтверждать удаление с помощью confirm('Удалить пользователя <user name>') ok
 
         $.ajax({
             url: $form.attr("action"),
@@ -91,6 +90,8 @@ use Auth\App\Entity\User;
             })
             .fail(() =>
             {
+				// todo использовать библиотеку нотификаций, создать глобальную фукнцию чтобы не писать одно и тоже везде,
+                //  а использовать эту функцию для показа ошибки
                 throw new Error("Ошибка: Пользователь не удалён");
             });
 

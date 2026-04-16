@@ -5,27 +5,29 @@
  */
 
 ?>
-<!-- todo вынеси блок поиска в отдельный шаблон в папку Users ok-->
 <div class="search">
     <form action="<?= \Auth\App\Action\Admin\Users::getUrl()?>" method="post">
         <label for="part_email">
             Поиск по e-mail:
         </label>
+        <!-- fixme внимательно посмотри что именно ты обернула в if, если удалить if то будет ошибка html -->
         <input
-                type="text"
-                id="part_email"
-                <?php if ( ! empty($part_email)): ?>
+            type="text"
+            id="part_email"
+            <?php if ( ! empty($part_email)): ?>
 
-                    value="<?= $part_email ?>">
+                value="<?= $part_email ?>">
 
-                <?php endif; ?>
+            <?php endif; ?>
     </form>
 </div>
 
-<!-- fixme размести скрипт непосредственно под тем html элементом к которому он относиться ok-->
 <script>
     $('.search input').on('keydown', (e) =>
     {
+		// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
+		return  true;
+
         if (e.key !== 'Enter') return ;
 
         let $input = $(e.currentTarget);
@@ -37,9 +39,11 @@
             method: 'POST',
             data: { part_email: part_email, },
             success: function(response) {
+				// todo замена не всего body а таблицы и кнопки Еще (должна быть обертка вокруг них)
                 $('body').html(response);
             },
             error: function() {
+				// todo используй библиотеку
                 alert('Ошибка');
             }
         });

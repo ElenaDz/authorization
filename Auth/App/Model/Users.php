@@ -35,7 +35,7 @@ class Users extends _Base
 		return $user;
 	}
 
-
+	// todo удаляем что не используется
     public static function getAll()
     {
         $results = self::getPDO()->query (
@@ -48,6 +48,7 @@ class Users extends _Base
         );
     }
 
+	// fixme значение по умолчанию для limit
     public static function getAllWithLimit($limit)
     {
         $results = self::getPDO()->query (
@@ -60,6 +61,7 @@ class Users extends _Base
         );
     }
 
+	// fixme значение по умолчанию для limit
     public static function getAllByPartEmail($part_email, $limit)
     {
         $results = self::getPDO()->prepare (
@@ -70,13 +72,13 @@ class Users extends _Base
             'part_email' => '%' . $part_email . '%'
         ]);
 
-
         return $results->fetchAll(
             \PDO::FETCH_CLASS,
             User::class
         );
     }
 
+	// todo удаляем что не используется
     public static function getWithOffset($limit, $offset)
     {
         $results = self::getPDO()->query (
@@ -105,6 +107,7 @@ class Users extends _Base
         );
     }
 
+	// fixme метод delete должен быть в самом низу, сперва в модели идут get has search потом add update и в самом низу delete
     public static function deleteById($id)
     {
         self::getPDO()->query (

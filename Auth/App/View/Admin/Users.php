@@ -28,7 +28,8 @@ use Auth\Sys\Views;
     <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
-            <!-- todo эта кнопка должна быть активна только если в БД действительно есть не активированные пользователи ok-->
+            <!-- todo disabled не понимает ide а должна -->
+            <!-- fixme нельзя обращаться к модели из шаблона -->
             <button class="delete_not_activated"
                     <?= \Auth\App\Model\Users::getNotActivated() ? '' : 'disabled'?>
                     type="submit">
@@ -38,6 +39,7 @@ use Auth\Sys\Views;
     </div>
 
     <div class="table-wrapper">
+
         <table class="users">
             <thead>
                 <tr>
@@ -54,7 +56,6 @@ use Auth\Sys\Views;
             </thead>
             <tbody>
                 <?php
-                // todo нельзя require, нужно использовать Views::get ok
                 echo Views::get(
                     __DIR__ . '/Users/Tbody.php',
                     [
@@ -65,7 +66,6 @@ use Auth\Sys\Views;
             </tbody>
         </table>
 
-        <!-- fixme размести скрипты непосредственно под тем html элементом к которому они относиться, тоесть под таблицей ok-->
         <script>
             $('table.users').on('change', '.activation input[type="checkbox"]',(e) =>
             {
@@ -98,21 +98,28 @@ use Auth\Sys\Views;
             });
         </script>
 
+        <!-- todo не показывать кнопку есть больше пользователей нету -->
         <form class="wrap_show_more" action="<?= \Auth\App\Action\Admin\Users::getUrl()?>" method="post">
             <button class="show_more" data-next_id="">
-                <!-- fixme передавай сюда limit чтобы показывать вместо этой цифры 100  ok-->
                 Показать ещё <?= $limit ?> пользователей
             </button>
         </form>
 
         <script>
+
             $('.show_more').on('click', (e) =>
             {
+				// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
+                return  true;
+
                 let btn = $(e.currentTarget);
                 let $form = btn.parents('form');
                 let offset = $('.users tbody tr').length;
                 let part_email = $form.parents('.b_admin_users').find('#part_email').val()
 
+                // fixme перед заменой текста на кнопки нужно запомнить предыдущий текст, чтобы можно было потом его вернуть,
+                //   но это плохая идея, лучше просто скрывать настоящую надпись и показывать надпись загрузка при добавлении класса loading
+                //   а все нужные надписи всегда есть на кнопке
                 btn.text('Загрузка...').prop('disabled', true);
 
                 $.ajax({
@@ -120,15 +127,22 @@ use Auth\Sys\Views;
                     method: 'POST',
                     data: { offset: offset, limit: <?= $limit ?>, part_email: part_email },
                     success: function(response) {
+						// fixme если записей нет нужно проверять код ответа он будет 404 ну это и в акшине надо запрограммировать
                         if (response.trim() === '') {
+							// todo скрываем кнопку, а не меняем текст на ней
                             btn.text('Больше записей нет');
+
                         } else {
+							// fixme мы на заменяем тело страницы, в вставляем присланные строки таблицы в нашу таблицу
                             $('body').html(response);
+
                             btn.text('Ещё <?= $limit ?>').prop('disabled', false);
                         }
                     },
                     error: function() {
+						// todo показываем ошибку с помощью библиотеки, что я прислал
                         alert('Ошибка загрузки данных');
+						// fixme не блокируем кнопку, у человека должна быть возможность нажать на нее снова, вдруг заработает
                         btn.text('Ещё <?= $limit ?>').prop('disabled', false);
                     }
                 });
@@ -136,6 +150,7 @@ use Auth\Sys\Views;
                 return false;
             });
         </script>
+
     </div>
 
 </div>
