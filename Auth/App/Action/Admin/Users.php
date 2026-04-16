@@ -11,7 +11,7 @@ class Users extends _BaseAdmin
     const POST_NAME_OFFSET = 'offset';
     const POST_NAME_ID = 'id';
     const POST_NAME_IS_ACTIVATED = 'is_activated';
-    const LIMIT = 2;
+    const LIMIT = 10;
     public function __invoke()
     {
 		// fixme сделай 10 для тестирования ok
