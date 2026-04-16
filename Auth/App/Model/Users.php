@@ -48,10 +48,22 @@ class Users extends _Base
         );
     }
 
-    public static function getAllByPartEmail($part_email)
+    public static function getAllWithLimit($limit)
+    {
+        $results = self::getPDO()->query (
+            'SELECT * FROM users LIMIT '. (int) $limit
+        );
+
+        return $results->fetchAll(
+            \PDO::FETCH_CLASS,
+            User::class
+        );
+    }
+
+    public static function getAllByPartEmail($part_email, $limit)
     {
         $results = self::getPDO()->prepare (
-            'SELECT * FROM users WHERE email LIKE :part_email'
+            'SELECT * FROM users WHERE email LIKE :part_email LIMIT '. (int) $limit
         );
 
         $results->execute([
@@ -76,6 +88,7 @@ class Users extends _Base
             User::class
         );
     }
+
 
 	/**
 	 * @return User[]

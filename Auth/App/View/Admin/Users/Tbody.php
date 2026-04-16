@@ -5,6 +5,7 @@
  */
 
 use Auth\App\Entity\User;
+
 ?>
 
 <?php foreach ($users as $user) : ?>
@@ -31,18 +32,18 @@ use Auth\App\Entity\User;
 
         <td class="activation">
             <form class="activation" action="<?= \Auth\App\Action\Api\UserActivation::getUrl() ?>" method="post">
-                <!-- fixme использовать константы для name -->
+                <!-- fixme использовать константы для name ok-->
                 <input
                     type="hidden"
-                    name="id"
+                    name="<?= \Auth\App\Action\Admin\Users::POST_NAME_ID ?>"
                     value="<?= $user->getId() ?>"
                 >
                 <label>
-                    <!-- fixme использовать константы для name -->
-                    <!-- fixme не совпадают имена activation и isActivated, лучше чтобы полностью совпадали, чтобы не было вопросов -->
+                    <!-- fixme использовать константы для name ok-->
+                    <!-- fixme не совпадают имена activation и isActivated, лучше чтобы полностью совпадали, чтобы не было вопросов ok-->
                     <input
                         type="checkbox"
-                        name="activation"
+                        name="<?= \Auth\App\Action\Admin\Users::POST_NAME_IS_ACTIVATED ?>"
                         value="1"
                         <?php if ($user->isActivated()): ?>
                             checked
@@ -58,12 +59,41 @@ use Auth\App\Entity\User;
 
         <td class="delete">
             <form class="delete" action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
-                <!-- fixme использовать константу для name -->
-                <input type="hidden" name="id" value="<?= $user->getId() ?>">
+                <!-- fixme использовать константу для name ok-->
+                <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::POST_NAME_ID ?>" value="<?= $user->getId() ?>">
                 <button type="submit">Удалить</button>
             </form>
         </td>
-
     </tr>
-
 <?php endforeach; ?>
+<script>
+    $('table.users').on('submit', '.delete', (e) =>
+    {
+        let $form = $(e.currentTarget);
+
+        let $tr = $form.parents('tr');
+
+        let user_login = $tr.find('.login').text();
+
+        if (!confirm(`Удалить пользователя ${user_login}?`)) {
+            return false;
+        }
+        // todo подтверждать удаление с помощью confirm('Удалить пользователя <user name>') ok
+
+        $.ajax({
+            url: $form.attr("action"),
+            type: 'POST',
+            data: $form.serialize(),
+        })
+            .done(() =>
+            {
+                $tr.remove();
+            })
+            .fail(() =>
+            {
+                throw new Error("Ошибка: Пользователь не удалён");
+            });
+
+        return false;
+    })
+</script>

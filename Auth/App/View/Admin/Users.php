@@ -2,32 +2,38 @@
 
 /**
  * @var User[] $users
+ * @var $limit
+ * @var $part_email
  */
 
 use Auth\App\Entity\User;
+use Auth\Sys\Views;
+
 ?>
 
 
 <div class="b_admin_users">
 
-    <!-- todo вынеси блок поиска в отдельный шаблон в папку Users -->
-    <div class="search">
-        <form action="<?= \Auth\App\Action\Admin\ShowUserByEmail::getUrl()?>" method="post">
-            <label for="part_email">
-                Поиск по e-mail:
-            </label>
-            <input type="text" id="part_email">
-        </form>
-    </div>
+    <?php
+        echo Views::get(
+            __DIR__ . '/Users/Search.php',
+            [
+                'part_email'  => $part_email
+            ]
+        );
+    ?>
 
     <div class="line"></div>
-
 
     <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
-            <!-- todo эта кнопка должна быть активна только если в БД действительно есть не активированные пользователи -->
-            <button class="delete_not_activated" type="submit">Удалить не активированных</button>
+            <!-- todo эта кнопка должна быть активна только если в БД действительно есть не активированные пользователи ok-->
+            <button class="delete_not_activated"
+                    <?= \Auth\App\Model\Users::getNotActivated() ? '' : 'disabled'?>
+                    type="submit">
+                Удалить не активированных
+            </button>
         </form>
     </div>
 
@@ -48,77 +54,18 @@ use Auth\App\Entity\User;
             </thead>
             <tbody>
                 <?php
-                // todo нельзя require, нужно использовать Views::get
-                require __DIR__ . '/Users/Tbody.php';
+                // todo нельзя require, нужно использовать Views::get ok
+                echo Views::get(
+                    __DIR__ . '/Users/Tbody.php',
+                    [
+                        'users'  => $users
+                    ]
+                );
                 ?>
             </tbody>
         </table>
 
-        <form class="wrap_show_more" action="<?= \Auth\App\Action\Admin\ShowMoreUsers::getUrl()?>" method="post">
-            <button class="show_more">
-                <!-- fixme передавай сюда limit чтобы показывать вместо этой цифры 100 -->
-                Показать ещё 100 пользователей
-            </button>
-        </form>
-
-        <!-- fixme размести скрипт непосредственно под тем html элементом к которому он относиться -->
-        <script>
-            $('.search input').on('keydown', (e) =>
-            {
-                if (e.key !== 'Enter') return ;
-
-                let $input = $(e.currentTarget);
-                let $form = $input.parents('form');
-                let part_email = $input.val();
-
-                $.ajax({
-                    url: $form.attr("action"),
-                    method: 'POST',
-                    data: { part_email: part_email, },
-                    success: function(response) {
-                        $('.users tbody').html(response);
-                    },
-                    error: function() {
-                        alert('Ошибка');
-                    }
-                });
-
-                return false;
-            });
-        </script>
-
-        <script>
-            $('.show_more').on('click', (e) =>
-            {
-                let btn = $(e.currentTarget);
-                let $form = btn.parents('form');
-                let offset = $('.users tbody tr').length;
-
-                btn.text('Загрузка...').prop('disabled', true);
-
-                $.ajax({
-                    url: $form.attr("action"),
-                    method: 'POST',
-                    data: { offset: offset, limit: 2 },
-                    success: function(response) {
-                        if (response.trim() === '') {
-                            btn.text('Больше записей нет');
-                        } else {
-                            $('.users tbody').append(response);
-                            btn.text('Ещё 100').prop('disabled', false);
-                        }
-                    },
-                    error: function() {
-                        alert('Ошибка загрузки данных');
-                        btn.text('Ещё 100').prop('disabled', false);
-                    }
-                });
-
-                return false;
-            });
-        </script>
-
-        <!-- fixme размести скрипты непосредственно под тем html элементом к которому они относиться, тоесть под таблицей -->
+        <!-- fixme размести скрипты непосредственно под тем html элементом к которому они относиться, тоесть под таблицей ok-->
         <script>
             $('table.users').on('change', '.activation input[type="checkbox"]',(e) =>
             {
@@ -137,9 +84,11 @@ use Auth\App\Entity\User;
                     })
                     .fail((jqXHR, textStatus, errorThrow) =>
                     {
-						// fixme протестируй, не снимается флажок в случае ошибки, а должен
+                        // fixme протестируй, не снимается флажок в случае ошибки, а должен ок
+                        $input.prop('checked', false)
+
                         throw new Error(
-							"Не удалось активировать пользователя. "+
+                            "Не удалось активировать пользователя. "+
                             "Ошибка: " + errorThrow+". "+
                             "Ответ сервера: " + jqXHR.responseText
                         );
@@ -149,31 +98,43 @@ use Auth\App\Entity\User;
             });
         </script>
 
+        <form class="wrap_show_more" action="<?= \Auth\App\Action\Admin\Users::getUrl()?>" method="post">
+            <button class="show_more" data-next_id="">
+                <!-- fixme передавай сюда limit чтобы показывать вместо этой цифры 100  ok-->
+                Показать ещё <?= $limit ?> пользователей
+            </button>
+        </form>
+
         <script>
-            $('table.users').on('submit', '.delete', (e) =>
+            $('.show_more').on('click', (e) =>
             {
-                let $form = $(e.currentTarget);
+                let btn = $(e.currentTarget);
+                let $form = btn.parents('form');
+                let offset = $('.users tbody tr').length;
+                let part_email = $form.parents('.b_admin_users').find('#part_email').val()
 
-                let $tr = $form.parents('tr');
-
-				// todo подтверждать удаление с помощью confirm('Удалить пользователя <user name>')
+                btn.text('Загрузка...').prop('disabled', true);
 
                 $.ajax({
                     url: $form.attr("action"),
-                    type: 'POST',
-                    data: $form.serialize(),
-                })
-                    .done(() =>
-                    {
-                        $tr.remove();
-                    })
-                    .fail(() =>
-                    {
-                        throw new Error("Ошибка: Пользователь не удалён");
-                    });
+                    method: 'POST',
+                    data: { offset: offset, limit: <?= $limit ?>, part_email: part_email },
+                    success: function(response) {
+                        if (response.trim() === '') {
+                            btn.text('Больше записей нет');
+                        } else {
+                            $('body').html(response);
+                            btn.text('Ещё <?= $limit ?>').prop('disabled', false);
+                        }
+                    },
+                    error: function() {
+                        alert('Ошибка загрузки данных');
+                        btn.text('Ещё <?= $limit ?>').prop('disabled', false);
+                    }
+                });
 
                 return false;
-            })
+            });
         </script>
     </div>
 
