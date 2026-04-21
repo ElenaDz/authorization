@@ -81,10 +81,11 @@ $getUrl = function ($file_path)
     <br>
     <br>
     <a href="<?= \Auth\App\Action\TestBox::getUrl(); ?>">
-        <!-- todo пробуй использовать, для тестирования Админки нужно много пользователей (спасибо)-->
-        Тестовая площадка (генератор фейковых пользователей)
+        Тестовая площадка
     </a><br>
-
+    <a href="<?= \Auth\App\Action\Admin\GeneratorFakeUsers::getUrl() ?>">
+        Генератор фейковых пользователей
+    </a><br>
     <br>
     <a href="https://www.figma.com/design/Wcdl2WmNjDCYluMBndX2DJ/DriveMusic?node-id=201-1057">
         Шаблон в Figma

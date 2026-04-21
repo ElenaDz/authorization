@@ -1,4 +1,6 @@
 <?php
+use Auth\App\Entity\User;
+use Auth\Sys\Views;
 
 /**
  * @var User[] $users
@@ -7,9 +9,6 @@
  * @var bool $has_not_activated_users
  * @var $user_id_first
  */
-
-use Auth\App\Entity\User;
-use Auth\Sys\Views;
 ?>
 
 
@@ -27,17 +26,18 @@ use Auth\Sys\Views;
     <div class="line"></div>
 
     <div class="toolbar">
+        <!-- fixme здесь не количество пользователей на этой странице а общее количество пользователей -->
         <span class="total_users"><?= count($users)?> пользователей</span>
         <form action="<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::getUrl() ?>">
-            <!-- todo disabled не понимает ide а должна  ok -->
-            <!-- fixme нельзя обращаться к модели из шаблона ok-->
+
             <button class="delete_not_activated"
-                    <?php if ( ! $has_not_activated_users): ?>
+                <?php if ( ! $has_not_activated_users): ?>
 
-                        disabled
+                    disabled
 
-                    <?php endif; ?>
-                    type="submit">
+                <?php endif; ?>
+                type="submit"
+            >
                 Удалить не активированных
             </button>
         </form>
@@ -88,7 +88,6 @@ use Auth\Sys\Views;
                     })
                     .fail((jqXHR, textStatus, errorThrow) =>
                     {
-                        // fixme протестируй, не снимается флажок в случае ошибки, а должен ок
                         $input.prop('checked', false)
 
                         throw new Error(
@@ -102,16 +101,18 @@ use Auth\Sys\Views;
             });
         </script>
 
-        <!-- todo не показывать кнопку есть больше пользователей нету ok-->
+        <!-- todo если $user_id_first пустой значит больше пользователей нет, а значит эту кнопку показывать не нужно -->
         <form class="wrap_show_more"
               data-<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>="<?= $user_id_first?>"
               action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
-              method="get">
-            <!-- todo без аякса метод get меняет урл, при post запросе работает корректно. Сюда урл подставляется некорректно, пришлось  в ручную писать-->
+              method="get"
+        >
+            <!-- fixme здесь не должно быть action убрать, action есть в форме выше, если есть какая то проблема, она решается не так -->
             <input type="hidden" name="action" value="Auth\App\Action\Admin\Users">
             <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?=  $user_id_first?>">
             <button type="submit" class="show_more">
                 <span class="more">
+                    <!-- fixme здесь не нужно показывать количество пользователей просто "показать еще" -->
                     Показать ещё <?= $limit ?> пользователей
                 </span>
                 <span class="inner_loading">
@@ -125,6 +126,7 @@ use Auth\Sys\Views;
             $('.show_more').on('click', (e) =>
             {
 				// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
+                return true;
 
                 let btn = $(e.currentTarget);
 
@@ -136,26 +138,21 @@ use Auth\Sys\Views;
 
                 let q = $form.parents('.b_admin_users').find('#q').val()
 
-                // fixme перед заменой текста на кнопки нужно запомнить предыдущий текст, чтобы можно было потом его вернуть,
-                //   но это плохая идея, лучше просто скрывать настоящую надпись и показывать надпись загрузка при добавлении класса loading
-                //   а все нужные надписи всегда есть на кнопке ok
                 btn.addClass('loading');
 
                 $.ajax({
                     url: $form.attr("action"),
                     method: 'GET',
                     data: { limit: <?= $limit ?>, q: q, user_id_first: user_id_first },
-                    success: function(response) {
-						// fixme если записей нет нужно проверять код ответа он будет 404 ну это и в акшине надо запрограммировать
-
-                        // fixme мы на заменяем тело страницы, в вставляем присланные строки таблицы в нашу таблицу ok
-
+                    success: function(response)
+                    {
                         let parser = new DOMParser();
 
                         let doc = parser.parseFromString(response, 'text/html');
 
                         let tbody = $(doc).find('.users tbody').html();
 
+						// fixme не нужно колупаться здесь во внутренностях, просто берешь целиком форму "Показать еще" и меняешь на новую
                         let new_user_id_first = $(doc)
                             .find('.wrap_show_more')
                             .data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
@@ -164,23 +161,31 @@ use Auth\Sys\Views;
 
                         $('.wrap_show_more').data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>', new_user_id_first);
 
+						// fixme переместить в complete, сейчас дублирование
                         btn.removeClass('loading');
-
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
+						// fixme 404 это не особый случай, это точно такая же ошибка как любая другая, не нужно ее обрабатывать особым образом
+                        //  если мы получили ошибку 404 это это явная ошибка, так как по умолчанию кнопки "Показать еще" просто нету,
+                        //  если больше нету пользователей
                         if (jqXHR.status === 404) {
                             $form.hide();
                             console.log('Записей больше нет (404)');
                         } else {
-                            // todo показываем ошибку с помощью библиотеки, что я прислал
+                            // todo текст ошибки здесь должен быть тот который написан на странице ошибке
                             // butterup.toast(
                             //     title: 'Ошибка загрузки данных',
-                            //     message: 'Не полуичлось загрузить пользователей',
+                            //     message: 'Не получилось загрузить пользователей',
                             //     location: 'top-right'
                             // )
                         }
-						// fixme не блокируем кнопку, у человека должна быть возможность нажать на нее снова, вдруг заработает ok
+
+						// fixme переместить в complete, сейчас дублирование
                         btn.removeClass('loading');
+                    },
+					complete: () =>
+					{
+
                     }
                 });
 

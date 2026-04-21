@@ -5,7 +5,6 @@ namespace Auth\App\Action\Api;
 use Auth\App\Model\Users;
 use DateTime;
 
-// todo переместить в папку API ok
 class DeleteNotActivatedUsers extends _BaseApi
 {
     public function __invoke()

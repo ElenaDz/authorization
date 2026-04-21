@@ -9,41 +9,40 @@ use PHPMailer\PHPMailer\Exception;
 
 class Users extends _BaseAdmin
 {
-	// fixme "part_email" а "q" это имя используют для поискового запроса обычно, сейчас там мейл завтра закащик захочет чего то еще поэтому это просто поисковая строка ок
     const POST_NAME_Q = 'q';
     const GET_NAME_Q = 'q';
     const GET_NAME_LIMIT = 'limit';
     const GET_NAME_USER_ID_FIRST = 'user_id_first';
-    const LIMIT = 3;
+	// fixme не вижу последнего пользователя на последней странице (тест пользователей - 20, limit - 10)
+	// fixme вижу кнопку "показать еще" на последней странице (тест пользователей - 20, limit - 10)
+    const LIMIT = 10;
 
+	// fixme убрать у $user_id_first 10000 должно быть null
     public function __invoke($limit = 10, $q = '', $user_id_first = 10000)
     {
-		// fixme у нас нету offset у нас только user_id_first ок
 	    // fixme здесь нужно использовать не POST а GET
-
         $q = ! empty($_POST[self::POST_NAME_Q]) ? $_POST[self::POST_NAME_Q] : null;
 
         $has_not_activated_users = ! empty(\Auth\App\Model\Users::getNotActivated());
 
         if ( ! empty($q)) {
-			// fixme переименовать findByEmail ok
             $users = \Auth\App\Model\Users::findByEmail($q, self::LIMIT + 1);
 
         } else {
-            // fixme переименовать getNew сортировка по id так как id чем новее тем больше ok
             $users = \Auth\App\Model\Users::getNew(self::LIMIT + 1);
-
         }
 
         if ( ! empty($_GET[self::GET_NAME_USER_ID_FIRST])) {
 
+			// fixme как будто бы вот этих 3х строк не должно быть, ведь всю эту работу должны делать значения по умолчанию этой функции
             $user_id_first = ! empty($_GET[self::GET_NAME_USER_ID_FIRST]) ? $_GET[self::GET_NAME_USER_ID_FIRST] : null;
 
             $q = ! empty($_GET[self::GET_NAME_Q]) ? $_GET[self::GET_NAME_Q] : null;
 
-
             $limit = ! empty($_GET[self::GET_NAME_LIMIT]) ? $_GET[self::GET_NAME_LIMIT] : self::LIMIT;
 
+			// fixme избавиться от дублирования, то же самое что я вижу выше, проблема здесь что не пустой USER_ID
+	        //  ты выделила в особый случай, а это не особый случай
             if ( ! empty($q)) {
                 $users = \Auth\App\Model\Users::findByEmail($q, self::LIMIT + 1, $q);
 
@@ -53,12 +52,12 @@ class Users extends _BaseAdmin
         }
 
         if (empty($users)) {
-
             throw new Exception('Пользователей не найдены', 404);
         }
 
-        if ( ! empty($users)) {
-
+		// fixme лишняя проверка, ты выше кидаешь исключение если пусто
+        if ( ! empty($users))
+		{
             $last_user = end($users);
 
             $user_id_first = $last_user->getId();

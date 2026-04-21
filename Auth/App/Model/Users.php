@@ -49,11 +49,11 @@ class Users extends _Base
     }
 
     /**
-     * @param $limit
+     * @param int $limit
      * @param $id_first
      * @return User[]/false
      */
-    public static function getNew($limit = 100, $id_first = null)
+    public static function getNew(int $limit = 100, $id_first = null)
     {
         $query = "SELECT * FROM users ";
 
@@ -73,15 +73,23 @@ class Users extends _Base
         );
     }
 
-    /**
-     * @param $part_email
-     * @param $limit
-     * @param $id_first
-     * @return User[]/false
-     */
-	// fixme значение по умолчанию для limit ok
-    public static function findByEmail($part_email, $limit = 100, $id_first = null)
+    // fixme этот метод на самом деле делает тоже самое, что getNew просто еще и с учетом email поэтом удаляем его и добавляем в getNew email
+    public static function findByEmail($part_email, int $limit = 100, $id_first = null)
     {
+		// fixme так не пойдет собирать запросы один запрос должен быть в одной строкой, чтобы ide его понимал,
+	    //  должно быть как то так Перепиши все где есть сборка с помощью if
+	    $sql = sprintf(
+			"SELECT * 
+			FROM users
+			WHERE 
+					email LIKE :part_email 
+			  	AND	%s
+			ORDER BY id DESC
+			LIMIT %s",
+		    ! empty($id_first) ? 'id <= :id_first' : '1=1',
+		    (int) $limit
+	    );
+
         $query = "SELECT * FROM users WHERE email LIKE :part_email";
         $params = [
             'part_email' => '%' . $part_email . '%'
@@ -89,12 +97,13 @@ class Users extends _Base
 
         if (!empty($id_first)) {
             $query .= " AND id <= :id_first";
-            $params['id_first'] = (int)$id_first;
+            $params['id_first'] = (int) $id_first;
         }
 
         $query .= " ORDER BY id DESC";
 
         $query .= " LIMIT " . (int)$limit;
+
 
         $results = self::getPDO()->prepare($query);
 
@@ -290,11 +299,13 @@ class Users extends _Base
 		return $prop->getValue($user);
 	}
 
-    // fixme метод delete должен быть в самом низу, сперва в модели идут get has search потом add update и в самом низу delete ок
+
     public static function deleteById($id)
     {
         self::getPDO()->query (
-            'DELETE FROM users WHERE id ='. (int) $id
+            'DELETE 
+			FROM users 
+			WHERE id ='. (int) $id
         );
     }
 }

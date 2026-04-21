@@ -10,7 +10,6 @@
         <label for="q">
             Поиск по e-mail:
         </label>
-        <!-- fixme внимательно посмотри что именно ты обернула в if, если удалить if то будет ошибка html ok -->
         <input
             type="text"
             id="q"
@@ -25,7 +24,7 @@
     {
 
 		// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
-		// return  true;
+		return  true;
 
         if (e.key !== 'Enter') return ;
 
@@ -38,7 +37,8 @@
             method: 'POST',
             data: { q: q},
             success: function(response) {
-				// todo замена не всего body а таблицы и кнопки Еще (должна быть обертка вокруг них)
+				// todo здесь ситуация проще чем с кнопкой показать еще, поэтому пользуемся этим,
+                //  добавляем обертку вокруг блока таблица + кнопка "показать еще" и меняем все это блок целиком
                 let parser = new DOMParser();
 
                 let doc = parser.parseFromString(response, 'text/html');

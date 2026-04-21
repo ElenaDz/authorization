@@ -38,8 +38,6 @@ class Logon extends _Base
                     Response::redirect('/');
                 }
 
-			// fixme ловим только DomainException, проверь после смены, что все необходимые сообщения для пользователя ок
-	        //  кидаются именно с помощью DomainException, возможно ты сменила на Exception именно потому что что-то не ловилось
             } catch (\DomainException $exception) {
                 $errors[self::POST_NAME_SUBMIT] = $exception->getMessage();
             }

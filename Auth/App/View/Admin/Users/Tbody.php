@@ -1,11 +1,13 @@
 <?php
+use Auth\App\Entity\User;
 
 /**
  * @var User[] $users
  */
 
-use Auth\App\Entity\User;
 
+
+// todo есть пользователй нет, нужно писать слово "Пусто", чтобы было все ясно
 ?>
 <?php foreach ($users as $user) : ?>
 
@@ -55,8 +57,11 @@ use Auth\App\Entity\User;
 
         <td class="delete">
             <form class="delete" action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
-                <!-- fixme использовать константу для name ok-->
-                <input type="hidden" name="<?= \Auth\App\Action\Api\UserDelete::POST_NAME_ID ?>" value="<?= $user->getId() ?>">
+                <input
+                    type="hidden"
+                    name="<?= \Auth\App\Action\Api\UserDelete::POST_NAME_ID ?>"
+                    value="<?= $user->getId() ?>"
+                >
                 <button type="submit">Удалить</button>
             </form>
         </td>

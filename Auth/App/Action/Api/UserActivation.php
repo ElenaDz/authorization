@@ -11,6 +11,10 @@ class UserActivation extends _BaseApi
 
     public function __invoke()
     {
+		// fixme эмулируем долгий ответ сервера, пока ждет ответа флажок можно снять, и тогда результат не тот что ожидаешь,
+	    //  должен быть заблокирован пока ждешь ответ
+		sleep(2);
+
         $id = $_POST[self::POST_NAME_ID];
 
         $user = Users::getByIdOrFall($id);
