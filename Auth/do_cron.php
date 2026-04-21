@@ -10,8 +10,8 @@ $params = [];
 
 switch ($job) {
 	// раз в день
-	case \Auth\App\Action\DeleteNotActivatedUsers::class:
-		$action = \Auth\App\Action\DeleteNotActivatedUsers::class;
+	case \Auth\App\Action\Api\DeleteNotActivatedUsers::class:
+		$action = \Auth\App\Action\Api\DeleteNotActivatedUsers::class;
 		break;
 
 	default:

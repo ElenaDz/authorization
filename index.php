@@ -94,7 +94,7 @@ $getUrl = function ($file_path)
     <h2>Cron</h2>
     <ul>
         <li>
-            <a href="/Auth/do_cron.php?job=<?= \Auth\App\Action\DeleteNotActivatedUsers::class ?>">
+            <a href="/Auth/do_cron.php?job=<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::class ?>">
                 Удалить не активированных пользователей
             </a>
         </li>
@@ -106,6 +106,8 @@ $getUrl = function ($file_path)
         crossorigin="anonymous"
     ></script>
 
+    <script src="Auth/butterup-main/butterup.js"></script>
+    <script src="Auth/butterup-main/butterup.css"></script>
     <?php
     require __DIR__.'/builder.php';
 

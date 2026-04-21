@@ -48,11 +48,23 @@ class Users extends _Base
         );
     }
 
-	// fixme значение по умолчанию для limit
-    public static function getAllWithLimit($limit)
+    /**
+     * @param $limit
+     * @param $id_first
+     * @return User[]/false
+     */
+    public static function getNew($limit = 100, $id_first = null)
     {
-        $results = self::getPDO()->query (
-            'SELECT * FROM users LIMIT '. (int) $limit
+        $query = "SELECT * FROM users ";
+
+        if ( ! empty($id_first)) {
+            $query  = $query . " WHERE id <= ". (int) $id_first ." ";
+        }
+
+        $query = $query. " ORDER BY id DESC LIMIT ". (int) $limit;
+
+        $results = self::getPDO()->query(
+            $query
         );
 
         return $results->fetchAll(
@@ -61,36 +73,38 @@ class Users extends _Base
         );
     }
 
-	// fixme значение по умолчанию для limit
-    public static function getAllByPartEmail($part_email, $limit)
+    /**
+     * @param $part_email
+     * @param $limit
+     * @param $id_first
+     * @return User[]/false
+     */
+	// fixme значение по умолчанию для limit ok
+    public static function findByEmail($part_email, $limit = 100, $id_first = null)
     {
-        $results = self::getPDO()->prepare (
-            'SELECT * FROM users WHERE email LIKE :part_email LIMIT '. (int) $limit
-        );
-
-        $results->execute([
+        $query = "SELECT * FROM users WHERE email LIKE :part_email";
+        $params = [
             'part_email' => '%' . $part_email . '%'
-        ]);
+        ];
+
+        if (!empty($id_first)) {
+            $query .= " AND id <= :id_first";
+            $params['id_first'] = (int)$id_first;
+        }
+
+        $query .= " ORDER BY id DESC";
+
+        $query .= " LIMIT " . (int)$limit;
+
+        $results = self::getPDO()->prepare($query);
+
+        $results->execute($params);
 
         return $results->fetchAll(
             \PDO::FETCH_CLASS,
             User::class
         );
     }
-
-	// todo удаляем что не используется
-    public static function getWithOffset($limit, $offset)
-    {
-        $results = self::getPDO()->query (
-            'SELECT * FROM users LIMIT '. $limit .' OFFSET '. $offset
-        );
-
-        return $results->fetchAll(
-            \PDO::FETCH_CLASS,
-            User::class
-        );
-    }
-
 
 	/**
 	 * @return User[]
@@ -104,14 +118,6 @@ class Users extends _Base
         return $results->fetchAll(
             \PDO::FETCH_CLASS,
             User::class
-        );
-    }
-
-	// fixme метод delete должен быть в самом низу, сперва в модели идут get has search потом add update и в самом низу delete
-    public static function deleteById($id)
-    {
-        self::getPDO()->query (
-            'DELETE FROM users WHERE id ='. (int) $id
         );
     }
 
@@ -283,4 +289,12 @@ class Users extends _Base
 
 		return $prop->getValue($user);
 	}
+
+    // fixme метод delete должен быть в самом низу, сперва в модели идут get has search потом add update и в самом низу delete ок
+    public static function deleteById($id)
+    {
+        self::getPDO()->query (
+            'DELETE FROM users WHERE id ='. (int) $id
+        );
+    }
 }

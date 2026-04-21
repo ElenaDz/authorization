@@ -7,7 +7,6 @@
 use Auth\App\Entity\User;
 
 ?>
-
 <?php foreach ($users as $user) : ?>
 
     <tr data-user_id="<?= $user->getId() ?>">
@@ -34,13 +33,13 @@ use Auth\App\Entity\User;
             <form class="activation" action="<?= \Auth\App\Action\Api\UserActivation::getUrl() ?>" method="post">
                 <input
                     type="hidden"
-                    name="<?= \Auth\App\Action\Admin\Users::POST_NAME_ID ?>"
+                    name="<?= \Auth\App\Action\Api\UserActivation::POST_NAME_ID ?>"
                     value="<?= $user->getId() ?>"
                 >
                 <label>
                     <input
                         type="checkbox"
-                        name="<?= \Auth\App\Action\Admin\Users::POST_NAME_IS_ACTIVATED ?>"
+                        name="<?= \Auth\App\Action\Api\UserActivation::POST_NAME_ACTIVATION ?>"
                         value="1"
                         <?php if ($user->isActivated()): ?>
                             checked
@@ -57,7 +56,7 @@ use Auth\App\Entity\User;
         <td class="delete">
             <form class="delete" action="<?=  \Auth\App\Action\Api\UserDelete::getUrl() ?>" method="post">
                 <!-- fixme использовать константу для name ok-->
-                <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::POST_NAME_ID ?>" value="<?= $user->getId() ?>">
+                <input type="hidden" name="<?= \Auth\App\Action\Api\UserDelete::POST_NAME_ID ?>" value="<?= $user->getId() ?>">
                 <button type="submit">Удалить</button>
             </form>
         </td>
@@ -90,7 +89,7 @@ use Auth\App\Entity\User;
             })
             .fail(() =>
             {
-				// todo использовать библиотеку нотификаций, создать глобальную фукнцию чтобы не писать одно и тоже везде,
+                // todo использовать библиотеку нотификаций, создать глобальную фукнцию чтобы не писать одно и тоже везде,
                 //  а использовать эту функцию для показа ошибки
                 throw new Error("Ошибка: Пользователь не удалён");
             });

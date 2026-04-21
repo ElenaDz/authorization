@@ -101,7 +101,7 @@ class Error
 	        header("Content-Type: text/plain");
 	    }
 
-	    http_response_code($code ?: 500);
+	    http_response_code((int)$code ?: 500);
 
 	    echo($msg);
 		exit;

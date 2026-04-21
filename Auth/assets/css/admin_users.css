@@ -138,3 +138,15 @@
   margin-top: 20px;
   height: 25px;
 }
+.b_admin_users .wrap_show_more .show_more .more {
+  display: flex;
+}
+.b_admin_users .wrap_show_more .show_more .inner_loading {
+  display: none;
+}
+.b_admin_users .wrap_show_more .show_more.loading .more {
+  display: none;
+}
+.b_admin_users .wrap_show_more .show_more.loading .inner_loading {
+  display: flex;
+}

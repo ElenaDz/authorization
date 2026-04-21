@@ -158,5 +158,25 @@
     align-items: center;
     margin-top: 20px;
     height: 25px;
+
+    .show_more {
+      .more {
+        display: flex;
+      }
+
+      .inner_loading {
+        display: none;
+      }
+
+      &.loading {
+        .more {
+          display: none;
+        }
+
+        .inner_loading {
+          display: flex;
+        }
+      }
+    }
   }
 }

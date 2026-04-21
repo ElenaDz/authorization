@@ -3,12 +3,13 @@
 /**
  * @var User[] $users
  * @var $limit
- * @var $part_email
+ * @var string $q
+ * @var bool $has_not_activated_users
+ * @var $user_id_first
  */
 
 use Auth\App\Entity\User;
 use Auth\Sys\Views;
-
 ?>
 
 
@@ -18,7 +19,7 @@ use Auth\Sys\Views;
         echo Views::get(
             __DIR__ . '/Users/Search.php',
             [
-                'part_email'  => $part_email
+                'part_email'  => $q
             ]
         );
     ?>
@@ -27,11 +28,15 @@ use Auth\Sys\Views;
 
     <div class="toolbar">
         <span class="total_users"><?= count($users)?> пользователей</span>
-        <form action="<?= \Auth\App\Action\DeleteNotActivatedUsers::getUrl() ?>">
-            <!-- todo disabled не понимает ide а должна -->
-            <!-- fixme нельзя обращаться к модели из шаблона -->
+        <form action="<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::getUrl() ?>">
+            <!-- todo disabled не понимает ide а должна  ok -->
+            <!-- fixme нельзя обращаться к модели из шаблона ok-->
             <button class="delete_not_activated"
-                    <?= \Auth\App\Model\Users::getNotActivated() ? '' : 'disabled'?>
+                    <?php if ( ! $has_not_activated_users): ?>
+
+                        disabled
+
+                    <?php endif; ?>
                     type="submit">
                 Удалить не активированных
             </button>
@@ -39,7 +44,6 @@ use Auth\Sys\Views;
     </div>
 
     <div class="table-wrapper">
-
         <table class="users">
             <thead>
                 <tr>
@@ -98,10 +102,21 @@ use Auth\Sys\Views;
             });
         </script>
 
-        <!-- todo не показывать кнопку есть больше пользователей нету -->
-        <form class="wrap_show_more" action="<?= \Auth\App\Action\Admin\Users::getUrl()?>" method="post">
-            <button class="show_more" data-next_id="">
-                Показать ещё <?= $limit ?> пользователей
+        <!-- todo не показывать кнопку есть больше пользователей нету ok-->
+        <form class="wrap_show_more"
+              data-<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>="<?= $user_id_first?>"
+              action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
+              method="get">
+            <!-- todo без аякса метод get меняет урл, при post запросе работает корректно. Сюда урл подставляется некорректно, пришлось  в ручную писать-->
+            <input type="hidden" name="action" value="Auth\App\Action\Admin\Users">
+            <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?=  $user_id_first?>">
+            <button type="submit" class="show_more">
+                <span class="more">
+                    Показать ещё <?= $limit ?> пользователей
+                </span>
+                <span class="inner_loading">
+                    Загрузка...
+                </span>
             </button>
         </form>
 
@@ -109,42 +124,63 @@ use Auth\Sys\Views;
 
             $('.show_more').on('click', (e) =>
             {
-
 				// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
-                return  true;
 
                 let btn = $(e.currentTarget);
+
                 let $form = btn.parents('form');
-                let offset = $('.users tbody tr').length;
-                let part_email = $form.parents('.b_admin_users').find('#part_email').val()
+
+                let user_id_first = $form.data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
+
+                $form.find('input[name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>"]').val(user_id_first);
+
+                let q = $form.parents('.b_admin_users').find('#q').val()
 
                 // fixme перед заменой текста на кнопки нужно запомнить предыдущий текст, чтобы можно было потом его вернуть,
                 //   но это плохая идея, лучше просто скрывать настоящую надпись и показывать надпись загрузка при добавлении класса loading
-                //   а все нужные надписи всегда есть на кнопке
-                btn.text('Загрузка...').prop('disabled', true);
+                //   а все нужные надписи всегда есть на кнопке ok
+                btn.addClass('loading');
 
                 $.ajax({
                     url: $form.attr("action"),
-                    method: 'POST',
-                    data: { offset: offset, limit: <?= $limit ?>, part_email: part_email },
+                    method: 'GET',
+                    data: { limit: <?= $limit ?>, q: q, user_id_first: user_id_first },
                     success: function(response) {
 						// fixme если записей нет нужно проверять код ответа он будет 404 ну это и в акшине надо запрограммировать
-                        if (response.trim() === '') {
-							// todo скрываем кнопку, а не меняем текст на ней
-                            btn.text('Больше записей нет');
 
-                        } else {
-							// fixme мы на заменяем тело страницы, в вставляем присланные строки таблицы в нашу таблицу
-                            $('body').html(response);
+                        // fixme мы на заменяем тело страницы, в вставляем присланные строки таблицы в нашу таблицу ok
 
-                            btn.text('Ещё <?= $limit ?>').prop('disabled', false);
-                        }
+                        let parser = new DOMParser();
+
+                        let doc = parser.parseFromString(response, 'text/html');
+
+                        let tbody = $(doc).find('.users tbody').html();
+
+                        let new_user_id_first = $(doc)
+                            .find('.wrap_show_more')
+                            .data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
+
+                        $('.users tbody').append(tbody);
+
+                        $('.wrap_show_more').data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>', new_user_id_first);
+
+                        btn.removeClass('loading');
+
                     },
-                    error: function() {
-						// todo показываем ошибку с помощью библиотеки, что я прислал
-                        alert('Ошибка загрузки данных');
-						// fixme не блокируем кнопку, у человека должна быть возможность нажать на нее снова, вдруг заработает
-                        btn.text('Ещё <?= $limit ?>').prop('disabled', false);
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 404) {
+                            $form.hide();
+                            console.log('Записей больше нет (404)');
+                        } else {
+                            // todo показываем ошибку с помощью библиотеки, что я прислал
+                            // butterup.toast(
+                            //     title: 'Ошибка загрузки данных',
+                            //     message: 'Не полуичлось загрузить пользователей',
+                            //     location: 'top-right'
+                            // )
+                        }
+						// fixme не блокируем кнопку, у человека должна быть возможность нажать на нее снова, вдруг заработает ok
+                        btn.removeClass('loading');
                     }
                 });
 
