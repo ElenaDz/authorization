@@ -107,8 +107,7 @@ use Auth\Sys\Views;
               action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
               method="get"
         >
-            <!-- fixme здесь не должно быть action убрать, action есть в форме выше, если есть какая то проблема, она решается не так -->
-            <input type="hidden" name="action" value="Auth\App\Action\Admin\Users">
+            <input type="hidden" name="action" value="<?= \Auth\App\Action\Admin\Users::class; ?>">
             <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?=  $user_id_first?>">
             <button type="submit" class="show_more">
                 <span class="more">
