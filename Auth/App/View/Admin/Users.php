@@ -8,6 +8,8 @@ use Auth\Sys\Views;
  * @var string $q
  * @var bool $has_not_activated_users
  * @var $user_id_first
+ * @var bool $has_users_more
+ * @var int $users_count
  */
 ?>
 
@@ -26,8 +28,8 @@ use Auth\Sys\Views;
     <div class="line"></div>
 
     <div class="toolbar">
-        <!-- fixme здесь не количество пользователей на этой странице а общее количество пользователей -->
-        <span class="total_users"><?= count($users)?> пользователей</span>
+        <!-- fixme здесь не количество пользователей на этой странице а общее количество пользователей ок-->
+        <span class="total_users">Всего <?= $users_count ?> пользователей</span>
         <form action="<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::getUrl() ?>">
 
             <button class="delete_not_activated"
@@ -43,10 +45,17 @@ use Auth\Sys\Views;
         </form>
     </div>
 
+    <?php if (empty($users)): ?>
+
+        Пусто
+
+    <?php return false; ?>
+    <?php endif; ?>
     <div class="table-wrapper">
         <table class="users">
             <thead>
                 <tr>
+                    <th class="date">ID</th>
                     <th class="date">Дата регистрации</th>
                     <th class="date">Дата входа</th>
                     <th class="email_th">Email</th>
@@ -59,6 +68,7 @@ use Auth\Sys\Views;
                 </tr>
             </thead>
             <tbody>
+
                 <?php
                 echo Views::get(
                     __DIR__ . '/Users/Tbody.php',
@@ -70,12 +80,19 @@ use Auth\Sys\Views;
             </tbody>
         </table>
 
+        <!-- fixme этот скрипт должен находиться под table ок-->
         <script>
-            $('table.users').on('change', '.activation input[type="checkbox"]',(e) =>
+            $('table.users').on('submit', '.delete', (e) =>
             {
-                let $input = $(e.currentTarget);
+                let $form = $(e.currentTarget);
 
-                let $form = $input.parents('form');
+                let $tr = $form.parents('tr');
+
+                let user_login = $tr.find('.login').text();
+
+                if ( ! confirm(`Удалить пользователя ${user_login}?`)) {
+                    return false;
+                }
 
                 $.ajax({
                     url: $form.attr("action"),
@@ -84,8 +101,37 @@ use Auth\Sys\Views;
                 })
                     .done(() =>
                     {
-                        $input.prop('disabled', true);
+                        $tr.remove();
                     })
+                    .fail(() =>
+                    {
+                        // todo использовать библиотеку нотификаций, создать глобальную фукнцию чтобы не писать одно и тоже везде,
+                        //  а использовать эту функцию для показа ошибки
+                        throw new Error("Ошибка: Пользователь не удалён");
+                    });
+
+                return false;
+            })
+        </script>
+
+        <script>
+            $('table.users').on('change', '.activation input[type="checkbox"]',(e) =>
+            {
+                let $input = $(e.currentTarget);
+
+                let $form = $input.parents('form');
+
+                let form_serialize = $form.serialize();
+
+                $input.prop('disabled', true);
+
+                $.ajax({
+                    url: $form.attr("action"),
+                    type: 'POST',
+                    data: form_serialize,
+                })
+                    .done(() =>
+                    {})
                     .fail((jqXHR, textStatus, errorThrow) =>
                     {
                         $input.prop('checked', false)
@@ -101,18 +147,23 @@ use Auth\Sys\Views;
             });
         </script>
 
-        <!-- todo если $user_id_first пустой значит больше пользователей нет, а значит эту кнопку показывать не нужно -->
+        <!-- todo если $user_id_first пустой значит больше пользователей нет, а значит эту кнопку показывать не нужно ok-->
         <form class="wrap_show_more"
               data-<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>="<?= $user_id_first?>"
               action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
               method="get"
+              <?php if ( ! $has_users_more): ?>
+
+                  style="display: none"
+
+              <?php endif; ?>
         >
             <input type="hidden" name="action" value="<?= \Auth\App\Action\Admin\Users::class; ?>">
-            <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?=  $user_id_first?>">
+            <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?= $user_id_first?>">
             <button type="submit" class="show_more">
                 <span class="more">
-                    <!-- fixme здесь не нужно показывать количество пользователей просто "показать еще" -->
-                    Показать ещё <?= $limit ?> пользователей
+                    <!-- fixme здесь не нужно показывать количество пользователей просто "показать еще" ок-->
+                    Показать ещё
                 </span>
                 <span class="inner_loading">
                     Загрузка...
@@ -121,75 +172,70 @@ use Auth\Sys\Views;
         </form>
 
         <script>
+            function initShowMore() {
+                $('.show_more').on('click', (e) =>
+                {
+                    // todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js ok
+                    // return true;
 
-            $('.show_more').on('click', (e) =>
-            {
-				// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
-                return true;
+                    let btn = $(e.currentTarget);
 
-                let btn = $(e.currentTarget);
+                    let $form = btn.parents('form');
 
-                let $form = btn.parents('form');
+                    let user_id_first = $form.data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
 
-                let user_id_first = $form.data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
+                    $form.find('input[name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>"]').val(user_id_first);
 
-                $form.find('input[name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>"]').val(user_id_first);
+                    let q = $form.parents('.b_admin_users').find('#q').val()
 
-                let q = $form.parents('.b_admin_users').find('#q').val()
+                    btn.addClass('loading');
 
-                btn.addClass('loading');
+                    $.ajax({
+                        url: $form.attr("action"),
+                        method: 'GET',
+                        data: { limit: <?= $limit ?>, q: q, user_id_first: user_id_first },
+                        success: function(response)
+                        {
+                            let parser = new DOMParser();
 
-                $.ajax({
-                    url: $form.attr("action"),
-                    method: 'GET',
-                    data: { limit: <?= $limit ?>, q: q, user_id_first: user_id_first },
-                    success: function(response)
-                    {
-                        let parser = new DOMParser();
+                            let doc = parser.parseFromString(response, 'text/html');
 
-                        let doc = parser.parseFromString(response, 'text/html');
+                            let tbody = $(doc).find('.users tbody').html();
 
-                        let tbody = $(doc).find('.users tbody').html();
+                            let $wrap_show_more =  $(doc).find('.wrap_show_more');
 
-						// fixme не нужно колупаться здесь во внутренностях, просто берешь целиком форму "Показать еще" и меняешь на новую
-                        let new_user_id_first = $(doc)
-                            .find('.wrap_show_more')
-                            .data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
+                            $('.wrap_show_more').replaceWith($wrap_show_more);
 
-                        $('.users tbody').append(tbody);
+                            initShowMore();
+                            // fixme не нужно колупаться здесь во внутренностях, просто берешь целиком форму "Показать еще" и меняешь на новую ок
 
-                        $('.wrap_show_more').data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>', new_user_id_first);
+                            $('.users tbody').append(tbody);
 
-						// fixme переместить в complete, сейчас дублирование
-                        btn.removeClass('loading');
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-						// fixme 404 это не особый случай, это точно такая же ошибка как любая другая, не нужно ее обрабатывать особым образом
-                        //  если мы получили ошибку 404 это это явная ошибка, так как по умолчанию кнопки "Показать еще" просто нету,
-                        //  если больше нету пользователей
-                        if (jqXHR.status === 404) {
-                            $form.hide();
-                            console.log('Записей больше нет (404)');
-                        } else {
+                            // fixme переместить в complete, сейчас дублирование ok
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            // fixme 404 это не особый случай, это точно такая же ошибка как любая другая, не нужно ее обрабатывать особым образом
+                            //  если мы получили ошибку 404 это это явная ошибка, так как по умолчанию кнопки "Показать еще" просто нету,
+                            //  если больше нету пользователей
+
                             // todo текст ошибки здесь должен быть тот который написан на странице ошибке
                             // butterup.toast(
                             //     title: 'Ошибка загрузки данных',
                             //     message: 'Не получилось загрузить пользователей',
                             //     location: 'top-right'
                             // )
+                        },
+                        complete: () =>
+                        {
+                            btn.removeClass('loading');
                         }
+                    });
 
-						// fixme переместить в complete, сейчас дублирование
-                        btn.removeClass('loading');
-                    },
-					complete: () =>
-					{
-
-                    }
+                    return false;
                 });
+            }
 
-                return false;
-            });
+            initShowMore();
         </script>
 
     </div>

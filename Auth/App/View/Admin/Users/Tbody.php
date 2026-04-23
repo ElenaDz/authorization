@@ -5,14 +5,13 @@ use Auth\App\Entity\User;
  * @var User[] $users
  */
 
-
-
-// todo есть пользователй нет, нужно писать слово "Пусто", чтобы было все ясно
+// todo есть пользователй нет, нужно писать слово "Пусто", чтобы было все ясно ok
 ?>
 <?php foreach ($users as $user) : ?>
 
     <tr data-user_id="<?= $user->getId() ?>">
 
+        <td class="date"><?= $user->getId() ?></td>
         <td class="date"><?= $user->getCreatedAt() ?></td>
         <td class="date"><?= $user->getLastLoginAt() ?></td>
         <td class="email"><?= $user->getEmail() ?></td>
@@ -69,36 +68,3 @@ use Auth\App\Entity\User;
 
 <?php endforeach; ?>
 
-<!-- fixme этот скрипт должен находиться под table -->
-<script>
-    $('table.users').on('submit', '.delete', (e) =>
-    {
-        let $form = $(e.currentTarget);
-
-        let $tr = $form.parents('tr');
-
-        let user_login = $tr.find('.login').text();
-
-        if ( ! confirm(`Удалить пользователя ${user_login}?`)) {
-            return false;
-        }
-
-        $.ajax({
-            url: $form.attr("action"),
-            type: 'POST',
-            data: $form.serialize(),
-        })
-            .done(() =>
-            {
-                $tr.remove();
-            })
-            .fail(() =>
-            {
-                // todo использовать библиотеку нотификаций, создать глобальную фукнцию чтобы не писать одно и тоже везде,
-                //  а использовать эту функцию для показа ошибки
-                throw new Error("Ошибка: Пользователь не удалён");
-            });
-
-        return false;
-    })
-</script>

@@ -23,8 +23,8 @@
     $('.search input').on('keydown', (e) =>
     {
 
-		// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js
-		return  true;
+		// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js ok
+		// return  true;
 
         if (e.key !== 'Enter') return ;
 
@@ -37,23 +37,15 @@
             method: 'POST',
             data: { q: q},
             success: function(response) {
-				// todo здесь ситуация проще чем с кнопкой показать еще, поэтому пользуемся этим,
-                //  добавляем обертку вокруг блока таблица + кнопка "показать еще" и меняем все это блок целиком
+				// todo здесь ситуация проще чем с кнопкой показать еще, поэтому пользуемся этим, ok
+                //  добавляем обертку вокруг блока таблица + кнопка "показать еще" и меняем все это блок целиком ok
                 let parser = new DOMParser();
 
                 let doc = parser.parseFromString(response, 'text/html');
 
-                let tbody = $(doc).find('.users tbody').html();
+                let $table_wrapper = $(doc).find('.table-wrapper').html();
 
-                let new_user_id_first = $(doc)
-                    .find('.wrap_show_more')
-                    .data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
-
-
-                $('.wrap_show_more').data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>', new_user_id_first);
-
-                $('.users tbody').html(tbody);
-
+                $('.table-wrapper').replaceWith($table_wrapper);
             },
             error: function() {
 				// todo используй библиотеку

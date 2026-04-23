@@ -20,6 +20,15 @@ class Users extends _Base
 		);
 	}
 
+    public static function getCount()
+    {
+        $results = self::getPDO()->query (
+            'SELECT COUNT(*) FROM users'
+        );
+
+        return $results->fetchColumn();
+    }
+
 	public static function getByIdOrFall($id)
 	{
 		$user = self::getById($id);
@@ -35,37 +44,35 @@ class Users extends _Base
 		return $user;
 	}
 
-	// todo удаляем что не используется
-    public static function getAll()
-    {
-        $results = self::getPDO()->query (
-            'SELECT * FROM users'
-        );
-
-        return $results->fetchAll(
-            \PDO::FETCH_CLASS,
-            User::class
-        );
-    }
-
     /**
      * @param int $limit
-     * @param $id_first
+     * @param int $id_first
+     * @param string $part_email
      * @return User[]/false
      */
-    public static function getNew(int $limit = 100, $id_first = null)
+    public static function getNew1(int $limit = 100, $id_first = null, $part_email = '')
     {
-        $query = "SELECT * FROM users ";
+        $conditions = ["1=1"];
+        $params = [];
 
-        if ( ! empty($id_first)) {
-            $query  = $query . " WHERE id <= ". (int) $id_first ." ";
+        if (!empty($part_email)) {
+            $conditions[] = "email LIKE :part_email";
+            $params['part_email'] = '%' . $part_email . '%';
         }
 
-        $query = $query. " ORDER BY id DESC LIMIT ". (int) $limit;
+        if (!empty($id_first)) {
+            $conditions[] = "id <= :id_first";
+            $params['id_first'] = $id_first;
+        }
 
-        $results = self::getPDO()->query(
-            $query
+        $sql = sprintf(
+            "SELECT * FROM users WHERE %s ORDER BY id DESC LIMIT %d",
+            implode(' AND ', $conditions),
+            $limit
         );
+
+        $results = self::getPDO()->prepare($sql);
+        $results->execute($params);
 
         return $results->fetchAll(
             \PDO::FETCH_CLASS,
@@ -73,41 +80,62 @@ class Users extends _Base
         );
     }
 
-    // fixme этот метод на самом деле делает тоже самое, что getNew просто еще и с учетом email поэтом удаляем его и добавляем в getNew email
-    public static function findByEmail($part_email, int $limit = 100, $id_first = null)
+    // fixme этот метод на самом деле делает тоже самое, что getNew просто еще и с учетом email поэтом удаляем его и добавляем в getNew email ok
+    // fixme написала 2 варианта рабочих, первый помогала ИИ писать, этот сама писала
+    public static function getNew2($part_email, int $limit = 100, $id_first = null)
     {
-		// fixme так не пойдет собирать запросы один запрос должен быть в одной строкой, чтобы ide его понимал,
-	    //  должно быть как то так Перепиши все где есть сборка с помощью if
-	    $sql = sprintf(
-			"SELECT * 
+        // fixme так не пойдет собирать запросы один запрос должен быть в одной строкой, чтобы ide его понимал,
+	    //  должно быть как то так Перепиши все где есть сборка с помощью if ок
+        if (!empty($id_first) && !empty($part_email)) {
+            $sql = sprintf(
+                "SELECT * 
 			FROM users
 			WHERE 
-					email LIKE :part_email 
+					email LIKE '%s'
 			  	AND	%s
+			ORDER BY id DESC 
+			LIMIT %s",
+                '%' . $part_email . '%',
+                ! empty($id_first) ? 'id <='.$id_first.'' : '1=1',
+                (int) $limit
+            );
+
+        } elseif (!empty($id_first) && empty($part_email)) {
+            $sql = sprintf(
+                "SELECT * 
+			FROM users
+			WHERE %s
 			ORDER BY id DESC
 			LIMIT %s",
-		    ! empty($id_first) ? 'id <= :id_first' : '1=1',
-		    (int) $limit
-	    );
+                ! empty($id_first) ? 'id <='.$id_first.'' : '1=1',
+                (int) $limit
+            );
 
-        $query = "SELECT * FROM users WHERE email LIKE :part_email";
-        $params = [
-            'part_email' => '%' . $part_email . '%'
-        ];
+        } elseif (empty($id_first) && !empty($part_email)) {
+            $sql = sprintf(
+                "SELECT * 
+			FROM users
+			WHERE 
+					email LIKE '%s'
+			ORDER BY id DESC
+			LIMIT %d",
+                 '%' .$part_email. '%',
+                (int) $limit
+            );
 
-        if (!empty($id_first)) {
-            $query .= " AND id <= :id_first";
-            $params['id_first'] = (int) $id_first;
+        } else {
+            $sql = sprintf(
+                "SELECT * 
+			FROM users
+			ORDER BY id DESC
+			LIMIT %s",
+                (int) $limit
+            );
         }
 
-        $query .= " ORDER BY id DESC";
+        $results = self::getPDO()->prepare($sql);
 
-        $query .= " LIMIT " . (int)$limit;
-
-
-        $results = self::getPDO()->prepare($query);
-
-        $results->execute($params);
+        $results->execute();
 
         return $results->fetchAll(
             \PDO::FETCH_CLASS,
