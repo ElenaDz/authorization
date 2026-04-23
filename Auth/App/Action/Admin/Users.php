@@ -11,27 +11,31 @@ class Users extends _BaseAdmin
 {
     const POST_NAME_Q = 'q';
     const GET_NAME_USER_ID_FIRST = 'user_id_first';
-	// fixme не вижу последнего пользователя на последней странице (тест пользователей - 20, limit - 10) ok
-	// fixme вижу кнопку "показать еще" на последней странице (тест пользователей - 20, limit - 10)
-    const LIMIT = 3;
+    const LIMIT = 10;
 
-	// fixme убрать у $user_id_first 10000 должно быть null ок
+
+	// fixme $limit не используется
     public function __invoke($limit = 10, $q = '', $user_id_first = null)
     {
+		// fixme если добавить задержку несколько секунд и покликать на кнопку "Загрузка ..." будет отправлено несколько запросов
+		//sleep(2);
+
         $has_not_activated_users = ! empty(\Auth\App\Model\Users::getNotActivated());
 
         $q = $_POST[self::POST_NAME_Q] ?? $q;
 
+		// todo проверка что $user_id_first есть в БД, если нет то 404 страница
+
         $users = \Auth\App\Model\Users::getNew2($q,self::LIMIT + 1, $user_id_first);
 
         if (empty($users)) {
-            throw new Exception('Пользователей не найдены', 404);
+			// todo все исключения которые ты добавляешь должны быть протестированы, протестируй это
+            throw new Exception('Пользователи не найдены', 404);
         }
-
-		// fixme лишняя проверка, ты выше кидаешь исключение если пусто ок
 
         $last_user = end($users);
 
+		// fixme наличие user_id_first должно говорить о том что есть еще пользователи, не нужна $has_users_more
         $user_id_first = $last_user->getId();
 
         $has_users_more = count($users) > self::LIMIT;

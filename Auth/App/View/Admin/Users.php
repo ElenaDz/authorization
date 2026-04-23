@@ -28,7 +28,6 @@ use Auth\Sys\Views;
     <div class="line"></div>
 
     <div class="toolbar">
-        <!-- fixme здесь не количество пользователей на этой странице а общее количество пользователей ок-->
         <span class="total_users">Всего <?= $users_count ?> пользователей</span>
         <form action="<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::getUrl() ?>">
 
@@ -45,13 +44,9 @@ use Auth\Sys\Views;
         </form>
     </div>
 
-    <?php if (empty($users)): ?>
 
-        Пусто
-
-    <?php return false; ?>
-    <?php endif; ?>
     <div class="table-wrapper">
+
         <table class="users">
             <thead>
                 <tr>
@@ -68,7 +63,6 @@ use Auth\Sys\Views;
                 </tr>
             </thead>
             <tbody>
-
                 <?php
                 echo Views::get(
                     __DIR__ . '/Users/Tbody.php',
@@ -80,7 +74,6 @@ use Auth\Sys\Views;
             </tbody>
         </table>
 
-        <!-- fixme этот скрипт должен находиться под table ок-->
         <script>
             $('table.users').on('submit', '.delete', (e) =>
             {
@@ -147,22 +140,25 @@ use Auth\Sys\Views;
             });
         </script>
 
-        <!-- todo если $user_id_first пустой значит больше пользователей нет, а значит эту кнопку показывать не нужно ok-->
-        <form class="wrap_show_more"
-              data-<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>="<?= $user_id_first?>"
-              action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
-              method="get"
-              <?php if ( ! $has_users_more): ?>
+        <!-- todo здесь нужен не display: none а if ом обернуть весь блок -->
+        <!-- fixme проверять нужно $user_id_first а $has_users_more вообще не нужен -->
+        <!-- todo вынести в отдельный блок -->
+        <!-- fixme не вижу где есть поисковый запрос -->
+        <form
+            class="wrap_show_more"
+            data-<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>="<?= $user_id_first?>"
+            action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
+            method="get"
+            <?php if ( ! $has_users_more): ?>
 
-                  style="display: none"
+              style="display: none"
 
-              <?php endif; ?>
+            <?php endif; ?>
         >
             <input type="hidden" name="action" value="<?= \Auth\App\Action\Admin\Users::class; ?>">
             <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?= $user_id_first?>">
             <button type="submit" class="show_more">
                 <span class="more">
-                    <!-- fixme здесь не нужно показывать количество пользователей просто "показать еще" ок-->
                     Показать ещё
                 </span>
                 <span class="inner_loading">
@@ -175,9 +171,6 @@ use Auth\Sys\Views;
             function initShowMore() {
                 $('.show_more').on('click', (e) =>
                 {
-                    // todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js ok
-                    // return true;
-
                     let btn = $(e.currentTarget);
 
                     let $form = btn.parents('form');
@@ -186,10 +179,12 @@ use Auth\Sys\Views;
 
                     $form.find('input[name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>"]').val(user_id_first);
 
+					// fixme так не пойдет, поисковый запрос должен быть в форме даже без js
                     let q = $form.parents('.b_admin_users').find('#q').val()
 
                     btn.addClass('loading');
 
+					// fixme js нет необходимости знать детали того что именно передавать он должен передавать все что есть в форме
                     $.ajax({
                         url: $form.attr("action"),
                         method: 'GET',
@@ -206,19 +201,14 @@ use Auth\Sys\Views;
 
                             $('.wrap_show_more').replaceWith($wrap_show_more);
 
+							// fixme это хрупкий способ инициализации который может привести к повторному вешанью событий,
+                            //   необходимо использовать подход такой же как с кнопками удалить
                             initShowMore();
-                            // fixme не нужно колупаться здесь во внутренностях, просто берешь целиком форму "Показать еще" и меняешь на новую ок
 
                             $('.users tbody').append(tbody);
-
-                            // fixme переместить в complete, сейчас дублирование ok
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            // fixme 404 это не особый случай, это точно такая же ошибка как любая другая, не нужно ее обрабатывать особым образом
-                            //  если мы получили ошибку 404 это это явная ошибка, так как по умолчанию кнопки "Показать еще" просто нету,
-                            //  если больше нету пользователей
-
-                            // todo текст ошибки здесь должен быть тот который написан на странице ошибке
+                            // todo текст ошибки здесь должен быть тот который написан на странице ошибки
                             // butterup.toast(
                             //     title: 'Ошибка загрузки данных',
                             //     message: 'Не получилось загрузить пользователей',
@@ -235,6 +225,7 @@ use Auth\Sys\Views;
                 });
             }
 
+			// fixme избавляемся от этой функции ее не должно быть, возле другого ее вызова написал альтернативу
             initShowMore();
         </script>
 

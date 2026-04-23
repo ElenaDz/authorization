@@ -4,12 +4,14 @@
  * @var $q
  */
 
+
 ?>
 <div class="search">
     <form action="<?= \Auth\App\Action\Admin\Users::getUrl()?>" method="post">
         <label for="q">
             Поиск по e-mail:
         </label>
+        <!-- fixme не подставляется поисковый запрос при отключенном js -->
         <input
             type="text"
             id="q"
@@ -20,25 +22,22 @@
 </div>
 
 <script>
+    // fixme поисковый запрос срабатывает только один раз, второй поиск ни чего не меняет на странице
     $('.search input').on('keydown', (e) =>
     {
-
-		// todo !!!! ВНИМАНИЕ !!!  отключаю js до тех пор пока не сделаешь полностью работающую версию без js ok
-		// return  true;
-
         if (e.key !== 'Enter') return ;
 
         let $input = $(e.currentTarget);
         let $form = $input.parents('form');
         let q = $input.val();
 
+		// fixme мы не должны в js уточнять какое именно данные нужно передать, передать нужно все data из формы
         $.ajax({
             url: $form.attr("action"),
             method: 'POST',
             data: { q: q},
-            success: function(response) {
-				// todo здесь ситуация проще чем с кнопкой показать еще, поэтому пользуемся этим, ok
-                //  добавляем обертку вокруг блока таблица + кнопка "показать еще" и меняем все это блок целиком ok
+            success: function(response)
+            {
                 let parser = new DOMParser();
 
                 let doc = parser.parseFromString(response, 'text/html');

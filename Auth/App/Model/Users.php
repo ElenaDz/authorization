@@ -44,12 +44,7 @@ class Users extends _Base
 		return $user;
 	}
 
-    /**
-     * @param int $limit
-     * @param int $id_first
-     * @param string $part_email
-     * @return User[]/false
-     */
+    // todo используем этот
     public static function getNew1(int $limit = 100, $id_first = null, $part_email = '')
     {
         $conditions = ["1=1"];
@@ -66,7 +61,11 @@ class Users extends _Base
         }
 
         $sql = sprintf(
-            "SELECT * FROM users WHERE %s ORDER BY id DESC LIMIT %d",
+            "SELECT *
+			FROM users 
+			WHERE %s 
+			ORDER BY id DESC 
+			LIMIT %d",
             implode(' AND ', $conditions),
             $limit
         );
@@ -80,45 +79,46 @@ class Users extends _Base
         );
     }
 
-    // fixme этот метод на самом деле делает тоже самое, что getNew просто еще и с учетом email поэтом удаляем его и добавляем в getNew email ok
-    // fixme написала 2 варианта рабочих, первый помогала ИИ писать, этот сама писала
+
+	// fixme удаляем, так не пойдет
     public static function getNew2($part_email, int $limit = 100, $id_first = null)
     {
-        // fixme так не пойдет собирать запросы один запрос должен быть в одной строкой, чтобы ide его понимал,
-	    //  должно быть как то так Перепиши все где есть сборка с помощью if ок
-        if (!empty($id_first) && !empty($part_email)) {
+        if (!empty($id_first) && !empty($part_email))
+		{
             $sql = sprintf(
                 "SELECT * 
-			FROM users
-			WHERE 
-					email LIKE '%s'
-			  	AND	%s
-			ORDER BY id DESC 
-			LIMIT %s",
+				FROM users
+				WHERE 
+						email LIKE '%s'
+				    AND	%s
+				ORDER BY id DESC 
+				LIMIT %s",
                 '%' . $part_email . '%',
                 ! empty($id_first) ? 'id <='.$id_first.'' : '1=1',
                 (int) $limit
             );
 
-        } elseif (!empty($id_first) && empty($part_email)) {
+        } elseif (!empty($id_first) && empty($part_email))
+        {
             $sql = sprintf(
                 "SELECT * 
-			FROM users
-			WHERE %s
-			ORDER BY id DESC
-			LIMIT %s",
+				FROM users
+				WHERE %s
+				ORDER BY id DESC
+				LIMIT %s",
                 ! empty($id_first) ? 'id <='.$id_first.'' : '1=1',
                 (int) $limit
             );
 
-        } elseif (empty($id_first) && !empty($part_email)) {
+        } elseif (empty($id_first) && !empty($part_email))
+        {
             $sql = sprintf(
                 "SELECT * 
-			FROM users
-			WHERE 
+				FROM users
+				WHERE 
 					email LIKE '%s'
-			ORDER BY id DESC
-			LIMIT %d",
+				ORDER BY id DESC
+				LIMIT %d",
                  '%' .$part_email. '%',
                 (int) $limit
             );
@@ -126,9 +126,9 @@ class Users extends _Base
         } else {
             $sql = sprintf(
                 "SELECT * 
-			FROM users
-			ORDER BY id DESC
-			LIMIT %s",
+				FROM users
+				ORDER BY id DESC
+				LIMIT %s",
                 (int) $limit
             );
         }
@@ -149,7 +149,9 @@ class Users extends _Base
     public static function getNotActivated()
     {
         $results = self::getPDO()->query (
-            'SELECT * FROM users WHERE activation_code IS NOT NULL'
+            'SELECT * 
+			FROM users 
+			WHERE activation_code IS NOT NULL'
         );
 
         return $results->fetchAll(

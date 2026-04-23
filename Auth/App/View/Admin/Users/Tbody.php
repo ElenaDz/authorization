@@ -5,8 +5,13 @@ use Auth\App\Entity\User;
  * @var User[] $users
  */
 
-// todo есть пользователй нет, нужно писать слово "Пусто", чтобы было все ясно ok
+// todo есть пользователй нет, нужно писать слово "Пусто", ниже показано как должно быть
 ?>
+<!--
+<tr>
+    <td colspan="10">Пусто</td>
+</tr>
+-->
 <?php foreach ($users as $user) : ?>
 
     <tr data-user_id="<?= $user->getId() ?>">
