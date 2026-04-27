@@ -28,6 +28,7 @@ use Auth\Sys\Views;
 
     <div class="toolbar">
         <span class="total_users">Всего <?= $users_count ?> пользователей</span>
+        <!-- fixme кнопка ведет на не существующий url -->
         <form action="<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::getUrl() ?>">
 
             <button class="delete_not_activated"
@@ -52,11 +53,14 @@ use Auth\Sys\Views;
                     <th class="id">ID</th>
                     <th class="date">Дата регистрации</th>
                     <th class="date">Дата входа</th>
+                    <!-- todo зафиксируй ширину чтобы таблица "не плава" в зависимости от длины емейла -->
                     <th class="email_th">Email</th>
                     <th>Права</th>
+                    <!-- todo зафиксируй ширину  -->
                     <th class="login">Имя</th>
                     <th class="geo">Гео</th>
                     <th>IP Адрес</th>
+                    <!-- todo сделай уже до ширины флажка -->
                     <th class="activation">Активация</th>
                     <th class="delete">Действия</th>
                 </tr>
@@ -96,15 +100,9 @@ use Auth\Sys\Views;
                     {
                         $tr.remove();
                     })
-                    .fail((jqXHR, textStatus, errorThrow) =>
+                    .fail((jqXHR) =>
                     {
-                        // todo использовать библиотеку нотификаций, создать глобальную фукнцию чтобы не писать одно и тоже везде, ok
-                        //  а использовать эту функцию для показа ошибки
-                        butterup.toast({
-                            title: 'Ошибка удаления',
-                            message: jqXHR.responseText,
-                            location: 'bottom-right'
-                        })
+                        showErrorAjix(jqXHR)
                     });
 
                 return false;
@@ -127,19 +125,13 @@ use Auth\Sys\Views;
                     type: 'POST',
                     data: form_serialize,
                 })
-                    .done(() =>
-                    {})
+                    .done(() => {})
                     .fail((jqXHR, textStatus, errorThrow) =>
                     {
                         $input.prop('checked', false);
-
                         $input.prop('disabled', false);
 
-                        butterup.toast({
-                            title: 'Ошибка активации',
-                            message: jqXHR.responseText,
-                            location: 'bottom-right'
-                        })
+						showErrorAjix(jqXHR);
                     })
 
                 return false;

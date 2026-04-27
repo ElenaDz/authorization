@@ -8,55 +8,47 @@ use Auth\App\Entity\User;
  * @var int $limit
  */
 
+// todo используй вот такой способ выхода из шаблона если этот шаблон не нужно показывать для некоторых параметров
+if (empty($user_id_first)) return;
 ?>
-<!-- todo здесь нужен не display: none а if ом обернуть весь блок ok-->
-<!-- fixme проверять нужно $user_id_first а $has_users_more вообще не нужен ok-->
-<!-- todo вынести в отдельный блок ok -->
-<!-- fixme не вижу где есть поисковый запрос ok -->
 
-<?php if ($user_id_first): ?>
-
-    <form
-        class="wrap_show_more"
-        data-<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>="<?= $user_id_first?>"
-        action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
-        method="get"
-    >
-        <input type="hidden" name="action" value="<?= \Auth\App\Action\Admin\Users::class; ?>">
-        <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?= $user_id_first?>">
-        <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_Q ?>" value="<?= $q?>">
-        <button type="submit" class="show_more">
-                    <span class="more">
-                        Показать ещё
-                    </span>
-            <span class="inner_loading">
-                        Загрузка...
-                    </span>
-        </button>
-    </form>
-<?php endif; ?>
+<form
+    class="wrap_show_more"
+    data-<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>="<?= $user_id_first?>"
+    action="<?= \Auth\App\Action\Admin\Users::getUrl() ?>"
+    method="get"
+>
+    <input type="hidden" name="action" value="<?= \Auth\App\Action\Admin\Users::class; ?>">
+    <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>" value="<?= $user_id_first?>">
+    <input type="hidden" name="<?= \Auth\App\Action\Admin\Users::GET_NAME_Q ?>" value="<?= $q?>">
+    <button type="submit" class="show_more">
+        <span class="more">
+            Показать ещё
+        </span>
+        <span class="inner_loading">
+            Загрузка...
+        </span>
+    </button>
+</form>
 
 <script>
-
     $('.table-wrapper').on('click', '.show_more', (e) =>
     {
+		// fixme у btn $ в начале нет, а нужен, у $form_serialize есть, а не нужен Напомню $ мы ставим только объектам которые JQuery
         let btn = $(e.currentTarget);
 
         let $form = btn.parents('form');
 
-        let  $form_serialize =  $form.serialize();
+        let $form_serialize = $form.serialize();
 
+		// fixme зачем эти две строки? Не просто удали, а подумай зачем добавляла и не добавляй в будущем
         let user_id_first = $form.data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
-
         $form.find('input[name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>"]').val(user_id_first);
-
-        // fixme так не пойдет, поисковый запрос должен быть в форме даже без js ok
 
         btn.addClass('loading');
 
         btn.prop('disabled', true)
 
-        // fixme js нет необходимости знать детали того что именно передавать он должен передавать все что есть в форме ok
         $.ajax({
             url: $form.attr("action"),
             method: 'GET',
@@ -73,19 +65,11 @@ use Auth\App\Entity\User;
 
                 $('.wrap_show_more').replaceWith($wrap_show_more);
 
-                // fixme это хрупкий способ инициализации который может привести к повторному вешанью событий,
-                //   необходимо использовать подход такой же как с кнопками удалить ok
-
                 $('.users tbody').append(tbody);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-
-                // todo текст ошибки здесь должен быть тот который написан на странице ошибки (не получилось)
-                butterup.toast({
-                    title: 'Не получилось показать ещё',
-                    message: jqXHR.responseText,
-                    location: 'bottom-right'
-                })
+            error: function(jqXHR)
+            {
+                showErrorAjix(jqXHR);
             },
             complete: () =>
             {
@@ -97,5 +81,3 @@ use Auth\App\Entity\User;
         return false;
     });
 </script>
-
-</div>

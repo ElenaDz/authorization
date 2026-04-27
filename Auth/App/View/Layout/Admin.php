@@ -6,6 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title><?= $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,24 +19,21 @@
         rel="stylesheet"
     >
     <link
-            href="/Auth/assets/js/butterup-main/butterup.css?v=<?= filemtime(__DIR__ . '/../../../assets/js/butterup-main/butterup.css') ?>"
-            rel="stylesheet"
+        href="/Auth/assets/js/butterup-main/butterup.min.css?v=<?= filemtime(__DIR__ . '/../../../assets/js/butterup-main/butterup.min.css') ?>"
+        rel="stylesheet"
     >
 
-    <title><?= $title; ?></title>
 </head>
 <body>
-<script
+    <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
         crossorigin="anonymous"
-></script>
-<script src="/Auth/assets/js/butterup-main/butterup.min.js?v=<?= filemtime(__DIR__ . '/../../../assets/js/butterup-main/butterup.min.js') ?>">
-
-</script>
+    ></script>
 
     <?= $content; ?>
 
-
+    <script src="/Auth/assets/js/butterup-main/butterup.min.js?v=<?= filemtime(__DIR__ . '/../../../assets/js/butterup-main/butterup.min.js') ?>" async></script>
+    <script src="/Auth/assets/js/base.js?v=<?= filemtime(__DIR__ . '/../../../assets/js/base.js') ?>" async></script>
 </body>
 </html>

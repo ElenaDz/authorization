@@ -5,7 +5,6 @@ use Auth\App\Entity\User;
  * @var User[] $users
  */
 
-// todo есть пользователй нет, нужно писать слово "Пусто", ниже показано как должно быть ok
 ?>
 
 <?php if (empty($users)): ?>
@@ -28,6 +27,7 @@ use Auth\App\Entity\User;
         <td class="role">
             <form>
                 <label>
+                    <!-- todo заблокируй так как пока не используется -->
                     <select>
                         <option>Пользователь</option>
                     </select>

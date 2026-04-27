@@ -112,6 +112,7 @@ $getUrl = function ($file_path)
 
     builder_assets(
         [
+	        __DIR__.'/Auth/assets/js/base.js',
             __DIR__.'/Auth/assets/js/auth.js',
             __DIR__.'/Auth/assets/js/auth_btn.js',
             __DIR__.'/Auth/assets/js/auth_modal.js'
