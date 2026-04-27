@@ -17,6 +17,11 @@
         href="/Auth/assets/css/admin_users.css?v=<?= filemtime(__DIR__ . '/../../../assets/css/admin_users.css') ?>"
         rel="stylesheet"
     >
+    <link
+            href="/Auth/assets/js/butterup-main/butterup.css?v=<?= filemtime(__DIR__ . '/../../../assets/js/butterup-main/butterup.css') ?>"
+            rel="stylesheet"
+    >
+
     <title><?= $title; ?></title>
 </head>
 <body>
@@ -25,6 +30,9 @@
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
         crossorigin="anonymous"
 ></script>
+<script src="/Auth/assets/js/butterup-main/butterup.min.js?v=<?= filemtime(__DIR__ . '/../../../assets/js/butterup-main/butterup.min.js') ?>">
+
+</script>
 
     <?= $content; ?>
 

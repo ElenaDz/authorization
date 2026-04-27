@@ -107,8 +107,6 @@ $getUrl = function ($file_path)
         crossorigin="anonymous"
     ></script>
 
-    <script src="Auth/butterup-main/butterup.js"></script>
-    <script src="Auth/butterup-main/butterup.css"></script>
     <?php
     require __DIR__.'/builder.php';
 

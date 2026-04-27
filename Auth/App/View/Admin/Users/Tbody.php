@@ -5,18 +5,22 @@ use Auth\App\Entity\User;
  * @var User[] $users
  */
 
-// todo есть пользователй нет, нужно писать слово "Пусто", ниже показано как должно быть
+// todo есть пользователй нет, нужно писать слово "Пусто", ниже показано как должно быть ok
 ?>
-<!--
-<tr>
-    <td colspan="10">Пусто</td>
-</tr>
--->
+
+<?php if (empty($users)): ?>
+
+    <tr>
+        <td colspan="10">Пусто</td>
+    </tr>
+
+<?php else : ?>
+
 <?php foreach ($users as $user) : ?>
 
     <tr data-user_id="<?= $user->getId() ?>">
 
-        <td class="date"><?= $user->getId() ?></td>
+        <td class="id"><?= $user->getId() ?></td>
         <td class="date"><?= $user->getCreatedAt() ?></td>
         <td class="date"><?= $user->getLastLoginAt() ?></td>
         <td class="email"><?= $user->getEmail() ?></td>
@@ -73,3 +77,4 @@ use Auth\App\Entity\User;
 
 <?php endforeach; ?>
 
+<?php endif; ?>

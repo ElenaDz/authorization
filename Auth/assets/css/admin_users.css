@@ -20,6 +20,9 @@
   border-collapse: collapse;
   text-align: center;
 }
+.b_admin_users .users .id {
+  width: 80px;
+}
 .b_admin_users .users .date {
   width: 140px;
   max-width: 140px;

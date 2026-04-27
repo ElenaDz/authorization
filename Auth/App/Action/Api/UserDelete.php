@@ -2,6 +2,7 @@
 namespace Auth\App\Action\Api;
 
 use Auth\App\Model\Users;
+use Exception;
 
 
 class UserDelete extends _BaseApi

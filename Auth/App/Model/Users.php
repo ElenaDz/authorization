@@ -44,8 +44,11 @@ class Users extends _Base
 		return $user;
 	}
 
-    // todo используем этот
-    public static function getNew1(int $limit = 100, $id_first = null, $part_email = '')
+    /**
+     * @return User[]|false
+     */
+    // todo используем этот ok
+    public static function getNew(int $limit = 100, $id_first = null, $part_email = '')
     {
         $conditions = ["1=1"];
         $params = [];
@@ -72,70 +75,6 @@ class Users extends _Base
 
         $results = self::getPDO()->prepare($sql);
         $results->execute($params);
-
-        return $results->fetchAll(
-            \PDO::FETCH_CLASS,
-            User::class
-        );
-    }
-
-
-	// fixme удаляем, так не пойдет
-    public static function getNew2($part_email, int $limit = 100, $id_first = null)
-    {
-        if (!empty($id_first) && !empty($part_email))
-		{
-            $sql = sprintf(
-                "SELECT * 
-				FROM users
-				WHERE 
-						email LIKE '%s'
-				    AND	%s
-				ORDER BY id DESC 
-				LIMIT %s",
-                '%' . $part_email . '%',
-                ! empty($id_first) ? 'id <='.$id_first.'' : '1=1',
-                (int) $limit
-            );
-
-        } elseif (!empty($id_first) && empty($part_email))
-        {
-            $sql = sprintf(
-                "SELECT * 
-				FROM users
-				WHERE %s
-				ORDER BY id DESC
-				LIMIT %s",
-                ! empty($id_first) ? 'id <='.$id_first.'' : '1=1',
-                (int) $limit
-            );
-
-        } elseif (empty($id_first) && !empty($part_email))
-        {
-            $sql = sprintf(
-                "SELECT * 
-				FROM users
-				WHERE 
-					email LIKE '%s'
-				ORDER BY id DESC
-				LIMIT %d",
-                 '%' .$part_email. '%',
-                (int) $limit
-            );
-
-        } else {
-            $sql = sprintf(
-                "SELECT * 
-				FROM users
-				ORDER BY id DESC
-				LIMIT %s",
-                (int) $limit
-            );
-        }
-
-        $results = self::getPDO()->prepare($sql);
-
-        $results->execute();
 
         return $results->fetchAll(
             \PDO::FETCH_CLASS,

@@ -11,8 +11,8 @@ class UserActivation extends _BaseApi
 
     public function __invoke()
     {
-		// fixme флажок снимается из за ошибку, но флажок остается заблокирован
-		throw new \Exception("Что то пошло не так");
+		// fixme флажок снимается из за ошибку, но флажок остается заблокирован ок
+        // throw new \Exception("Что то пошло не так");
 
         $id = $_POST[self::POST_NAME_ID];
 
@@ -20,8 +20,12 @@ class UserActivation extends _BaseApi
 
         $is_activation = $_POST[self::POST_NAME_ACTIVATION];
 
-		// fixme проверка и сообщения об ошибки совершенно не согласуются, разбить на две проверки и две ошибки
-        if ( ! $is_activation && ! $user->isActivated()) {
+		// fixme проверка и сообщения об ошибки совершенно не согласуются, разбить на две проверки и две ошибки ок
+        if ( ! $is_activation ) {
+            throw new \Exception('Флаг активации снят');
+        }
+
+        if ( $user->isActivated()) {
             throw new \Exception('Пользователь уже активирован');
         }
 
