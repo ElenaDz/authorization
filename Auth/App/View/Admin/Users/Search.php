@@ -10,7 +10,6 @@
         <label for="q">
             Поиск
         </label>
-        <!-- fixme поменяй тип с text на search ок-->
         <input
             type="search"
             id="q"

@@ -5,11 +5,13 @@ use Auth\App\Entity\User;
  * @var User[] $users
  */
 
+// fixme мы здесь показываем данные которые ввел пользователь, это может быть не безопасно, нужно обезопаситься с помощью htmlspecialchars
 ?>
 
 <?php if (empty($users)): ?>
 
     <tr>
+        <!-- todo я бы здесь писал "Пусто" по-умолчанию, "Не найдено" если задана поисковая строка  -->
         <td colspan="10">Пусто</td>
     </tr>
 
@@ -27,7 +29,6 @@ use Auth\App\Entity\User;
         <td class="role">
             <form>
                 <label>
-                    <!-- todo заблокируй так как пока не используется ок-->
                     <select disabled>
                         <option>Пользователь</option>
                     </select>

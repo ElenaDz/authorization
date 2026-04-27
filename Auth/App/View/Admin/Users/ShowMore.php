@@ -8,7 +8,6 @@ use Auth\App\Entity\User;
  * @var int $limit
  */
 
-// todo используй вот такой способ выхода из шаблона если этот шаблон не нужно показывать для некоторых параметров (да точно)
 if (empty($user_id_first)) return;
 ?>
 
@@ -34,14 +33,11 @@ if (empty($user_id_first)) return;
 <script>
     $('.table-wrapper').on('click', '.show_more', (e) =>
     {
-		// fixme у btn $ в начале нет, а нужен, у $form_serialize есть, а не нужен Напомню $ мы ставим только объектам которые JQuery (согласна)
         let $btn = $(e.currentTarget);
 
         let $form = $btn.parents('form');
 
         let form_serialize = $form.serialize();
-
-		// fixme зачем эти две строки? Не просто удали, а подумай зачем добавляла и не добавляй в будущем ок
 
         $btn.addClass('loading');
 

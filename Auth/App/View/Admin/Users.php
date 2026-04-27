@@ -28,9 +28,7 @@ use Auth\Sys\Views;
 
     <div class="toolbar">
         <span class="total_users">Всего <?= $users_count ?> пользователей</span>
-        <!-- fixme кнопка ведет на не существующий url ok-->
-        <form action="<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::getUrl() ?>">
-
+        <form action="<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::getUrl() ?>" method="post">
             <button class="delete_not_activated"
                 <?php if ( ! $has_not_activated_users): ?>
 
@@ -50,17 +48,16 @@ use Auth\Sys\Views;
         <table class="users">
             <thead>
                 <tr>
+                    <!-- todo протестируй на разных размерах экрана и исправь -->
                     <th class="id">ID</th>
                     <th class="date">Дата регистрации</th>
                     <th class="date">Дата входа</th>
-                    <!-- todo зафиксируй ширину чтобы таблица "не плава" в зависимости от длины емейла ok-->
                     <th class="email_th">Email</th>
                     <th>Права</th>
-                    <!-- todo зафиксируй ширину  ok-->
                     <th class="login">Имя</th>
                     <th class="geo">Гео</th>
                     <th>IP Адрес</th>
-                    <!-- todo сделай уже до ширины флажка ok-->
+                    <!-- todo смена фона при наведении - убрать -->
                     <th class="activation">Активация</th>
                     <th class="delete">Действия</th>
                 </tr>
@@ -138,16 +135,17 @@ use Auth\Sys\Views;
             });
         </script>
 
-        <?php
-        echo Views::get(
-            __DIR__ . '/Users/ShowMore.php',
-            [
-                'users'  => $users,
-                'limit' => $limit,
-                'q' => $q,
-                'user_id_first' => $user_id_first
-            ]
-        );
+        <?=
+            Views::get(
+                __DIR__ . '/Users/ShowMore.php',
+                [
+                    'users'  => $users,
+                    'limit' => $limit,
+                    'q' => $q,
+                    'user_id_first' => $user_id_first
+                ]
+            );
         ?>
+
     </div>
 </div>

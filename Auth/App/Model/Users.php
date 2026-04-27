@@ -47,7 +47,6 @@ class Users extends _Base
     /**
      * @return User[]|false
      */
-	// fixme почему part_email именно пустая строка, по-умолчанию пустой, не важно какого типа, равен null ок
     public static function getNew(int $limit = 100, $id_first = null, $part_email = null)
     {
         $conditions = ["1=1"];
