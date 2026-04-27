@@ -4,6 +4,7 @@ namespace Auth\App\Action\Admin;
 
 
 use Auth\Sys\Request;
+use Auth\Sys\Response;
 use Auth\Sys\Routing;
 use Auth\Sys\Views;
 use Exception;
@@ -31,7 +32,7 @@ class Users extends _BaseAdmin
 	     * @see \Auth\Sys\Response::setStatusCode
 	     */
         if (empty($users)) {
-            throw new Exception('Пользователи не найдены');
+            Response::setStatusCode(404);
         }
 
         $user_id_first = $users[self::LIMIT] ? $users[self::LIMIT]->getID() : null;

@@ -10,9 +10,9 @@
         <label for="q">
             Поиск
         </label>
-        <!-- fixme поменяй тип с text на search -->
+        <!-- fixme поменяй тип с text на search ок-->
         <input
-            type="text"
+            type="search"
             id="q"
             name="<?= \Auth\App\Action\Admin\Users::POST_NAME_Q ?>"
             value="<?= htmlspecialchars($q ?? '') ?>"

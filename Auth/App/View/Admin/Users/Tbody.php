@@ -27,8 +27,8 @@ use Auth\App\Entity\User;
         <td class="role">
             <form>
                 <label>
-                    <!-- todo заблокируй так как пока не используется -->
-                    <select>
+                    <!-- todo заблокируй так как пока не используется ок-->
+                    <select disabled>
                         <option>Пользователь</option>
                     </select>
                 </label>

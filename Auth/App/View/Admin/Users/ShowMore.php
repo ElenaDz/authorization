@@ -8,7 +8,7 @@ use Auth\App\Entity\User;
  * @var int $limit
  */
 
-// todo используй вот такой способ выхода из шаблона если этот шаблон не нужно показывать для некоторых параметров
+// todo используй вот такой способ выхода из шаблона если этот шаблон не нужно показывать для некоторых параметров (да точно)
 if (empty($user_id_first)) return;
 ?>
 
@@ -34,25 +34,23 @@ if (empty($user_id_first)) return;
 <script>
     $('.table-wrapper').on('click', '.show_more', (e) =>
     {
-		// fixme у btn $ в начале нет, а нужен, у $form_serialize есть, а не нужен Напомню $ мы ставим только объектам которые JQuery
-        let btn = $(e.currentTarget);
+		// fixme у btn $ в начале нет, а нужен, у $form_serialize есть, а не нужен Напомню $ мы ставим только объектам которые JQuery (согласна)
+        let $btn = $(e.currentTarget);
 
-        let $form = btn.parents('form');
+        let $form = $btn.parents('form');
 
-        let $form_serialize = $form.serialize();
+        let form_serialize = $form.serialize();
 
-		// fixme зачем эти две строки? Не просто удали, а подумай зачем добавляла и не добавляй в будущем
-        let user_id_first = $form.data('<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>');
-        $form.find('input[name="<?= \Auth\App\Action\Admin\Users::GET_NAME_USER_ID_FIRST ?>"]').val(user_id_first);
+		// fixme зачем эти две строки? Не просто удали, а подумай зачем добавляла и не добавляй в будущем ок
 
-        btn.addClass('loading');
+        $btn.addClass('loading');
 
-        btn.prop('disabled', true)
+        $btn.prop('disabled', true)
 
         $.ajax({
             url: $form.attr("action"),
             method: 'GET',
-            data:  $form_serialize,
+            data:  form_serialize,
             success: function(response)
             {
                 let parser = new DOMParser();
@@ -73,8 +71,8 @@ if (empty($user_id_first)) return;
             },
             complete: () =>
             {
-                btn.prop('disabled', false);
-                btn.removeClass('loading');
+                $btn.prop('disabled', false);
+                $btn.removeClass('loading');
             }
         });
 

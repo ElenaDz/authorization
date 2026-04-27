@@ -20,9 +20,15 @@
     }
 
     .users {
+      table-layout: fixed;
       width: 100%;
       border-collapse: collapse;
       text-align: center;
+
+      .email_th, .email {
+        width: 260px;
+        box-sizing: border-box;
+      }
 
       .id {
         width: 80px;
@@ -34,29 +40,42 @@
 
       .email {
         text-align: left;
-        max-width: 300px;
       }
 
       .login {
         text-align: left;
         width: 180px;
+        max-width: 200px;
       }
 
-      .email {
-        width: 200px;
-      }
       .role {
         width: 160px;
 
         select {
           width: 100%;
+
+          &:disabled {
+            cursor: initial;
+          }
         }
       }
       .ip {
         width: 90px;
       }
       .activation {
-        width: 90px;
+        width: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all 0.3s ease;
+
+        &:hover {
+          overflow: visible;
+          white-space: normal;
+          background: #ddd;
+          position: relative;
+          z-index: 2;
+        }
 
         label {
           position: relative;
