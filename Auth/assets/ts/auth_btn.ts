@@ -110,7 +110,7 @@ class AuthBtn
                 })
                 .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) =>
                 {
-                    throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
+                    showErrorAjix(jqXHR);
                 });
         });
     }
@@ -150,8 +150,7 @@ class AuthBtn
             })
             .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) =>
             {
-                // fixme использовать здесь функцию которую я написал для показа ошибок showErrorAjix() так же как у таблицы пользователей
-                throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
+                showErrorAjix(jqXHR);
             });
     }
 

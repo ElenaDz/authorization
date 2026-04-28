@@ -18,8 +18,7 @@ class UserActivation extends _BaseApi
         $is_activation = $_POST[self::POST_NAME_ACTIVATION];
 
         if ( ! $is_activation ) {
-			// fixme не понятное сообщение об ошибке, что на самом деле здесь пошло не так что пришлось бросать исключение?
-            throw new \Exception('Флаг активации снят');
+            throw new \Exception('Нельзя отменить активацию');
         }
 
         if ( $user->isActivated()) {

@@ -4,7 +4,9 @@ let showErrorAjix = (jqXHR: XMLHttpRequest) =>
 	const [title, ...rest] = jqXHR.responseText.split('\n');
 	const msg = rest.join('\n');
 
-	console.error(title+"\r\n"+msg);
+	// console.error(title+"\r\n"+msg);
+	console.error(msg);
+	console.error(jqXHR.responseText);
 
 	butterup.options.maxToasts = 3;
 	butterup.options.toastLife = 20*1000;

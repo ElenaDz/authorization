@@ -63,7 +63,7 @@ class AuthBtn {
                 this.$context.find('.open').show();
             })
                 .fail((jqXHR, textStatus, errorThrow) => {
-                throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
+                showErrorAjix(jqXHR);
             });
         });
     }
@@ -89,8 +89,7 @@ class AuthBtn {
             this.initAjix();
         })
             .fail((jqXHR, textStatus, errorThrow) => {
-            // fixme использовать здесь функцию которую я написал для показа ошибок showErrorAjix() так же как у таблицы пользователей
-            throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
+            showErrorAjix(jqXHR);
         });
     }
     initAjix() {

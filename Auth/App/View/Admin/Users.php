@@ -15,14 +15,25 @@ use Auth\Sys\Views;
 
 <div class="b_admin_users">
 
-    <?php
+    <div class="nav">
+        <?php
         echo Views::get(
             __DIR__ . '/Users/Search.php',
             [
                 'q'  => $q
             ]
         );
-    ?>
+        ?>
+        <div class="inner_nav">
+            <div class="elem">
+                <a class="nav-link" href="/damin.php">Главная</a>
+            </div>
+            <div  class="elem">
+                <a class="nav-link" href="/" target="_blank">Просмотр сайта</a>
+            </div>
+        </div>
+    </div>
+
 
     <div class="line"></div>
 
@@ -48,16 +59,14 @@ use Auth\Sys\Views;
         <table class="users">
             <thead>
                 <tr>
-                    <!-- todo протестируй на разных размерах экрана и исправь -->
                     <th class="id">ID</th>
                     <th class="date">Дата регистрации</th>
                     <th class="date">Дата входа</th>
                     <th class="email_th">Email</th>
-                    <th>Права</th>
+                    <th class="role">Права</th>
                     <th class="login">Имя</th>
                     <th class="geo">Гео</th>
-                    <th>IP Адрес</th>
-                    <!-- todo смена фона при наведении - убрать -->
+                    <th class="ip">IP Адрес</th>
                     <th class="activation">Активация</th>
                     <th class="delete">Действия</th>
                 </tr>
@@ -67,7 +76,8 @@ use Auth\Sys\Views;
                 echo Views::get(
                     __DIR__ . '/Users/Tbody.php',
                     [
-                        'users'  => $users
+                        'users'  => $users,
+                        'q' => $q
                     ]
                 );
                 ?>
@@ -148,4 +158,49 @@ use Auth\Sys\Views;
         ?>
 
     </div>
+    <script>
+        $('.table-wrapper').on('click', '.show_more', (e) =>
+        {
+            let $btn = $(e.currentTarget);
+
+            let $form = $btn.parents('form');
+
+            let form_serialize = $form.serialize();
+
+            $btn.addClass('loading');
+
+            $btn.prop('disabled', true)
+
+            $.ajax({
+                url: $form.attr("action"),
+                method: 'GET',
+                data:  form_serialize,
+                success: function(response)
+                {
+                    let parser = new DOMParser();
+
+                    let doc = parser.parseFromString(response, 'text/html');
+
+                    let tbody = $(doc).find('.users tbody').html();
+
+                    let $wrap_show_more =  $(doc).find('.wrap_show_more');
+
+                    $('.wrap_show_more').replaceWith($wrap_show_more);
+
+                    $('.users tbody').append(tbody);
+                },
+                error: function(jqXHR, )
+                {
+                    showErrorAjix(jqXHR);
+                },
+                complete: () =>
+                {
+                    $btn.prop('disabled', false);
+                    $btn.removeClass('loading');
+                }
+            });
+
+            return false;
+        });
+    </script>
 </div>

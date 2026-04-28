@@ -2,9 +2,11 @@
 
 namespace Auth\App\Action\Admin;
 
+use Auth\Sys\Request;
 use Auth\Sys\Response;
 use Auth\Sys\Routing;
 use Auth\Sys\Views;
+use Exception;
 
 class Users extends _BaseAdmin
 {
@@ -16,12 +18,11 @@ class Users extends _BaseAdmin
 
     public function __invoke($q = '', $user_id_first = null)
     {
-
         $q = $_POST[self::POST_NAME_Q] ?? $q;
 
         $users = \Auth\App\Model\Users::getNew(self::LIMIT + 1, $user_id_first, $q);
 
-        if (empty($users)) {
+        if (empty($users) && ! Request::isAjax()) {
             Response::setStatusCode(404);
         }
 
@@ -31,6 +32,7 @@ class Users extends _BaseAdmin
         }
 
 	    $has_not_activated_users = ! empty(\Auth\App\Model\Users::getNotActivated());
+
         $users_count = \Auth\App\Model\Users::getCount();
 
         $content = Views::get(

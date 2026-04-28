@@ -3,16 +3,17 @@ use Auth\App\Entity\User;
 
 /**
  * @var User[] $users
+ * @var $q
  */
 
-// fixme мы здесь показываем данные которые ввел пользователь, это может быть не безопасно, нужно обезопаситься с помощью htmlspecialchars
 ?>
 
 <?php if (empty($users)): ?>
 
     <tr>
-        <!-- todo я бы здесь писал "Пусто" по-умолчанию, "Не найдено" если задана поисковая строка  -->
-        <td colspan="10">Пусто</td>
+        <td colspan="10">
+            <?= $q ? 'Не найдено' : 'Пусто' ?>
+        </td>
     </tr>
 
 <?php else : ?>
@@ -24,7 +25,7 @@ use Auth\App\Entity\User;
         <td class="id"><?= $user->getId() ?></td>
         <td class="date"><?= $user->getCreatedAt() ?></td>
         <td class="date"><?= $user->getLastLoginAt() ?></td>
-        <td class="email"><?= $user->getEmail() ?></td>
+        <td class="email"><?= htmlspecialchars($user->getEmail()) ?></td>
 
         <td class="role">
             <form>
@@ -36,8 +37,8 @@ use Auth\App\Entity\User;
             </form>
         </td>
 
-        <td class="login"><?= $user->getLogin() ?></td>
-        <td class="geo"><?= $user->getCountry() ?> <br> <?= $user->getCity() ?></td>
+        <td class="login"><?= htmlspecialchars($user->getLogin()) ?></td>
+        <td class="geo"><?= htmlspecialchars($user->getCountry()) ?> <br> <?= htmlspecialchars($user->getCity()) ?></td>
         <td class="ip"><?= $user->getIP() ?></td>
 
         <td class="activation">

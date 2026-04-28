@@ -13,6 +13,28 @@
   max-width: 1600px;
   /* Стилизация элементов управления */
 }
+.b_admin_users a {
+  text-decoration: none;
+}
+.b_admin_users .nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.b_admin_users .nav .inner_nav {
+  display: flex;
+}
+.b_admin_users .nav .inner_nav .nav-link {
+  margin-right: 15px;
+  box-sizing: border-box;
+  width: fit-content;
+  white-space: nowrap;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
 .b_admin_users .toolbar {
   display: flex;
   justify-content: space-between;
@@ -26,11 +48,11 @@
   text-align: center;
 }
 .b_admin_users .users .email_th, .b_admin_users .users .email {
-  width: 260px;
+  width: 220px;
   box-sizing: border-box;
 }
 .b_admin_users .users .id {
-  width: 80px;
+  width: 50px;
 }
 .b_admin_users .users .date {
   width: 140px;
@@ -41,11 +63,11 @@
 }
 .b_admin_users .users .login {
   text-align: left;
-  width: 180px;
+  width: 170px;
   max-width: 200px;
 }
 .b_admin_users .users .role {
-  width: 160px;
+  width: 140px;
 }
 .b_admin_users .users .role select {
   width: 100%;
@@ -66,7 +88,6 @@
 .b_admin_users .users .activation:hover {
   overflow: visible;
   white-space: normal;
-  background: #ddd;
   position: relative;
   z-index: 2;
 }
@@ -84,7 +105,10 @@
   cursor: initial;
 }
 .b_admin_users .users .delete {
-  width: 100px;
+  width: 60px;
+}
+.b_admin_users .users .delete form {
+  width: 100%;
 }
 .b_admin_users .users .delete button {
   font-size: 11px;
@@ -94,7 +118,7 @@
   background: #eee;
 }
 .b_admin_users .users .geo {
-  width: 110px;
+  width: 90px;
 }
 .b_admin_users .users th {
   background-color: #f9f9f9;
