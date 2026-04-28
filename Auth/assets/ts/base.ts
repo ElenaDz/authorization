@@ -3,8 +3,7 @@ let showErrorAjix = (jqXHR: XMLHttpRequest) =>
 {
 	const [title, ...rest] = jqXHR.responseText.split('\n');
 	const msg = rest.join('\n');
-
-	// console.error(title+"\r\n"+msg);
+	
 	console.error(msg);
 	console.error(jqXHR.responseText);
 
