@@ -9,15 +9,23 @@
     color: inherit;
   }
 
+  .wrap_loader {
+    width: 98px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+
   .loader {
     width: 30px;
     height: 30px;
     border: 5px solid #1A81F6; /* Цвет основного кольца */
     border-bottom-color: white; /* Цвет активной части */
-
+    display: none;
     border-radius: 50%;
 
-    display: none;
+
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
 
@@ -107,9 +115,8 @@
       align-items: center;
       width: 100%;
       height: 40px;
-      // fixme у тебя не правильно сверстано меню, каждый пунк меня должен быть на всю ширину, иначе по нему не возможно кликнуть,
-      //  убери эту строку и увидишь что кликабельная зона у тебя совпадает с размером текста а должна быть на всю ширину
       cursor: pointer;
+      white-space: nowrap;
 
       a {
         height: 100%;

@@ -78,7 +78,6 @@ class Reg extends _Base
                 return;
             }
 
-
             if ( isset($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]) ) {
                 unset($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]);
             }
