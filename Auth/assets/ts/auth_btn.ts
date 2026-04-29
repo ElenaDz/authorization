@@ -99,6 +99,7 @@ class AuthBtn
 
             this.auth_modal = AuthModal.create();
 
+
             this.request(url)
                 .done(() =>
                 {
@@ -110,7 +111,7 @@ class AuthBtn
                 })
                 .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) =>
                 {
-                    showErrorAjix(jqXHR);
+                    throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
                 });
         });
     }

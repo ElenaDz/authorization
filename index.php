@@ -35,6 +35,10 @@ $getUrl = function ($file_path)
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
+    <link
+            href="/Auth/assets/js/butterup-main/butterup.min.css?v=<?= filemtime(__DIR__ . '/Auth/assets/js/butterup-main/butterup.min.css') ?>"
+            rel="stylesheet"
+    >
 </head>
 
 <body style="padding: 20px;">
@@ -120,6 +124,7 @@ $getUrl = function ($file_path)
         __DIR__.'/Auth/assets/js/auth.one_file.js'
     );
     ?>
+    <script src="/Auth/assets/js/butterup-main/butterup.min.js?v=<?= filemtime(__DIR__ . '/Auth/assets/js/butterup-main/butterup.min.js') ?>" async></script>
 
     <script src="<?= $getUrl(__DIR__ . '/Auth/assets/js/auth.one_file.js'); ?>"></script>
 

@@ -2,7 +2,7 @@
 namespace Auth\App\Entity;
 
 use Auth\App\Action\Logon;
-use Auth\APP\Helper\SxGeo;
+use Auth\App\Helper\SxGeo;
 use Auth\App\Model\Users;
 use Auth\Sys\Request;
 use DateTime;

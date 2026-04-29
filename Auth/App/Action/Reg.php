@@ -79,6 +79,10 @@ class Reg extends _Base
             }
 
 
+            if ( isset($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]) ) {
+                unset($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]);
+            }
+
             $user = User::create($login, $pass, $email);
 
             $id = Users::add($user);

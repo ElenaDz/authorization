@@ -63,7 +63,7 @@ class AuthBtn {
                 this.$context.find('.open').show();
             })
                 .fail((jqXHR, textStatus, errorThrow) => {
-                showErrorAjix(jqXHR);
+                throw new Error("Ошибка: " + errorThrow + ". Ответ сервера: " + jqXHR.responseText);
             });
         });
     }

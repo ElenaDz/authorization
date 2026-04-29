@@ -1,6 +1,7 @@
 <?php
 namespace Auth\App\Action;
 
+use Auth\App\Entity\User;
 use Auth\App\Helper\SxGeo;
 use Auth\App\Service\Auth;
 use Auth\Sys\Request;
