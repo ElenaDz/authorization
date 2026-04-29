@@ -170,13 +170,20 @@ body {
   text-decoration: none;
   color: inherit;
 }
+.b_auth_btn .wrap_loader {
+  width: 98px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 .b_auth_btn .loader {
   width: 30px;
   height: 30px;
   border: 5px solid #1A81F6; /* Цвет основного кольца */
   border-bottom-color: white; /* Цвет активной части */
-  border-radius: 50%;
   display: none;
+  border-radius: 50%;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
@@ -260,6 +267,7 @@ body {
   width: 100%;
   height: 40px;
   cursor: pointer;
+  white-space: nowrap;
 }
 .b_auth_btn .list_profile_options .item a {
   height: 100%;

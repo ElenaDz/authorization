@@ -49,7 +49,9 @@ $getUrl = function ($file_path)
             <button class="open" data-href="<?= \Auth\App\Action\Logon::getUrl(); ?>">
                 Вход
             </button>
-            <div class="loader"></div>
+            <div class="wrap_loader">
+                <div class="loader"></div>
+            </div>
 
         <?php else: ?>
 
