@@ -69,7 +69,7 @@ class Auth
     public static function loginUser(User $user)
     {
         if ( ! $user->isActivated()) {
-            throw new \Exception('Чтобы войти, вам нужно активировать аккаунт, проверьте почту');
+            throw new \DomainException('Ваш аккаунт еще не активирован. Проверьте почту и перейдите по ссылке в письме.');
         }
 
         if (empty($user->getToken())) {

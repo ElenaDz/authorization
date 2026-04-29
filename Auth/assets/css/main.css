@@ -261,19 +261,36 @@ body {
   height: 40px;
   cursor: pointer;
 }
+.b_auth_btn .list_profile_options .item a {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
 .b_auth_btn .list_profile_options .item form {
   display: flex;
   width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: start;
 }
 .b_auth_btn .list_profile_options .item form .exit {
   margin: unset;
   background: none;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+  height: 100%;
   border: none;
   padding: 0;
   color: inherit;
   font: inherit;
   outline: none;
   cursor: pointer;
+}
+.b_auth_btn .list_profile_options .item:not(:last-child) {
+  border-bottom: 1px solid #d0e1f5;
 }
 
 .b_auth_modal {
