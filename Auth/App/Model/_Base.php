@@ -18,7 +18,9 @@ abstract class _Base
 				'lena',
 				'`12',
 				[
-                    PDO::ATTR_PERSISTENT => false
+                    PDO::ATTR_PERSISTENT => false,
+					// кидаем исключение при ошибках БД, а не просто возвращаем false
+					PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 ]
 			);
 		}

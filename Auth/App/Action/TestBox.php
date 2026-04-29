@@ -9,7 +9,6 @@ class TestBox extends _Base
 {
 	public function __invoke()
 	{
-		var_dump(null);
 
 	}
 }
