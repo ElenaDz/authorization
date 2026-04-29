@@ -78,6 +78,7 @@ class Reg extends _Base
                 return;
             }
 
+
             $user = User::create($login, $pass, $email);
 
             $id = Users::add($user);
