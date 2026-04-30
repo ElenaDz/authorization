@@ -5,6 +5,7 @@ use Auth\App\Helper\Email;
 use Auth\App\Entity\User;
 use Auth\App\Helper\Url;
 use Auth\App\Model\Users;
+use Auth\Sys\Request;
 use Auth\Sys\Views;
 
 class Reg extends _Base
@@ -78,11 +79,7 @@ class Reg extends _Base
                 return;
             }
 
-            // if ( isset($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]) ) {
-            //   unset($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE]);
-            // }
-
-            $user = User::create($login, $pass, $email);
+            $user = User::create($login, $pass, $email, Request::getIpRemote());
 
             $id = Users::add($user);
 

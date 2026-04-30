@@ -37,7 +37,7 @@ class User extends _Base
 	private $ip;
 	private $city;
 
-	public static function create($login, $pass, $email): User
+	public static function create($login, $pass, $email, $ip): User
     {
         $user = new self();
 
@@ -49,7 +49,7 @@ class User extends _Base
 
 	    $user->genActivationCode();
 
-        $user->updateUserIp();
+        $user->setIP($ip);
 
         return $user;
 	}
@@ -154,8 +154,6 @@ class User extends _Base
 
     public function updateUserIp()
     {
-        if ( ! empty($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE])) return;
-
         $ip = Request::getIpRemote();
 
         $this->setIP($ip);

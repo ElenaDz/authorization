@@ -17,7 +17,7 @@ class GeneratorFakeUsers extends _BaseAdmin
 			$pass = 'Qw123!';
 			$email =  $login.'@mail.ru';
 
-			$user = User::create($login, $pass, $email);
+			$user = User::create($login, $pass, $email, '178.252.127.241');
 
 			var_dump(Users::add($user));
 		}

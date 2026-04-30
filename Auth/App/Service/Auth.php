@@ -9,6 +9,7 @@ use Auth\Sys\Request;
 class Auth
 {
     const COOKIE_NAME_TOKEN = 'auth_token';
+    const COOKIE_NAME_UPDATE_USER_IP_DONE = 'update_user_ip_done';
 
     /**
      * @var User $user
@@ -19,6 +20,7 @@ class Auth
     public static function isAuthorized(): bool
     {
 		$token = $_COOKIE[self::COOKIE_NAME_TOKEN] ?? null ;
+
         if (empty($token)) return false;
 
         if (self::$user) return true;
@@ -34,10 +36,12 @@ class Auth
 
         self::$user = $user;
 
-        $user->updateUserIp();
+        if ( empty($_COOKIE[Logon::COOKIE_NAME_UPDATE_USER_IP_DONE])) {
+            $user->updateUserIp();
+        }
 
         if ( ! headers_sent()) {
-            setcookie(Logon::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
+            setcookie(Auth::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
         }
 
         $user->save();
