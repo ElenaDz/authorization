@@ -1,8 +1,6 @@
 <?php
 namespace Auth\App\Action;
 
-use Auth\App\Entity\User;
-use Auth\App\Helper\SxGeo;
 use Auth\App\Service\Auth;
 use Auth\Sys\Request;
 use Auth\Sys\Response;
@@ -13,8 +11,6 @@ class Logon extends _Base
     const POST_NAME_EMAIL = 'email';
     const POST_NAME_PASS = 'password';
     const POST_NAME_SUBMIT = 'submit';
-	const COOKIE_NAME_UPDATE_USER_IP_DONE = 'update_user_ip_done';
-
 
     public function __invoke($email = null)
 	{
