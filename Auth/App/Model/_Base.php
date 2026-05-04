@@ -12,7 +12,8 @@ abstract class _Base
 
 	protected static function getPDO(): PDO
 	{
-		if (empty(self::$pdo)) {
+		if (empty(self::$pdo))
+		{
 			self::$pdo = new PDO(
 				'mysql:host=localhost;dbname=authorization',
 				'lena',
@@ -23,6 +24,10 @@ abstract class _Base
 					PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 ]
 			);
+
+			include_once __DIR__.'/../../vendor/Sql.php';
+
+			\Sql::setPDO(self::$pdo);
 		}
 		return self::$pdo;
 	}

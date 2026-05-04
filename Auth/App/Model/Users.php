@@ -11,8 +11,13 @@ class Users extends _Base
 	 */
 	public static function getById($id)
 	{
-		$results = self::getPDO()->query (
-			'SELECT * FROM users WHERE id ='. (int) $id
+		$results = self::getPDO()->query(
+			'SELECT * 
+			FROM users
+			WHERE '.
+				\Sql::where([
+					'id' => $id
+				])
 		);
 
 		return $results->fetchObject(
@@ -23,7 +28,8 @@ class Users extends _Base
     public static function getCount()
     {
         $results = self::getPDO()->query (
-            'SELECT COUNT(*) FROM users'
+            'SELECT COUNT(*)
+			FROM users'
         );
 
         return $results->fetchColumn();
@@ -49,31 +55,27 @@ class Users extends _Base
      */
     public static function getNew(int $limit = 100, $id_first = null, $part_email = null)
     {
-        $conditions = ["1=1"];
-        $params = [];
+		$pdo = self::getPDO();
 
-        if ($part_email) {
-            $conditions[] = "email LIKE :part_email";
-            $params['part_email'] = '%' . $part_email . '%';
-        }
+		$where = \Sql::where(
+		    array_filter([
+			    'email[~]' => $part_email,
+			    'id[<=]' => $id_first
+		    ])
+	    );
 
-        if ($id_first) {
-            $conditions[] = "id <= :id_first";
-            $params['id_first'] = $id_first;
-        }
-
-        $sql = sprintf(
-            "SELECT *
-			FROM users 
-			WHERE %s 
-			ORDER BY id DESC 
-			LIMIT %d",
-            implode(' AND ', $conditions),
-            $limit
-        );
-
-        $results = self::getPDO()->prepare($sql);
-        $results->execute($params);
+        $results = $pdo
+	        ->query(
+		        sprintf(
+			        "SELECT *
+					FROM users 
+					WHERE %s 
+					ORDER BY id DESC 
+					LIMIT %d",
+			        $where ?: '1=1',
+			        (int) $limit
+		        )
+	        );
 
         return $results->fetchAll(
             \PDO::FETCH_CLASS,
@@ -86,7 +88,7 @@ class Users extends _Base
 	 */
     public static function getNotActivated()
     {
-        $results = self::getPDO()->query (
+        $results = self::getPDO()->query(
             'SELECT * 
 			FROM users 
 			WHERE activation_code IS NOT NULL'
@@ -106,13 +108,16 @@ class Users extends _Base
     {
         $pdo = self::getPDO();
 
-        $results = $pdo->prepare(
-            'SELECT * FROM users WHERE email = :value  LIMIT 1'
+        $results = $pdo->query(
+            'SELECT * 
+			FROM users 
+			WHERE '.
+                \Sql::where([
+					'email' => $email
+                ]).
+            '  
+			LIMIT 1'
         );
-
-		$results->execute([
-            'value' => $email
-        ]);
 
         return $results->fetchObject(User::class);
     }
@@ -135,13 +140,16 @@ class Users extends _Base
     {
         $pdo = self::getPDO();
 
-        $results = $pdo->prepare(
-            'SELECT * FROM users WHERE email=:email LIMIT 1'
+        $results = $pdo->query(
+            'SELECT * 
+			FROM users 
+			WHERE '.
+	            \Sql::where([
+		            'email' => $email
+	            ]).
+            '  
+			LIMIT 1'
         );
-
-        $results->execute([
-            'email' => $email
-        ]);
 
         return ! empty($results->fetchColumn());
     }
@@ -154,13 +162,16 @@ class Users extends _Base
     {
         $pdo = self::getPDO();
 
-        $results = $pdo->prepare(
-            'SELECT * FROM users WHERE token=:token LIMIT 1'
+        $results = $pdo->query(
+            'SELECT * 
+			FROM users 
+			WHERE '.
+	            \Sql::where([
+					'token' => $token
+	            ]).
+	        '   
+			LIMIT 1'
         );
-
-        $results->execute([
-            'token' => $token
-        ]);
 
         return $results->fetchObject(
             User::class
@@ -273,7 +284,10 @@ class Users extends _Base
         self::getPDO()->query (
             'DELETE 
 			FROM users 
-			WHERE id ='. (int) $id
+			WHERE '.
+	            \Sql::where([
+					'id' => $id
+	            ])
         );
     }
 }

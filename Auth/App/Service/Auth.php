@@ -36,12 +36,12 @@ class Auth
 
         self::$user = $user;
 
-        if ( empty($_COOKIE[Auth::COOKIE_NAME_UPDATE_USER_IP_DONE])) {
+        if (empty($_COOKIE[self::COOKIE_NAME_UPDATE_USER_IP_DONE])) {
             $user->updateUserIp();
         }
 
         if ( ! headers_sent()) {
-            setcookie(Auth::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
+            setcookie(self::COOKIE_NAME_UPDATE_USER_IP_DONE, true, 0, '/');
         }
 
         $user->save();

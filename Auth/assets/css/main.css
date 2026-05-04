@@ -180,8 +180,10 @@ body {
 .b_auth_btn .loader {
   width: 30px;
   height: 30px;
-  border: 5px solid #1A81F6; /* Цвет основного кольца */
-  border-bottom-color: white; /* Цвет активной части */
+  border: 5px solid #1A81F6;
+  /* Цвет основного кольца */
+  border-bottom-color: white;
+  /* Цвет активной части */
   display: none;
   border-radius: 50%;
   box-sizing: border-box;
