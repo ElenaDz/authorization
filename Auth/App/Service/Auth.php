@@ -3,6 +3,7 @@ namespace Auth\App\Service;
 
 use Auth\App\Action\Logon;
 use Auth\App\Entity\User;
+use Auth\App\Exception\UserNoActivationDomainException;
 use Auth\App\Model\Users;
 use Auth\Sys\Request;
 
@@ -73,7 +74,7 @@ class Auth
     public static function loginUser(User $user)
     {
         if ( ! $user->isActivated()) {
-            throw new \DomainException('Ваш аккаунт еще не активирован. Проверьте почту и перейдите по ссылке в письме.');
+            throw new UserNoActivationDomainException('Ваш аккаунт еще не активирован. Проверьте почту и перейдите по ссылке в письме.');
         }
 
         if (empty($user->getToken())) {

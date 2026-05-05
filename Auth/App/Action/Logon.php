@@ -1,6 +1,7 @@
 <?php
 namespace Auth\App\Action;
 
+use Auth\App\Exception\UserNoActivationDomainException;
 use Auth\App\Service\Auth;
 use Auth\Sys\Request;
 use Auth\Sys\Response;
@@ -34,6 +35,18 @@ class Logon extends _Base
                 } else {
                     Response::redirect('/');
                 }
+
+            } catch (UserNoActivationDomainException $exception) {
+                $content = Views::get(
+                    __DIR__ . '/../View/Block/Logon/LogonNoActivation.php'
+                );
+
+                self::showLayout(
+                    'Ошибка входа',
+                    $content
+                );
+
+                exit();
 
             } catch (\DomainException $exception) {
                 $errors[self::POST_NAME_SUBMIT] = $exception->getMessage();
