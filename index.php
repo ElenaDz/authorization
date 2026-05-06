@@ -83,9 +83,9 @@ $getUrl = function ($file_path)
 
     <div class="lk">
         <?php
-            ob_start();
+            // ob_start();
             \Auth\Sys\Routing::runAction(\Auth\App\Action\LK::class);
-            $lk = ob_get_clean();
+            // $lk = ob_get_clean();
         ?>
     </div>
 
@@ -127,6 +127,7 @@ $getUrl = function ($file_path)
     <script>
         $(function() {
             AuthBtn.create($('.b_auth_btn'));
+            LK.create();
         });
     </script>
 </body>

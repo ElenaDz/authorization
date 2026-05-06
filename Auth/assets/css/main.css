@@ -180,10 +180,8 @@ body {
 .b_auth_btn .loader {
   width: 30px;
   height: 30px;
-  border: 5px solid #1A81F6;
-  /* Цвет основного кольца */
-  border-bottom-color: white;
-  /* Цвет активной части */
+  border: 5px solid #1A81F6; /* Цвет основного кольца */
+  border-bottom-color: white; /* Цвет активной части */
   display: none;
   border-radius: 50%;
   box-sizing: border-box;
@@ -348,4 +346,55 @@ body {
 }
 .b_auth_modal.open .model_fon {
   display: flex;
+}
+
+.b_lk {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+}
+.b_lk ul {
+  padding: 0;
+}
+
+.sidebar-my-collection {
+  border-bottom: 1px solid #e9e9e9;
+  padding: 0 32px 24px 32px;
+}
+
+.sidebar-my-collection ul {
+  list-style: none;
+}
+
+.sidebar-my-collection ul li:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.sidebar-my-collection ul a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: black;
+}
+
+.sidebar-my-collection ul a .link-content {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.sidebar-my-collection ul a .link-content span {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.sidebar-my-collection ul a .count {
+  color: #686868;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+.sidebar-my-collection ul a svg {
+  margin-right: 10px;
 }

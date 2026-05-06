@@ -1,0 +1,54 @@
+@import "mixin";
+@import "var";
+
+.b_lk {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+
+  ul {
+    padding: 0;
+  }
+}
+
+.sidebar-my-collection {
+  border-bottom: 1px solid #e9e9e9;
+  padding: 0 32px 24px 32px;
+}
+
+.sidebar-my-collection ul {
+  list-style: none;
+}
+
+.sidebar-my-collection ul li:not(:last-child){
+  margin-bottom: 10px;
+}
+
+.sidebar-my-collection ul a{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: black;
+}
+
+.sidebar-my-collection ul a .link-content {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.sidebar-my-collection ul a .link-content span {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.sidebar-my-collection ul a .count {
+  color: #686868;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+.sidebar-my-collection ul a svg {
+  margin-right: 10px;
+}
