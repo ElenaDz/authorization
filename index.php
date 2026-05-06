@@ -29,15 +29,18 @@ $getUrl = function ($file_path)
 <head>
     <meta charset="UTF-8">
     <title>DriveMusic</title>
-    <link rel="stylesheet" href="<?= $getUrl(__DIR__ . '/Auth/assets/css/main.css'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-          rel="stylesheet">
     <link
-            href="/Auth/assets/js/butterup-main/butterup.min.css?v=<?= filemtime(__DIR__ . '/Auth/assets/js/butterup-main/butterup.min.css') ?>"
-            rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="<?= $getUrl(__DIR__.'/Auth/assets/css/main.css'); ?>">
+    <!-- fixme переписать на использование функции $getUrl -->
+    <link
+        href="/Auth/assets/js/butterup-main/butterup.min.css?v=<?= filemtime(__DIR__.'/Auth/assets/js/butterup-main/butterup.min.css') ?>"
+        rel="stylesheet"
     >
 </head>
 
@@ -77,32 +80,23 @@ $getUrl = function ($file_path)
 
         <?php endif; ?>
     </div>
-    <br>
-    <br>
-    <div>
-        <a href="<?= \Auth\App\Action\Admin\Users::getUrl() ?>">Админка</a>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <a href="<?= \Auth\App\Action\TestBox::getUrl(); ?>">
-        Тестовая площадка
-    </a><br>
-    <a href="<?= \Auth\App\Action\Admin\GeneratorFakeUsers::getUrl() ?>">
-        Генератор фейковых пользователей
-    </a><br>
-    <br>
-    <a href="https://www.figma.com/design/Wcdl2WmNjDCYluMBndX2DJ/DriveMusic?node-id=201-1057">
-        Шаблон в Figma
-    </a>
 
-    <br>
-    <h2>Cron</h2>
+    <div class="lk">
+        <?php
+            ob_start();
+            \Auth\Sys\Routing::runAction(\Auth\App\Action\LK::class);
+            $lk = ob_get_clean();
+        ?>
+    </div>
+
+
     <ul>
         <li>
-            <a href="/Auth/do_cron.php?job=<?= \Auth\App\Action\Api\DeleteNotActivatedUsers::class ?>">
-                Удалить не активированных пользователей
+            <a href="<?= \Auth\App\Action\Admin\Users::getUrl() ?>">Таблица пользователей</a>
+        </li>
+        <li>
+            <a href="<?= \Auth\App\Action\TestBox::getUrl(); ?>">
+                Тестовая площадка
             </a>
         </li>
     </ul>
@@ -126,10 +120,10 @@ $getUrl = function ($file_path)
         __DIR__.'/Auth/assets/js/auth.one_file.js'
     );
     ?>
+    <!-- fixme переписать на использование функции $getUrl -->
     <script src="/Auth/assets/js/butterup-main/butterup.min.js?v=<?= filemtime(__DIR__ . '/Auth/assets/js/butterup-main/butterup.min.js') ?>" async></script>
-
     <script src="<?= $getUrl(__DIR__ . '/Auth/assets/js/auth.one_file.js'); ?>"></script>
-
+    <script src="<?= $getUrl(__DIR__ . '/Auth/assets/js/lk.js'); ?>"></script>
     <script>
         $(function() {
             AuthBtn.create($('.b_auth_btn'));

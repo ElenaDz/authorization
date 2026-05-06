@@ -13,7 +13,7 @@ class Users extends _BaseAdmin
     const POST_NAME_Q = 'q';
     const GET_NAME_USER_ID_FIRST = 'user_id_first';
     const GET_NAME_Q = 'q';
-    const LIMIT = 3;
+    const LIMIT = 10;
 
 
     public function __invoke($q = '', $user_id_first = null)
