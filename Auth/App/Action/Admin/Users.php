@@ -6,7 +6,6 @@ use Auth\Sys\Request;
 use Auth\Sys\Response;
 use Auth\Sys\Routing;
 use Auth\Sys\Views;
-use Exception;
 
 class Users extends _BaseAdmin
 {

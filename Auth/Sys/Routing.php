@@ -1,8 +1,6 @@
 <?php
 namespace Auth\Sys;
 
-use Auth\App\Action\_Base;
-
 class Routing
 {
 	public static function getUrl($class_name_action, array $params = []): string

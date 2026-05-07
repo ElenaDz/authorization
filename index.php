@@ -84,11 +84,22 @@ $getUrl = function ($file_path)
     <div class="lk">
         <?php
             // ob_start();
-            \Auth\Sys\Routing::runAction(\Auth\App\Action\LK::class);
+            \Auth\Sys\Routing::runAction(\Auth\App\Action\LK\LK::class);
             // $lk = ob_get_clean();
         ?>
     </div>
 
+
+    <?php if (\Auth\App\Service\Auth::isAuthorized()): ?>
+
+        <div>
+            <form method="post" action="<?= \Auth\App\Action\Api\HistoryAdd::getUrl() ?>">
+                <input type="hidden" name="<?= \Auth\App\Action\Api\HistoryAdd::POST_NAME_SONG_ID ?>" value="<?= mt_rand(1, 100) ?>">
+                <button type="submit" >Записать песню в БД</button>
+            </form>
+        </div>
+
+    <?php endif; ?>
 
     <ul>
         <li>
