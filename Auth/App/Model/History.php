@@ -10,12 +10,11 @@ class History extends _Base
 
         $results = $pdo->query(
             'SELECT song_id 
-			FROM History 
+			FROM history 
 			WHERE '.
-            \Sql::where([
-                'user_id' => $user_id
-            ]).
-            '  
+	            \Sql::where([
+	                'user_id' => $user_id
+	            ]).'  
 			LIMIT '. $limit
         );
 
@@ -24,9 +23,11 @@ class History extends _Base
 
     public static function add($song_id, $user_id)
     {
+		// fixme где проверка что такой записи уже нету?
+
         $prepare = self::getPDO()->prepare(
             'INSERT INTO 
-                     History
+                     history
                     (song_id, user_id) 
                 VALUES 
                     (:song_id, :user_id)'

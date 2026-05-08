@@ -11,9 +11,8 @@ class LK extends _Base
 {
 	public function __invoke()
 	{
-
         if ( ! Auth::isAuthorized()) {
-        //  throw new \DomainException('Доступ закрыт, вы не авторизованы', 403);
+			throw new \DomainException('Доступ закрыт, вы не авторизованы', 403);
         }
 
         $user = Auth::getUser();
@@ -23,7 +22,7 @@ class LK extends _Base
         echo Views::get(
             __DIR__ . '/../../View/LK.php',
             [
-                'user_id' => $user->getId(),
+                'user' => $user,
                 'is_authorized' => $is_authorized
             ]
         );

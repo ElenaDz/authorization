@@ -83,9 +83,17 @@ $getUrl = function ($file_path)
 
     <div class="lk">
         <?php
-            // ob_start();
-            \Auth\Sys\Routing::runAction(\Auth\App\Action\LK\LK::class);
-            // $lk = ob_get_clean();
+        try {
+	        ob_start();
+	        \Auth\Sys\Routing::runAction(\Auth\App\Action\LK\LK::class);
+	        $lk = ob_get_clean();
+
+        } catch (DomainException $exception) {
+            if ($exception->getCode() !== 403) {
+                throw $exception;
+            }
+        }
+        echo $lk;
         ?>
     </div>
 

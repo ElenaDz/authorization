@@ -4,13 +4,13 @@ namespace Auth\App\Action\LK;
 
 use Auth\Sys\Views;
 
+// fixme удалить
 class History extends _BaseLK
 {
     const LIMIT = 10;
     public function __invoke($user_id = null)
     {
-        if ( $user_id )
-        {
+        if ($user_id) {
             $song_ids = \Auth\App\Model\History::getSongIdsByUserId($user_id, self::LIMIT);
         }
 
