@@ -13,6 +13,7 @@ class LK extends _Base
 	public function __invoke()
 	{
 		// fixme прежде чем отправлять заголовки сперва всегда нужно проверить а не было ли они уже отправлены
+		// todo это только для разработки, оберни
         header('Access-Control-Allow-Origin: http://mp3player');
         header('Access-Control-Allow-Credentials: true'); // Разрешает принимать куки
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
