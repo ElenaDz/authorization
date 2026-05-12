@@ -13,6 +13,12 @@ class HistoryAdd extends _BaseApi
 
 	public function __invoke()
 	{
+        header('Access-Control-Allow-Origin: http://mp3player');
+        header('Access-Control-Allow-Credentials: true'); // Разрешает принимать куки
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+
         $song_id = $_POST[self::POST_NAME_SONG_ID];
 
         $user = Auth::getUser();
