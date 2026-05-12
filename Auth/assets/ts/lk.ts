@@ -1,6 +1,6 @@
 class LK
 {
-    private readonly $context: JQuery;
+    public readonly $context: JQuery;
 
     constructor($context: JQuery)
     {
@@ -14,6 +14,9 @@ class LK
 
     }
 
+    public static is_authorized($context: JQuery = $('.b_lk')): boolean {
+        return !!$context.data('is_authorized');
+    }
 
     public static create($context = $('.b_lk')): LK
     {

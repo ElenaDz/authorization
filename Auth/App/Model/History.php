@@ -4,26 +4,43 @@ namespace Auth\App\Model;
 
 class History extends _Base
 {
-    public static function getSongIdsByUserId($user_id, $limit)
+    public static function getSongIdsByUserId($user_id, $limit = 50)
     {
         $pdo = self::getPDO();
 
         $results = $pdo->query(
             'SELECT song_id 
-			FROM history 
+			FROM History
 			WHERE '.
 	            \Sql::where([
 	                'user_id' => $user_id
 	            ]).'  
-			LIMIT '. $limit
+	        ORDER BY id DESC 
+			LIMIT '. (int)$limit
         );
 
-        return $results->fetchColumn();
+        return $results->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public static function add($song_id, $user_id)
     {
-		// fixme где проверка что такой записи уже нету?
+        $pdo = self::getPDO();
+
+        $check = $pdo->query(
+            'SELECT 1 
+			FROM History
+			WHERE '.
+            \Sql::where([
+                'user_id' => $user_id,
+                'song_id' => $song_id
+            ])
+        );
+
+        if ($check->fetch()) {
+            return;
+        }
+
+		// fixme где проверка что такой записи уже нету? ok
 
         $prepare = self::getPDO()->prepare(
             'INSERT INTO 

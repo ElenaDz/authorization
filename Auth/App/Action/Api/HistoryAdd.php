@@ -11,20 +11,13 @@ class HistoryAdd extends _BaseApi
 {
     const POST_NAME_SONG_ID = 'song_id';
 
-
 	public function __invoke()
 	{
-        if ($_POST) {
-            $song_id = $_POST[self::POST_NAME_SONG_ID];
+        $song_id = $_POST[self::POST_NAME_SONG_ID];
 
-            if ($song_id) {
+        $user = Auth::getUser();
 
-                $user = Auth::getUser();
+        History::add($song_id, $user->getId());
 
-                History::add($song_id, $user->getId());
-
-                Response::redirect('/');
-            }
-        }
 	}
 }
