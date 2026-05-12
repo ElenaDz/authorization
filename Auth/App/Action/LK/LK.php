@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Auth\App\Action\LK;
 
 use Auth\App\Action\_Base;
+use Auth\App\Model\History;
 use Auth\App\Service\Auth;
 use Auth\Sys\Views;
 
