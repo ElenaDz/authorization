@@ -26,16 +26,18 @@ class History extends _Base
     {
         $pdo = self::getPDO();
 
+		// fixme использовать sql::where для where
         $sql = "DELETE FROM History 
-        WHERE " . \Sql::where(['user_id' => $user_id]) . " 
-        AND song_id NOT IN (
-            SELECT song_id FROM (
-                SELECT song_id FROM History 
-                WHERE user_id = " . (int)$user_id . " 
-                ORDER BY id DESC 
-                LIMIT ". (int)$limit ."
-            ) tmp
-        )";
+	        WHERE " . \Sql::where(['user_id' => $user_id]) . " 
+	        AND song_id NOT IN (
+	            SELECT song_id FROM (
+	                SELECT song_id FROM History 
+	                WHERE user_id = " . (int)$user_id . " 
+	                ORDER BY id DESC 
+	                LIMIT ". (int)$limit ."
+	            ) tmp
+	        )
+		";
 
         $results = $pdo->query($sql);
 
@@ -45,12 +47,14 @@ class History extends _Base
 
     public static function add($song_id, $user_id)
     {
+		// fixme это нужно делать после а не до добавления
         if (rand(1, 10) == 1) {
             self::clean($user_id);
         }
 
         $pdo = self::getPDO();
 
+		// todo вынести в отдельный метод
         $check = $pdo->query(
             'SELECT 1 
 			FROM History
@@ -64,8 +68,6 @@ class History extends _Base
         if ($check->fetch()) {
             return;
         }
-
-		// fixme где проверка что такой записи уже нету? ok
 
         $prepare = self::getPDO()->prepare(
             'INSERT INTO 

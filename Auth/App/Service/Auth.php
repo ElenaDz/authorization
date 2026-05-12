@@ -20,6 +20,7 @@ class Auth
 
     public static function isAuthorized(): bool
     {
+		// fixme костыли удаляем
 		$token = $_COOKIE[self::COOKIE_NAME_TOKEN] ?? '6f8ea4fc79c67fcd494043f1d6fe8e22' ;
 
         if (empty($token)) return false;
@@ -111,7 +112,7 @@ class Auth
 			'/',
 			'',
 			Request::isDevelopment() ? false : true,
-			false
+			Request::isDevelopment() ? false : true
 		);
 
 		if ( ! $result) {

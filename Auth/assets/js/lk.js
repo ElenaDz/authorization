@@ -7,6 +7,8 @@ class LK {
         // @ts-ignore
         this.$context[0].LK = this;
     }
+    // fixme нотация
+    // fixme убрать $context он уже есть у личного кабинета он задан через create
     static is_authorized($context = $('.b_lk')) {
         return !!$context.data('is_authorized');
     }

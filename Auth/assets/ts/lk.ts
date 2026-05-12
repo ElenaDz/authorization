@@ -14,8 +14,10 @@ class LK
 
     }
 
+	// fixme нотация
+	// fixme убрать $context он уже есть у личного кабинета он задан через create
     public static is_authorized($context: JQuery = $('.b_lk')): boolean {
-        return !!$context.data('is_authorized');
+        return !! $context.data('is_authorized');
     }
 
     public static create($context = $('.b_lk')): LK

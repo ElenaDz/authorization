@@ -29,4 +29,5 @@
     </div>
 </div>
 
+<!-- fixme посмотри в других шаблонах как мы подключаем js  -->
 <script src="http://authorization/Auth/assets/js/lk.js"></script>

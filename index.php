@@ -130,7 +130,6 @@ $getUrl = function ($file_path)
     <!-- fixme переписать на использование функции $getUrl -->
     <script src="/Auth/assets/js/butterup-main/butterup.min.js?v=<?= filemtime(__DIR__ . '/Auth/assets/js/butterup-main/butterup.min.js') ?>" async></script>
     <script src="<?= $getUrl(__DIR__ . '/Auth/assets/js/auth.one_file.js'); ?>"></script>
-<!--    <script src="--><?php //= $getUrl(__DIR__ . '/Auth/assets/js/lk.js'); ?><!--"></script>-->
     <script>
         $(function() {
             AuthBtn.create($('.b_auth_btn'));
