@@ -6,19 +6,21 @@ namespace Auth\App\Action\LK;
 use Auth\App\Action\_Base;
 use Auth\App\Model\History;
 use Auth\App\Service\Auth;
+use Auth\Sys\Request;
 use Auth\Sys\Views;
 
 class LK extends _Base
 {
 	public function __invoke()
 	{
-		// fixme прежде чем отправлять заголовки сперва всегда нужно проверить а не было ли они уже отправлены
-		// todo это только для разработки, оберни
-        header('Access-Control-Allow-Origin: http://mp3player');
-        header('Access-Control-Allow-Credentials: true'); // Разрешает принимать куки
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
-
+		// fixme прежде чем отправлять заголовки сперва всегда нужно проверить а не было ли они уже отправлены ok
+		// todo это только для разработки, оберни ok
+        if (!headers_sent() && Request::isDevelopment()) {
+            header('Access-Control-Allow-Origin: http://mp3player');
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+            header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        }
 
         if ( ! Auth::isAuthorized()) {
 			throw new \DomainException('Доступ закрыт, вы не авторизованы', 403);
