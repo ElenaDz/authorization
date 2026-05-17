@@ -37,7 +37,6 @@ $getUrl = function ($file_path)
         rel="stylesheet"
     >
     <link rel="stylesheet" href="<?= $getUrl(__DIR__.'/Auth/assets/css/main.css'); ?>">
-    <!-- fixme переписать на использование функции $getUrl ok-->
     <link
         href="<?= $getUrl(__DIR__.'/Auth/assets/js/butterup-main/butterup.min.css'); ?>"
         rel="stylesheet"
@@ -127,7 +126,6 @@ $getUrl = function ($file_path)
         __DIR__.'/Auth/assets/js/auth.one_file.js'
     );
     ?>
-    <!-- fixme переписать на использование функции $getUrl ok-->
     <script src="<?= $getUrl(__DIR__ . '/Auth/assets/js/butterup-main/butterup.min.js'); ?>" async></script>
     <script src="<?= $getUrl(__DIR__ . '/Auth/assets/js/auth.one_file.js'); ?>"></script>
     <script>

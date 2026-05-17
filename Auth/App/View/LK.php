@@ -1,7 +1,8 @@
 <?php
-/** @var \Auth\App\Entity\User $user */
+use Auth\App\Entity\User;
+
+/** @var User $user */
 /** @var bool $is_authorized */
-// todo
 ?>
 <div
 	class="b_lk"

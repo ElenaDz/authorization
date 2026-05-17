@@ -20,7 +20,6 @@ class Auth
 
     public static function isAuthorized(): bool
     {
-		// fixme костыли удаляем ok
 		$token = $_COOKIE[self::COOKIE_NAME_TOKEN] ?? null ;
 
         if (empty($token)) return false;

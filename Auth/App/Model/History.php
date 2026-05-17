@@ -22,11 +22,11 @@ class History extends _Base
         return $results->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+	// fixme почему public
     public static function clean($user_id, $limit = 50)
     {
         $pdo = self::getPDO();
 
-		// fixme использовать sql::where для where ок
         $sql = "DELETE FROM History 
 	        WHERE " . \Sql::where(['user_id' => $user_id]) . " 
 	        AND song_id NOT IN (
@@ -44,11 +44,11 @@ class History extends _Base
         $results->execute();
     }
 
+	// fixme переименовать в has
     public static function repeatCheck($song_id, $user_id)
     {
         $pdo = self::getPDO();
 
-        // todo вынести в отдельный метод ok
         $check = $pdo->query(
             'SELECT 1 
 			FROM History
@@ -62,29 +62,12 @@ class History extends _Base
         return $check->fetch();
     }
 
-    public static function delete($song_id, $user_id)
-    {
-        $pdo = self::getPDO();
-
-        $results = $pdo->query(
-            'DELETE
-			FROM History
-			WHERE '.
-            \Sql::where([
-                'user_id' => $user_id,
-                'song_id' => $song_id
-            ])
-        );
-
-        $results->execute();
-    }
 
     public static function add($song_id, $user_id)
     {
-		// fixme это нужно делать после а не до добавления ок
-		// todo вынести в отдельный метод ok
-
-        if (self::repeatCheck($song_id, $user_id)) self::delete($song_id, $user_id);
+        if (self::repeatCheck($song_id, $user_id)) {
+			self::delete($song_id, $user_id);
+        }
 
         $prepare = self::getPDO()->prepare(
             'INSERT INTO 
@@ -103,4 +86,22 @@ class History extends _Base
             self::clean($user_id);
         }
     }
+
+
+	public static function delete($song_id, $user_id)
+	{
+		$pdo = self::getPDO();
+
+		$results = $pdo->query(
+			'DELETE
+			FROM History
+			WHERE '.
+			\Sql::where([
+				'user_id' => $user_id,
+				'song_id' => $song_id
+			])
+		);
+
+		$results->execute();
+	}
 }

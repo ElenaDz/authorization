@@ -13,9 +13,8 @@ class LK extends _Base
 {
 	public function __invoke()
 	{
-		// fixme прежде чем отправлять заголовки сперва всегда нужно проверить а не было ли они уже отправлены ok
-		// todo это только для разработки, оберни ok
-        if (!headers_sent() && Request::isDevelopment()) {
+		// fixme просил тебя не писать не связанные друг с другом проверки в одном If
+        if ( ! headers_sent() && Request::isDevelopment()) {
             header('Access-Control-Allow-Origin: http://mp3player');
             header('Access-Control-Allow-Credentials: true');
             header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
