@@ -13,12 +13,14 @@ class LK extends _Base
 {
 	public function __invoke()
 	{
-		// fixme просил тебя не писать не связанные друг с другом проверки в одном If
-        if ( ! headers_sent() && Request::isDevelopment()) {
-            header('Access-Control-Allow-Origin: http://mp3player');
-            header('Access-Control-Allow-Credentials: true');
-            header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-            header('Access-Control-Allow-Headers: Content-Type, Authorization');
+		// fixme просил тебя не писать не связанные друг с другом проверки в одном If ok
+        if ( ! headers_sent()) {
+            if (Request::isDevelopment()) {
+                header('Access-Control-Allow-Origin: http://mp3player');
+                header('Access-Control-Allow-Credentials: true');
+                header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+                header('Access-Control-Allow-Headers: Content-Type, Authorization');
+            }
         }
 
         if ( ! Auth::isAuthorized()) {
