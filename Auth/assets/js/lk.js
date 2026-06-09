@@ -6,6 +6,19 @@ class LK {
             return this.$context[0].LK;
         // @ts-ignore
         this.$context[0].LK = this;
+        // поменять клик на проверку ссылки
+        this.$context.find('.history').on('click', (event) => {
+            // event.preventDefault();
+            let url = $(event.currentTarget).data('href');
+            let user_id = this.$context.data('user_id');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: user_id,
+            })
+                .done((response, textStatus, jqXHR) => {
+            });
+        });
     }
     // fixme нотация
     // fixme убрать $context он уже есть у личного кабинета он задан через create
