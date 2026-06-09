@@ -31,6 +31,4 @@ use Auth\App\Entity\User;
     </div>
 </div>
 
-<!-- fixme посмотри в других шаблонах как мы подключаем js ok -->
-<!--<script src="http://authorization/Auth/assets/js/lk.js"></script>-->
 <script src="/Auth/assets/js/lk.js?v=<?= filemtime(__DIR__ . '/../../../assets/js/lk.js') ?>"></script>

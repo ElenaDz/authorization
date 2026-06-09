@@ -22,7 +22,7 @@ class History extends _Base
         return $results->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-	// fixme почему public ok
+
     private static function clean($user_id, $limit = 50)
     {
         $pdo = self::getPDO();
@@ -44,7 +44,7 @@ class History extends _Base
         $results->execute();
     }
 
-	// fixme переименовать в has ok
+
     public static function hasCheck($song_id, $user_id)
     {
         $pdo = self::getPDO();

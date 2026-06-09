@@ -13,7 +13,6 @@ class LK extends _Base
 {
 	public function __invoke()
 	{
-		// fixme просил тебя не писать не связанные друг с другом проверки в одном If ok
         if ( ! headers_sent()) {
             if (Request::isDevelopment()) {
                 header('Access-Control-Allow-Origin: http://mp3player');
